@@ -1,0 +1,11 @@
+<h2>INICIO DE SESIÓN</h2>
+<form [formGroup]="registroForm" (ngSubmit)="login()" novalidate="">
+    <div>
+        <input type="text" formControlName="documento" placeholder="Identificación" [(ngModel)]="sesion.documento">
+    </div>
+    <div>
+        <input type="password" formControlName="contrasenia" placeholder="Contraseña" [(ngModel)]="sesion.contrasenia">
+    </div>
+    <button type="submit">Ingresa como Uniquindiano</button>
+</form>
+<div><a routerLink="/registro">Registrate</a></div>
