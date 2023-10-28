@@ -1,0 +1,234 @@
+<!-- Modals -->
+<div class="modal fade" id="agregarEditar" tabindex="-1" aria-labelledby="agreagarModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header bg-color-u">
+                <h3 *ngIf="!esEdicion" class="modal-title">Agregar curso</h3>
+                <h3 *ngIf="esEdicion" class="modal-title">Editar curso</h3>
+            </div>
+            <div class="modal-body">
+                <form #f="ngForm">
+                    <div class="row g-3 justify-content-center">
+                        <div class="col px-3">
+                            <div class="mb-3">
+                                <label for="idCurso" class="form-label">Cod. Asignatura</label>
+                                <input type="text" name="idCurso" id="idCurso" class="form-control"
+                                    [(ngModel)]="curso.idCurso">
+                            </div>
+                            <div class="mb-3">
+                                <label for="asignatura" class="form-label">Asignatura</label>
+                                <input type="text" name="asignatura" id="asignatura" class="form-control"
+                                    [(ngModel)]="curso.nombre">
+                            </div>
+                            <div class="mb-3">
+                                <label for="idFacultad" class="form-label">Facultad</label>
+                                <select name="idFacultad" id="idFacultad" class="form-select"
+                                    [(ngModel)]="curso.idFacultad">
+                                    <option value="">-Seleccione una opción-</option>
+                                    <option *ngFor="let item of facultades" value="{{item.idFacultad}}">{{item.nombre}}
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="idPrograma" class="form-label">Programa</label>
+                                <select name="idPrograma" id="idPrograma" class="form-select"
+                                    [(ngModel)]="curso.idPrograma">
+                                    <option value="">-Seleccione una opción-</option>
+                                    <option *ngFor="let item of programas"
+                                        value="{{item.idFacultad}},{{item.idPrograma}}">{{item.nombre}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col px-3">
+                            <div class="row">
+                                <div class="col">
+                                    <div class="mb-3">
+                                        <label for="pensum" class="form-label">Pensum</label>
+                                        <input type="text" name="pensum" id="pensum" class="form-control"
+                                            [(ngModel)]="curso.pensum">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="creditos" class="form-label">Créditos</label>
+                                        <input type="number" name="creditos" id="creditos" class="form-control"
+                                            [(ngModel)]="curso.creditos">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="grupo" class="form-label">Grupo</label>
+                                        <input type="text" name="grupo" id="grupo" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="mb-3">
+                                        <label for="nivel" class="form-label">Nivel</label>
+                                        <input type="number" name="nivel" id="nivel" class="form-control"
+                                            [(ngModel)]="curso.nivel">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="horas" class="form-label">Horas</label>
+                                        <input type="number" name="horas" id="horas" class="form-control"
+                                            [(ngModel)]="curso.horas">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="cupos" class="form-label">Cupos</label>
+                                        <input type="number" name="cupos" id="cupos" class="form-control"
+                                            [(ngModel)]="curso.cupos">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col mb-3">
+                                <div class="row">
+                                    <label for="recursos" class="form-label">Recursos Audiovisuales</label>
+                                </div>
+                                <div class="row">
+                                    <div class="col text-center">
+                                        <i class="fa-solid fa-computer fa-2xl me-2"></i><input type="checkbox"
+                                            [name]="recursos[0].nombre" id="recursos" class="form-check-input"
+                                            [(ngModel)]="recursos[0].checked">
+                                    </div>
+                                    <div class="col text-center">
+                                        <i class="fa-solid fa-video fa-2xl me-2"></i><input type="checkbox"
+                                            [name]="recursos[1].nombre" id="recursos" class="form-check-input"
+                                            [(ngModel)]="recursos[1].checked">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="mb-3">
+                                <label for="idDocente" class="form-label">Docente</label>
+                                <input type="text" name="idDocente" id="idDocente" class="form-control"
+                                    [(ngModel)]="curso.idDocente">
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-success" (click)="esEdicion ? editarCurso() : agregarCurso()"
+                    data-bs-dismiss="modal">Guardar</button>
+                <button class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="borrar" tabindex="-1" aria-labelledby="borrarModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-color-u">
+                <h1 class="modal-title fs-5" id="borrarModalLabel">Eliminar Curso</h1>
+            </div>
+            <div class="modal-body">
+                <p>¿Está seguro que desea borrar el curso {{textoEliminar}}?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal" (click)="borrarCurso()">Sí</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="d-flex justify-content-center h-100">
+    <p-toast [showTransformOptions]="'translateY(100%)'" [showTransitionOptions]="'500ms'"
+        [hideTransitionOptions]="'500ms'" [showTransformOptions]="'translateX(100%)'"></p-toast>
+    <div class="col px-5 justify-content-center pt-5" style="overflow-x:auto;">
+        <div class="mb-4">
+            <h2 class="mb-5"><strong>Cursos</strong></h2>
+        </div>
+        <p-table #dt [value]="cursos" [columns]="cols" styleClass="p-datatable-striped" [exportHeader]="'customExportHeader'" [scrollable]="true"
+            [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
+            currentPageReportTemplate="Mostrando de {first} a {last} para {totalRecords} resultados"
+            [rowsPerPageOptions]="[10, 25, 50]" [globalFilterFields]="['idAula']">
+            <ng-template pTemplate="caption">
+                <div class="flex">
+                    <button type="button" (click)="dt.exportCSV()" class="btn btn-secondary mx-2"><i
+                            class="fa-solid fa-file-csv"></i></button>
+                    <button type="button" (click)="exportExcel()" class="btn btn-success mx-2"><i
+                            class="fa-solid fa-file-excel"></i></button>
+                    <button type="button" (click)="exportPdf()" class="btn btn-danger mx-2"><i
+                            class="fa-solid fa-file-pdf"></i></button>
+                    <button type="button" (click)="dt.exportCSV({ selectionOnly: true })"
+                        class="btn btn-primary float-end" pTooltip="Selection Only" tooltipPosition="bottom"><i
+                            class="fa-solid fa-filter"></i></button>
+                    <span class="float-end mx-3">
+                        <input type="text" (input)="dt.filterGlobal($any($event.target).value, 'contains')"
+                            placeholder="Ingrese el ID del aula" class="form-control" />
+                    </span>
+                    <button class="btn btn-primary float-end" data-bs-toggle="modal" data-bs-target="#agregarEditar"
+                        (click)="esEdicion = false; limpiarCampos();">
+                        <i class="fa-solid fa-circle-plus"></i>
+                        Agregar
+                    </button>
+                </div>
+            </ng-template>
+            <ng-template pTemplate="header">
+                <tr>
+                    <th pSortableColumn="idCurso" style="min-width:180px">Cod. Asignatura <p-sortIcon
+                            field="idCurso"></p-sortIcon></th>
+                    <th pSortableColumn="nombre" style="min-width:150px">Asignatura <p-sortIcon
+                            field="nombre"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="grupo" style="min-width:150px">Grupo <p-sortIcon field="grupo"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="nivel" style="min-width:150px">Nivel <p-sortIcon field="nivel"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="horas" style="min-width:150px">Horas <p-sortIcon field="horas"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="creditos" style="min-width:150px">Créditos <p-sortIcon
+                            field="creditos"></p-sortIcon></th>
+                    <th pSortableColumn="programa" style="min-width:150px">Programa <p-sortIcon
+                            field="programa"></p-sortIcon></th>
+                    <th pSortableColumn="pensum" style="min-width:150px">Pensum <p-sortIcon field="pensum"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="idFacultad" style="min-width:150px">Facultad <p-sortIcon
+                            field="idFacultad"></p-sortIcon></th>
+                    <th pSortableColumn="idDocente" style="min-width:150px">Docente <p-sortIcon
+                            field="idDocente"></p-sortIcon></th>
+                    <th pSortableColumn="cupos" style="min-width:150px">Cupos <p-sortIcon field="cupos"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="recursos" style="min-width:150px">Necesidades Audiovisuales <p-sortIcon
+                            field="recursos"></p-sortIcon></th>
+                    <th pSortableColumn="cupos" style="min-width:150px">Horario <p-sortIcon field="cupos"></p-sortIcon>
+                    </th>
+                    <th style="min-width:150px">Opciones </th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-cursoLista>
+                <tr>
+                    <td>{{cursoLista.idCurso}}</td>
+                    <td>{{cursoLista.nombre}}</td>
+                    <td>{{cursoLista.grupo}}</td>
+                    <td>{{cursoLista.nivel}}</td>
+                    <td>{{cursoLista.horas}}</td>
+                    <td>{{cursoLista.creditos}}</td>
+                    <td>{{cursoLista.idPrograma}}</td>
+                    <td>{{cursoLista.pensum}}</td>
+                    <td>{{cursoLista.idFacultad}}</td>
+                    <td>{{cursoLista.idDocente}}</td>
+                    <td>{{cursoLista.cupos}}</td>
+                    <td class="text-center">
+                        <i *ngIf="estaEnLista('COMPUTADORA', cursoLista.recursos)"
+                            class="fa-solid fa-computer fa-xl me-2"></i>
+                        <i *ngIf="estaEnLista('VIDEOBEAM', cursoLista.recursos)"
+                            class="fa-solid fa-video fa-xl ms-2"></i>
+                    </td>
+                    <td class="text-center"><i class="fa-solid fa-eye fa-xl"></i></td>
+                    <td class="text-center" style="min-width:120px;max-width:120px;">
+                        <button class="btn btn-primary me-2" (click)="editar(cursoLista)" data-bs-toggle="modal"
+                            data-bs-target="#agregarEditar">
+                            <i class="fa-solid fa-pen"></i>
+                        </button>
+                        <button class="btn btn-danger" (click)="eliminar(cursoLista)" data-bs-toggle="modal"
+                            data-bs-target="#borrar">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </button>
+                    </td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+                <tr>
+                    <td colspan="14">No hay cursos</td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+</div>

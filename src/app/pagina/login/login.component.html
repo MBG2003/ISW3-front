@@ -1,11 +1,81 @@
-<h2>INICIO DE SESIÓN</h2>
-<form [formGroup]="registroForm" (ngSubmit)="login()" novalidate="">
-    <div>
-        <input type="text" formControlName="documento" placeholder="Identificación" [(ngModel)]="sesion.documento">
+<header class="p-3">
+    <div class="d-flex justify-content-center align-items-center">
+        <div class="col-3 text-center">
+            <img src="../../../assets/logo-universidad-del-quindio.png" alt="logo-universidad-del-quindio" width="150px"
+                class="img-fluid rounded-circle shadow">
+        </div>
+        <div class="col-9 text-start">
+            <h1 class="ms-4" style="font-size: 3.5rem;"><span class="color-u">SISTEMA DE</span> GESTION DE AULAS</h1>
+        </div>
     </div>
-    <div>
-        <input type="password" formControlName="contrasenia" placeholder="Contraseña" [(ngModel)]="sesion.contrasenia">
+</header>
+<div class="d-flex justify-content-center login-container">
+    <p-toast [showTransformOptions]="'translateY(100%)'" [showTransitionOptions]="'500ms'" [hideTransitionOptions]="'500ms'" [showTransformOptions]="'translateX(100%)'"></p-toast>
+    <div class="d-flex justify-content-center align-self-center" style="min-width:500px;">
+        <div class="container text-center shadow-lg">
+            <h2 class="mb-5">INICIO DE <span class="color-u">SESIÓN</span></h2>
+            <form #f="ngForm" (submit)="login()" novalidate="">
+                <div class="mb-4">
+                    <input class="form-control" type="text" name="id" placeholder="Identificación" [(ngModel)]="sesion.documento" required>
+                </div>
+                <div class="mb-5">
+                    <input class="form-control" type="password" name="password" placeholder="Contraseña" [(ngModel)]="sesion.contrasenia" required>
+                </div>
+                <button type="submit" class="btn btn-success rounded-5 w-100"><strong>Ingresar como
+                        Uniquindiano</strong></button>
+            </form>
+            <div><a routerLink="/registro">Registrate</a></div>
+        </div>
     </div>
-    <button type="submit">Ingresa como Uniquindiano</button>
-</form>
-<div><a routerLink="/registro">Registrate</a></div>
+</div>
+<footer class="m-0 p-0">
+    <img class="img-responsive" src="../assets/border-uniquindio.jpg"
+        style="background-size: cover;height:5px;width:100%;">
+    <div class="row mw-100 mt-5 pie-pagina">
+        <div class="col-2"></div>
+        <div class="col-2">
+            <img src="../assets/logo-acreditada.jpg" style="float:right;" class="img-responsive" width="79px"
+                height="80">
+            <img src="../assets/linea.png" style="float:right;" class="img-responsive">
+            <img src="../assets/logo-universidad.jpg" style="float:right;" class="img-responsive" width="70px"
+                height="80">
+        </div>
+        <div class="col-2">
+            <p class="p-0 m-0">Carrera 15 Calle 12 Norte +57(6) 7359300</p>
+            <p class="p-0 mb-2">Armenia,Quindio,Colombia</p>
+            <p>
+                <a href="mailto:corrupcioncero@uniquindio.edu.co">corrupcioncero@uniquindio.edu.co</a><br>
+                <a href="mailto:wbmaster@uniquindio.edu.co">wbmaster@uniquindio.edu.co</a><br>
+                <a href="mailto:csu@uniquindio.edu.co">corrupcioncero@uniquindio.edu.co</a><br>
+            </p>
+            <p class="py-0 my-2">Quejas y Reclamos: 018000 96 35 78 opción 5</p>
+            <p class="pb-0 my-2">Denuncias actos de corrupción: +57 (6) 7359416</p>
+            <p class="pb-0 my-2">Ext.416</p>
+            <br />
+        </div>
+        <div id="enlaces" class="col-2">
+            <p>
+                <a href="https://uniquindio.edu.co/mapa-del-sitio" title="Enlace a Mapa del sitio">
+                    <strong>Mapa del sitio</strong> </a><br>
+                <a href="https://uniquindio.edu.co/estudiantes/formularios/66/ayudenos-a-mejorar/"
+                    title="Enlace a Ayudenos a mejorar">
+                    <strong>Ayúdenos a mejorar</strong> </a><br>
+                <a href="http://uniquindio.edu.co/estudiantes/publicaciones/334/terminos-y-condiciones-de-uso/"
+                    title="Enlace a Políticas de privacidad y condiiones de uso">
+                    <strong>Políticas de privacidad y condiciones de uso</strong> </a><br>
+                <a href="https://uniquindio.edu.co/estudiantes/publicaciones/335/politica-de-tratamiento-de-datos-personales/"
+                    title="Enlace a Política de tratamiento de datos personales">
+                    <strong>Política de tratamiento de datos personales</strong> </a><br>
+                <a href="https://uniquindio.edu.co/glosario" title="Enlace a Glosario">
+                    <strong>Glosario</strong> </a><br>
+                <a href="https://uniquindio.edu.co/estudiantes/publicaciones/352/notificaciones-por-aviso/"
+                    title="Enlace a Notificaciones por aviso">
+                    <strong>Notificaciones por aviso</strong> </a>
+            </p>
+        </div>
+        <div class="col-2">
+            <img src="../assets/iconteciso.png" style="float:left;width:250px;height:150px;" class="img-responsive">
+        </div>
+        <div class="col-2"></div>
+    </div>
+</footer>

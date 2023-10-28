@@ -1,0 +1,139 @@
+<header>
+    <div class="bg-color-u shadow-bottom py-3 ps-5">
+        <div class="d-flex flex-wrap align-items-center justify-content-lg-start">
+            <div class="d-flex align-items-center col-9">
+                <a routerLink="/gestion_aulas" title="Inicio">
+                    <img src="../../../assets/logo-universidad-del-quindio.png" alt="logo-universidad-del-quindio"
+                        class="img-fluid rounded-circle shadow" width="80px">
+                </a>
+                <div class="d-inline ms-3">
+                    <h1 class="fs-1">
+                        <a routerLink="/gestion_aulas" class="d-block text-white text-decoration-underline"
+                            title="Inicio">{{title}}</a>
+                    </h1>
+                    <span class="d-block fs-5 text-dark"><strong>Universidad del Quindio</strong></span>
+                </div>
+            </div>
+            <div class="shadow col-3 py-3">
+                <a routerLink="/" class="fs-5 mx-3 text-decoration-none text-dark enlace">Ayuda</a>
+                <a routerLink="/" class="fs-5 mx-3 text-decoration-none text-dark enlace">Mi cuenta</a>
+                <a (click)="logout()" class="cursor-hand fs-5 mx-3 text-dark enlace">Salir</a>
+            </div>
+        </div>
+    </div>
+</header>
+<div class="d-flex">
+    <div class="sidebar" style="overflow-y:hidden;">
+        <div class="row-4 my-4">
+            <div class="col">
+                <div class="d-flex row-8 mb-3 align-items-center justify-content-center">
+                    <img src="../assets/user.png" alt="foto-usuario" class="mx-auto" width="120px">
+                </div>
+                <div class="row-4">
+                    <p class="m-0 p-0 fs-5 fw-semibold text-center">Bienvenid@</p>
+                    <p class="m-0 p-0 fs-5 fw-semibold text-center">{{usuario}}</p>
+                </div>
+            </div>
+        </div>
+        <div class="row-8 menu h-100">
+            <ul class="list-unstyled bg-color-u p-3 m-0 h-100">
+                <li class="mb-1">
+                    <button class="btn btn-toggle rounded collapsed w-100 text-start" data-bs-toggle="collapse"
+                        data-bs-target="#aulas-collapse" aria-expanded="false">
+                        <i class="fa-solid fa-caret-right me-3"></i>
+                        Aulas
+                    </button>
+                    <div class="collapse" id="aulas-collapse">
+                        <ul class="btn-toggle-nav list-unstyled fw-normal pl-2 pb-1 small">
+                            <li><a routerLink="/gestion_aulas/listado_aulas" class="link-dark rounded">Listado de
+                                    aulas</a></li>
+                            <li><a routerLink="/asignacion_aulas" class="link-dark rounded">Asignación de aulas</a></li>
+                            <li><a routerLink="/horario_aulas" class="link-dark rounded">Horario de aulas</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="mb-1">
+                    <button class="btn btn-toggle rounded collapsed w-100 text-start" data-bs-toggle="collapse"
+                        data-bs-target="#cursos-collapse" aria-expanded="false">
+                        <i class="fa-solid fa-caret-right me-3"></i>
+                        Cursos
+                    </button>
+                    <div class="collapse" id="cursos-collapse">
+                        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                            <li><a routerLink="/gestion_aulas/listado_cursos" class="link-dark rounded">Listado de
+                                    cursos</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="mb-1">
+                    <button class="btn btn-toggle rounded collapsed w-100 text-start" data-bs-toggle="collapse"
+                        data-bs-target="#tramites-collapse" aria-expanded="false">
+                        <i class="fa-solid fa-caret-right me-3"></i>
+                        Trámites
+                    </button>
+                    <div class="collapse" id="tramites-collapse">
+                        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                            <li><a routerLink="" class="link-dark rounded">Reservas</a></li>
+                            <li><a routerLink="/gestion_aulas/listado_mejoras_problemas"
+                                    class="link-dark rounded">Problemas y Mejoras</a></li>
+                        </ul>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="seccion">
+        <router-outlet></router-outlet>
+    </div>
+</div>
+<footer class="shadow-top m-0 p-0">
+    <img class="img-responsive" src="../assets/border-uniquindio.jpg"
+        style="background-size:cover;height:5px;width:100%;">
+    <div class="row mw-100 mt-5 pie-pagina">
+        <div class="col-2"></div>
+        <div class="col-2">
+            <img src="../assets/logo-acreditada.jpg" style="float:right;" class="img-responsive" width="79px"
+                height="80">
+            <img src="../assets/linea.png" style="float:right;" class="img-responsive">
+            <img src="../assets/logo-universidad.jpg" style="float:right;" class="img-responsive" width="70px"
+                height="80">
+        </div>
+        <div class="col-2">
+            <p class="p-0 m-0">Carrera 15 Calle 12 Norte +57(6) 7359300</p>
+            <p class="p-0 mb-2">Armenia,Quindio,Colombia</p>
+            <p>
+                <a href="mailto:corrupcioncero@uniquindio.edu.co">corrupcioncero@uniquindio.edu.co</a><br>
+                <a href="mailto:wbmaster@uniquindio.edu.co">wbmaster@uniquindio.edu.co</a><br>
+                <a href="mailto:csu@uniquindio.edu.co">corrupcioncero@uniquindio.edu.co</a><br>
+            </p>
+            <p class="py-0 my-2">Quejas y Reclamos: 018000 96 35 78 opción 5</p>
+            <p class="pb-0 my-2">Denuncias actos de corrupción: +57 (6) 7359416</p>
+            <p class="pb-0 my-2">Ext.416</p>
+            <br />
+        </div>
+        <div id="enlaces" class="col-2">
+            <p>
+                <a href="https://uniquindio.edu.co/mapa-del-sitio" title="Enlace a Mapa del sitio">
+                    <strong>Mapa del sitio</strong> </a><br>
+                <a href="https://uniquindio.edu.co/estudiantes/formularios/66/ayudenos-a-mejorar/"
+                    title="Enlace a Ayudenos a mejorar">
+                    <strong>Ayúdenos a mejorar</strong> </a><br>
+                <a href="http://uniquindio.edu.co/estudiantes/publicaciones/334/terminos-y-condiciones-de-uso/"
+                    title="Enlace a Políticas de privacidad y condiiones de uso">
+                    <strong>Políticas de privacidad y condiciones de uso</strong> </a><br>
+                <a href="https://uniquindio.edu.co/estudiantes/publicaciones/335/politica-de-tratamiento-de-datos-personales/"
+                    title="Enlace a Política de tratamiento de datos personales">
+                    <strong>Política de tratamiento de datos personales</strong> </a><br>
+                <a href="https://uniquindio.edu.co/glosario" title="Enlace a Glosario">
+                    <strong>Glosario</strong> </a><br>
+                <a href="https://uniquindio.edu.co/estudiantes/publicaciones/352/notificaciones-por-aviso/"
+                    title="Enlace a Notificaciones por aviso">
+                    <strong>Notificaciones por aviso</strong> </a>
+            </p>
+        </div>
+        <div class="col-2">
+            <img src="../assets/iconteciso.png" style="float:left;width:250px;height:150px;" class="img-responsive">
+        </div>
+        <div class="col-2"></div>
+    </div>
+</footer>

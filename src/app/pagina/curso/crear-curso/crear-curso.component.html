@@ -1,0 +1,88 @@
+<h2 mat-dialog-title class="fs-4 bg-color-u"><strong>Agregar curso</strong></h2>
+<div mat-dialog-content class="pt-4 px-5 text-dark" style="font-family:Helvetica;">
+    <form class="">
+        <div class="row g-3 justify-content-center">
+            <div class="col px-3">
+                <div class="mb-3">
+                    <label for="idAsignatura" class="form-label">Cod. Asignatura</label>
+                    <input type="text" name="idAsignatura" id="idAsignatura" class="form-control">
+                </div>
+                <div class="mb-3">
+                    <label for="asignatura" class="form-label">Asignatura</label>
+                    <input type="text" name="asignatura" id="asignatura" class="form-control">
+                </div>
+                <div class="mb-3">
+                    <label for="idFacultad" class="form-label">Facultad</label>
+                    <select name="idFacultad" id="idFacultad" class="form-select">
+                        <option value="">-Seleccione una opción-</option>
+                        <option *ngFor="let item of facultades" value="{{item.idFacultad}}">{{item.nombre}}</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="idPrograma" class="form-label">Programa</label>
+                    <select name="idPrograma" id="idPrograma" class="form-select">
+                        <option value="">-Seleccione una opción-</option>
+                        <option *ngFor="let item of programas" value="{{item.idFacultad}},{{item.idPrograma}}">{{item.nombre}}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col px-3">
+                <div class="row">
+                    <div class="col">
+                        <div class="mb-3">
+                            <label for="pensum" class="form-label">Pensum</label>
+                            <input type="text" name="pensum" id="pensum" class="form-control">
+                        </div>
+                        <div class="mb-3">
+                            <label for="creditos" class="form-label">Créditos</label>
+                            <input type="number" name="creditos" id="creditos" class="form-control">
+                        </div>
+                        <div class="mb-3">
+                            <label for="grupo" class="form-label">Grupo</label>
+                            <input type="text" name="grupo" id="grupo" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="mb-3">
+                            <label for="nivel" class="form-label">Nivel</label>
+                            <input type="number" name="nivel" id="nivel" class="form-control">
+                        </div>
+                        <div class="mb-3">
+                            <label for="horas" class="form-label">Horas</label>
+                            <input type="text" name="horas" id="horas" class="form-control">
+                        </div>
+                        <div class="mb-3">
+                            <label for="cupos" class="form-label">Cupos</label>
+                            <input type="number" name="cupos" id="cupos" class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <div class="col mb-3">
+                    <div class="row">
+                        <label for="" class="form-label">Necesidades Audiovisuales</label>
+                    </div>
+                    <div class="row">
+                        <div class="col text-center">
+                            <i class="fa-solid fa-computer fa-2xl me-2"></i><input type="checkbox" name="" id=""
+                                class="form-check-input">
+                        </div>
+                        <div class="col text-center">
+                            <i class="fa-solid fa-video fa-2xl me-2"></i><input type="checkbox" name="" id=""
+                                class="form-check-input">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="mb-3">
+                    <label for="idDocente" class="form-label">Docente</label>
+                    <input type="text" name="idDocente" id="idDocente" class="form-control">
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<div mat-dialog-actions class="p-3 border-top border-ligth-subtle">
+    <button class="btn btn-success me-5">Guardar</button>
+    <button class="btn btn-secondary" (click)="onNoClick()">Cancelar</button>
+</div>

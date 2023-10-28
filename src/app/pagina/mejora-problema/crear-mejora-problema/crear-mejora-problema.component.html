@@ -1,0 +1,53 @@
+<h2 mat-dialog-title class="fs-4 bg-color-u"><strong>Agregar solicitud</strong></h2>
+<div mat-dialog-content class="pt-4 px-5 text-dark" style="font-family:Helvetica;">
+    <form class="">
+        <div class="row g-2 justify-content-center">
+            <div class="col px-3">
+                <div class="mb-3">
+                    <label for="idFacultad" class="form-label">Facultad</label>
+                    <select name="idFacultad" id="idFacultad" class="form-select">
+                        <option value="">Escoja una opción</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="idAula" class="form-label">Aula</label>
+                    <select name="idAula" id="idAula" class="form-select">
+                        <option value="">Escoja una opción</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col px-3">
+                <div class="mb-3">
+                    <label for="emisor" class="form-label">Emisor</label>
+                    <input type="text" name="emisor" id="emisor" class="form-control">
+                </div>
+                <div class="mb-3">
+                    <label for="" class="form-label">Estado</label>
+                    <select name="" id="" class="form-select">
+                        <option value="" selected>Escoja una opción</option>
+                        <option value="ACEPTADO">Aceptada</option>
+                        <option value="RECHAZADO">Rechazada</option>
+                        <option value="REVISION">En revisión</option>
+                        <option value="SOLUCIONADO">Solucionada</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="row g-2 justify-content-center">
+            <div class="col px-3">
+                <div class="mb-3">
+                    <label for="descipcion" class="form-label">Descripción</label>
+                    <textarea class="form-control" name="descipcion" id="descipcion" cols="30" rows="5"></textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="descipcion" class="form-label">Observaciones</label>
+                    <textarea class="form-control" name="descipcion" id="descipcion" cols="30" rows="5"></textarea>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<div mat-dialog-actions class="p-3 border-top border-ligth-subtle">
+    <button class="btn btn-success me-5">Guardar</button>
+    <button class="btn btn-secondary" (click)="onNoClick()">Cancelar</button>
+</div>

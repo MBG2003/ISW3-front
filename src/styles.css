@@ -1,1 +1,92 @@
-/* You can add global styles to this file, and also import other style files */
+* {
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+
+a {
+    text-decoration: none;
+}
+
+.shadow-bottom {
+    box-shadow: 0 10px 10px #88888848;
+}
+
+.shadow-top {
+    box-shadow: 0 -10px 10px #88888848;
+}
+
+.login-container {
+    background-image: url("assets/universidad_q.jpg");
+    background-size: cover;
+    min-height: 700px;
+}
+
+.container {
+    padding: 40px;
+    min-height: 400px;
+    background-color: rgba(255, 255, 255, 0.9);
+    border: 1px solid #000;
+    border-radius: 25px;
+    align-items: center;
+}
+
+#enlaces a {
+    color: #308113;
+}
+
+.enlace:hover {
+    color: #fff;
+}
+
+.sidebar {
+    width: 300px;
+    font-size: 17px;
+}
+
+.menu ul ul {
+    border-left: 2px solid #308113;
+}
+
+.menu a {
+    display: block;
+    padding: 10px;
+    margin: 0 0 0 15px;
+}
+
+.menu button {
+    padding: 15px 5px;
+    font-size: 17px;
+}
+
+.menu a:hover {
+    background: #23692f;
+    color: #fff;
+}
+
+.seccion {
+    width: 80%;
+    min-height: 700px;
+    padding-bottom: 50px;
+}
+
+.color-u {
+    color: #3A9B4A;
+}
+
+.bg-color-u {
+    background: #3A9B4A;
+}
+
+.menu button:hover {
+    background: #23692f;
+    color: #fff;
+}
+
+.table-fixed tbody td {
+    word-wrap: break-word;
+}
+
+.pie-pagina {
+    font-size: 13px;
+}
+@import "primeng/resources/themes/lara-light-blue/theme.css";
+@import "primeng/resources/primeng.css";

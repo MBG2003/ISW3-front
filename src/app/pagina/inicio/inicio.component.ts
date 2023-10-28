@@ -6,5 +6,6 @@ import { Component } from '@angular/core';
   styleUrls: ['./inicio.component.css']
 })
 export class InicioComponent {
-
+  title = 'SISTEMA DE GESTIÓN DE AULAS';
+  usuario = 'Mateo Baez Guevara';
 }
