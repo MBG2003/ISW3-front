@@ -9,10 +9,10 @@ export class CursoGetDTO {
     creditos:number = 0;
     nivel:number = 0;
     horas:number = 0;
-    cupos:number = 0;
+    grupos: Grupo[];
     recursos:string[] = [];
 
-    constructor(idFacultad:string, idPrograma:string, idCurso:string, idDocente:string, nombre:string, descripcion:string, pensum:string, creditos:number, nivel:number, horas:number, cupos:number, recursos:string[]) {
+    constructor(idFacultad:string, idPrograma:string, idCurso:string, idDocente:string, nombre:string, descripcion:string, pensum:string, creditos:number, nivel:number, horas:number, grupos: Grupo[], recursos:string[]) {
         this.idFacultad = idFacultad;
         this.idPrograma = idPrograma;
         this.idCurso = idCurso;
@@ -23,7 +23,14 @@ export class CursoGetDTO {
         this.creditos = creditos;
         this.nivel = nivel;
         this.horas = horas;
-        this.cupos = cupos;
+        this.grupos = grupos;
         this.recursos = recursos;
     }
+}
+
+
+interface Grupo {
+    idGrupo: number;
+    nombre: string;
+    cupos: number;
 }

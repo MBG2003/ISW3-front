@@ -26,6 +26,10 @@ export class AulaService {
     return this.http.get<MensajeDTO>(`${this.aulaUrl}/listar`, {headers: this.headers});
   }
 
+  public listarPorFacultad(idFacultad:string): Observable<MensajeDTO> {
+    return this.http.get<MensajeDTO>(`${this.aulaUrl}/listarPorFacultad/${idFacultad}`, { headers: this.headers });
+  }
+
   public agregar(aula:AulaDTO) {
     return this.http.post<MensajeDTO>(`${this.aulaUrl}/crear`, aula, {headers: this.headers});
   }

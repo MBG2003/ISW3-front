@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
@@ -7,6 +8,11 @@ import { JwtModule } from '@auth0/angular-jwt';
 import { ToastModule } from 'primeng/toast';
 import { TableModule } from 'primeng/table';
 import { FileSaverModule } from 'ngx-filesaver';
+import { MultiSelectModule } from 'primeng/multiselect';
+import { DropdownModule } from 'primeng/dropdown';
+import { TagModule } from 'primeng/tag';
+import { CalendarModule, DateAdapter } from 'angular-calendar';
+import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -18,10 +24,10 @@ import { CompleteLayoutComponent } from './pagina/layout/complete-layout/complet
 import { LoginLayoutComponent } from './pagina/layout/login-layout/login-layout.component';
 import { ListaAulaComponent } from './pagina/lista-aula/lista-aula.component';
 import { ListaCursoComponent } from './pagina/lista-curso/lista-curso.component';
-import { CrearCursoComponent } from './pagina/curso/crear-curso/crear-curso.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { ListaMejoraProblemaComponent } from './pagina/mejora-problema/lista-mejora-problema/lista-mejora-problema.component';
-import { CrearMejoraProblemaComponent } from './pagina/mejora-problema/crear-mejora-problema/crear-mejora-problema.component';
+import { ListaMejoraProblemaComponent } from './pagina/lista-mejora-problema/lista-mejora-problema.component';
+import { ListaReservaComponent } from './pagina/lista-reserva/lista-reserva.component';
+import { HorarioAulaComponent } from './pagina/horario-aula/horario-aula.component';
 
 @NgModule({
   declarations: [
@@ -34,9 +40,9 @@ import { CrearMejoraProblemaComponent } from './pagina/mejora-problema/crear-mej
     LoginLayoutComponent,
     ListaAulaComponent,
     ListaCursoComponent,
-    CrearCursoComponent,
     ListaMejoraProblemaComponent,
-    CrearMejoraProblemaComponent
+    ListaReservaComponent,
+    HorarioAulaComponent,
   ],
   imports: [
     BrowserModule,
@@ -49,6 +55,14 @@ import { CrearMejoraProblemaComponent } from './pagina/mejora-problema/crear-mej
     ToastModule,
     TableModule,
     FileSaverModule,
+    MultiSelectModule,
+    DropdownModule,
+    TagModule,
+    NgxMaterialTimepickerModule,
+    CalendarModule.forRoot({
+      provide: DateAdapter,
+      useFactory: adapterFactory
+    }),
     JwtModule.forRoot({
       config: {
         tokenGetter: () => {

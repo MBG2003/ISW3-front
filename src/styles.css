@@ -6,6 +6,20 @@ a {
     text-decoration: none;
 }
 
+ul {
+    padding: 0;
+}
+
+textarea {
+    resize: none;
+}
+
+.p-multiselect {
+    display: block;
+    width: 100%;
+    height: 38px;
+}
+
 .shadow-bottom {
     box-shadow: 0 10px 10px #88888848;
 }
@@ -65,7 +79,6 @@ a {
 .seccion {
     width: 80%;
     min-height: 700px;
-    padding-bottom: 50px;
 }
 
 .color-u {
@@ -90,3 +103,4 @@ a {
 }
 @import "primeng/resources/themes/lara-light-blue/theme.css";
 @import "primeng/resources/primeng.css";
+@import "../node_modules/angular-calendar/css/angular-calendar.css";

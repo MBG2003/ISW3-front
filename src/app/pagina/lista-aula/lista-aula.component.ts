@@ -83,7 +83,6 @@ export class ListaAulaComponent implements OnInit {
         this.aulas = data.response;
       },
       error: error => {
-        this.showError(error.error.message);
       }
     });
   }
@@ -99,6 +98,7 @@ export class ListaAulaComponent implements OnInit {
     this.aulaServicio.agregar(this.aula).subscribe({
       next: data => {
         this.showSuccess(data.message);
+        this.limpiarCampos();
         this.listar();
       },
       error: error => {
@@ -119,6 +119,7 @@ export class ListaAulaComponent implements OnInit {
     this.aulaServicio.actualizar(this.aula).subscribe({
       next: data => {
         this.showSuccess(data.message);
+        this.limpiarCampos();
         this.listar();
       },
       error: error => {
@@ -160,6 +161,18 @@ export class ListaAulaComponent implements OnInit {
       if (index !== -1) {
         this.recursos[index].checked = true;
       }
+    }
+  }
+
+  public getSeverity(status: string) {
+    switch (status) {
+      case 'FUNCIONANDO':
+        return 'info';
+
+      case 'MANTENIMIENTO':
+        return 'warning';
+
+      default: return 'danger';
     }
   }
 

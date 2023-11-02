@@ -1,0 +1,174 @@
+<!-- Modals -->
+<div class="modal fade" id="agregarEditar" tabindex="-1" aria-labelledby="agreagarModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header bg-color-u">
+                <h3 *ngIf="!esEdicion" class="modal-title">Agregar solicitud</h3>
+                <h3 *ngIf="esEdicion" class="modal-title">Editar solicitud</h3>
+            </div>
+            <div class="modal-body">
+                <form #f="ngForm">
+                    <div class="row g-2 justify-content-center">
+                        <div class="col px-3">
+                            <div class="mb-3">
+                                <label for="idSolicitud" class="form-label">Cod. Solicitud</label>
+                                <input type="text" name="idSolicitud" id="idSolicitud" class="form-control"
+                                    [(ngModel)]="solicitud.idSolicitud" disabled>
+                            </div>
+                            <div class="mb-3">
+                                <label for="emisor" class="form-label">Emisor</label>
+                                <input type="text" name="emisor" id="emisor" class="form-control"
+                                    [(ngModel)]="solicitud.emisor">
+                            </div>
+                        </div>
+                        <div class="col px-3">
+                            <div class="mb-3">
+                                <label for="idFacultad" class="form-label">Facultad</label>
+                                <select name="idFacultad" id="idFacultad" class="form-select"
+                                    [(ngModel)]="solicitud.idFacultad" (change)="listarAulasPorFacultad($event.target);">
+                                    <option value="">-Seleccione una opción-</option>
+                                    <option *ngFor="let item of facultades" value="{{item.idFacultad}}">{{item.nombre}}
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="idAula" class="form-label">Aula</label>
+                                <select name="idAula" id="idAula" class="form-select" [(ngModel)]="solicitud.idAula">
+                                    <option value="">-Seleccione una opción-</option>
+                                    <option *ngFor="let item of aulas" value="{{item.idFacultad}},{{item.idAula}}">
+                                        {{item.nombre}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div *ngIf="esEdicion" class="row g-2 justify-content-center mb-3">
+                        <div class="col px-3">
+                            <label for="estado" class="form-label">Estado</label>
+                            <select name="estado" id="estado" class="form-select" [(ngModel)]="solicitud.estado">
+                                <option value="" selected>-Seleccione una opción-</option>
+                                <option value="ACEPTADO">Aceptada</option>
+                                <option value="RECHAZADO">Rechazada</option>
+                                <option value="REVISION">En revisión</option>
+                                <option value="SOLUCIONADO">Solucionado</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row g-2 justify-content-center mb-3">
+                        <div class="col px-3">
+                            <label for="descripcion" class="form-label">Descripción</label>
+                            <textarea name="descripcion" id="descripcion" cols="30" rows="5"
+                                class="form-control" [(ngModel)]="solicitud.descripcion" maxlength="2000"></textarea>
+                        </div>
+                    </div>
+                    <div *ngIf="esEdicion" class="row g-2 justify-content-center mb-3">
+                        <div class="col px-3">
+                            <label for="observaciones" class="form-label">Observaciones</label>
+                            <textarea name="observaciones" id="observaciones" cols="30" rows="5"
+                                class="form-control" [(ngModel)]="solicitud.observaciones" maxlength="1000"></textarea>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-success" (click)="esEdicion ? editarSolicitud() : agregarSolicitud()"
+                    data-bs-dismiss="modal">Guardar</button>
+                <button class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="borrar" tabindex="-1" aria-labelledby="borrarModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-color-u">
+                <h1 class="modal-title fs-5" id="borrarModalLabel">Eliminar solicitud</h1>
+            </div>
+            <div class="modal-body">
+                <p>¿Está seguro que desea borrar la solicitud {{textoEliminar}}?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal" (click)="borrarSolicitud()">Sí</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="p-5 justify-content-center h-100">
+    <p-toast [showTransformOptions]="'translateY(100%)'" [showTransitionOptions]="'500ms'"
+        [hideTransitionOptions]="'500ms'" [showTransformOptions]="'translateX(100%)'"></p-toast>
+    <div class="mb-4">
+        <h2 class="mb-5"><strong>Solicitudes</strong></h2>
+    </div>
+    <p-table #dt [value]="solicitudes" [columns]="cols" [exportHeader]="'customExportHeader'" [paginator]="true"
+        [rows]="10" [showCurrentPageReport]="true"
+        currentPageReportTemplate="Mostrando {first} - {last} de {totalRecords} resultados"
+        [rowsPerPageOptions]="[10, 25, 50]" [globalFilterFields]="['idAula']">
+        <ng-template pTemplate="caption">
+            <div class="flex">
+                <button type="button" (click)="dt.exportCSV()" class="btn btn-secondary mx-2"><i
+                        class="fa-solid fa-file-csv"></i></button>
+                <button type="button" (click)="exportExcel()" class="btn btn-success mx-2"><i
+                        class="fa-solid fa-file-excel"></i></button>
+                <button type="button" (click)="exportPdf()" class="btn btn-danger mx-2"><i
+                        class="fa-solid fa-file-pdf"></i></button>
+                <button type="button" (click)="dt.exportCSV({ selectionOnly: true })" class="btn btn-primary float-end"
+                    pTooltip="Selection Only" tooltipPosition="bottom"><i class="fa-solid fa-filter"></i></button>
+                <span class="float-end mx-3">
+                    <input type="text" (input)="dt.filterGlobal($any($event.target).value, 'contains')"
+                        placeholder="Ingrese el ID del aula" class="form-control" />
+                </span>
+                <button class="btn btn-primary float-end" data-bs-toggle="modal" data-bs-target="#agregarEditar"
+                    (click)="esEdicion = false; limpiarCampos(); solicitud.idSolicitud = solicitudes.length + 1;">
+                    <i class="fa-solid fa-circle-plus"></i>
+                    Agregar
+                </button>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th pSortableColumn="idSolicitud" style="min-width:180px">Cod. Solicitud <p-sortIcon
+                        field="idSolicitud"></p-sortIcon>
+                </th>
+                <th pSortableColumn="descripcion" style="min-width:150px">Descripción <p-sortIcon
+                        field="descripcion"></p-sortIcon>
+                </th>
+                <th pSortableColumn="idAula" style="min-width:150px">Aula <p-sortIcon field="idAula"></p-sortIcon></th>
+                <th pSortableColumn="idFacultad" style="min-width:150px">Facultad <p-sortIcon
+                        field="idFacultad"></p-sortIcon></th>
+                <th pSortableColumn="emisor" style="min-width:150px">Emisor <p-sortIcon field="emisor"></p-sortIcon>
+                </th>
+                <th pSortableColumn="estado" style="min-width:150px">Estado <p-sortIcon field="estado"></p-sortIcon>
+                </th>
+                <th style="min-width:100px" field="observaciones">Observaciones </th>
+                <th style="min-width:150px">Opciones </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-solicitudLista>
+            <tr>
+                <td>{{solicitudLista.idSolicitud}}</td>
+                <td>{{solicitudLista.descripcion}}</td>
+                <td>{{solicitudLista.idAula}}</td>
+                <td>{{solicitudLista.idFacultad}}</td>
+                <td>{{solicitudLista.emisor}}</td>
+                <td><p-tag [value]="solicitudLista.estado" [severity]="getSeverity(solicitudLista.estado)"></p-tag></td>
+                <td>{{solicitudLista.observaciones}}</td>
+                <td class="text-center" style="min-width:120px;max-width:120px;">
+                    <button class="btn btn-primary me-2" (click)="editar(solicitudLista)" data-bs-toggle="modal"
+                        data-bs-target="#agregarEditar">
+                        <i class="fa-solid fa-pen"></i>
+                    </button>
+                    <button class="btn btn-danger" (click)="eliminar(solicitudLista)" data-bs-toggle="modal"
+                        data-bs-target="#borrar">
+                        <i class="fa-solid fa-trash-can"></i>
+                    </button>
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td colspan="8">No hay solicitudes</td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>

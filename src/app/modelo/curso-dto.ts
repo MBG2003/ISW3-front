@@ -4,11 +4,16 @@ export class CursoDTO {
     idCurso:string = "";
     idDocente:string = "";
     nombre:string = "";
-    descripcion:string = "";
     pensum:string = "";
+    grupos:Grupo[] = [];
     creditos:number = 0;
     nivel:number = 0;
     horas:number = 0;
-    cupos:number = 0;
     recursos:number[] = [];
+}
+
+interface Grupo {
+    idGrupo: number;
+    nombre: string;
+    cupos: number;
 }

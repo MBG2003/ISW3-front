@@ -24,4 +24,8 @@ export class ProgramaService {
   public listar(): Observable<MensajeDTO> {
     return this.http.get<MensajeDTO>(`${this.programaURL}/listar`, { headers: this.headers });
   }
+
+  public listarPorFacultad(idFacultad:string): Observable<MensajeDTO> {
+    return this.http.get<MensajeDTO>(`${this.programaURL}/listarPorFacultad/${idFacultad}`, { headers: this.headers });
+  }
 }

@@ -47,8 +47,8 @@
                         <ul class="btn-toggle-nav list-unstyled fw-normal pl-2 pb-1 small">
                             <li><a routerLink="/gestion_aulas/listado_aulas" class="link-dark rounded">Listado de
                                     aulas</a></li>
-                            <li><a routerLink="/asignacion_aulas" class="link-dark rounded">Asignación de aulas</a></li>
-                            <li><a routerLink="/horario_aulas" class="link-dark rounded">Horario de aulas</a></li>
+                            <li><a routerLink="/gestion_aulas/asignacion_aulas" class="link-dark rounded">Asignación de aulas</a></li>
+                            <li><a routerLink="/gestion_aulas/horario_aulas" class="link-dark rounded">Horario de aulas</a></li>
                         </ul>
                     </div>
                 </li>
@@ -73,7 +73,7 @@
                     </button>
                     <div class="collapse" id="tramites-collapse">
                         <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                            <li><a routerLink="" class="link-dark rounded">Reservas</a></li>
+                            <li><a routerLink="/gestion_aulas/listado_reservas" class="link-dark rounded">Reservas</a></li>
                             <li><a routerLink="/gestion_aulas/listado_mejoras_problemas"
                                     class="link-dark rounded">Problemas y Mejoras</a></li>
                         </ul>
@@ -82,7 +82,7 @@
             </ul>
         </div>
     </div>
-    <div class="seccion">
+    <div class="seccion" style="overflow-y:visible;">
         <router-outlet></router-outlet>
     </div>
 </div>

@@ -7,6 +7,7 @@ import { FacultadGetDTO } from 'src/app/modelo/facultad-get-dto';
 import { FacultadService } from 'src/app/servicios/facultad.service';
 import { ProgramaGetDTO } from 'src/app/modelo/programa-get-dto';
 import { CursoService } from 'src/app/servicios/curso.service';
+import { ProgramaService } from 'src/app/servicios/programa.service';
 
 @Component({
   selector: 'app-lista-curso',
@@ -20,8 +21,18 @@ export class ListaCursoComponent implements OnInit {
   exportColumns!: ExportColumn[];
   textoEliminar: string;
   esEdicion!: boolean;
+  esEdicionGrupo!: boolean;
   cursos: CursoGetDTO[];
   curso: CursoDTO;
+  grupoSelected: string;
+  cupos: number;
+  grupos: Grupo[] = [
+    { idGrupo: 0, nombre: '01-D', cupos: 0 },
+    { idGrupo: 1, nombre: '02-D', cupos: 0 },
+    { idGrupo: 2, nombre: '03-D', cupos: 0 },
+    { idGrupo: 3, nombre: '01-N', cupos: 0 },
+    { idGrupo: 4, nombre: '02-N', cupos: 0 }
+  ]
   facultades: FacultadGetDTO[];
   programas: ProgramaGetDTO[];
   recursos: Recurso[] = [
@@ -29,12 +40,14 @@ export class ListaCursoComponent implements OnInit {
     { idRecurso: 1, nombre: 'VIDEOBEAM', checked: false }
   ]
 
-  constructor(private cursoServicio:CursoService, private facultadServicio: FacultadService, private messageService: MessageService, private fileSaverService: FileSaverService) {
+  constructor(private cursoServicio: CursoService, private facultadServicio: FacultadService, private programaServicio: ProgramaService, private messageService: MessageService, private fileSaverService: FileSaverService) {
     this.cursos = [];
     this.facultades = [];
     this.programas = [];
-    this.textoEliminar = "";
+    this.textoEliminar = '';
     this.curso = new CursoDTO();
+    this.grupoSelected = '';
+    this.cupos = 0;
   }
 
   ngOnInit(): void {
@@ -49,7 +62,7 @@ export class ListaCursoComponent implements OnInit {
     this.cols = [
       { field: 'idCurso', header: 'Cod. Asignatura' },
       { field: 'nombre', header: 'Asignatura' },
-      { field: 'grupo', header: 'Grupo' },
+      { field: 'grupos', header: 'Grupos' },
       { field: 'nivel', header: 'Nivel' },
       { field: 'horas', header: 'Horas' },
       { field: 'creditos', header: 'Créditos' },
@@ -71,9 +84,23 @@ export class ListaCursoComponent implements OnInit {
         this.cursos = data.response;
       },
       error: error => {
-        this.showError(error.error.message);
       }
     });
+  }
+
+  public listarProgramasPorFacultad(idFacultad: any) {
+    if(idFacultad instanceof EventTarget) {
+      idFacultad = (idFacultad as HTMLSelectElement).value;
+    }
+    this.programaServicio.listarPorFacultad(idFacultad).subscribe({
+      next: data => {
+        this.programas = data.response;
+      },
+      error: error => {
+        this.programas = [];
+        this.showInfo(error.error.message);
+      }
+    })
   }
 
   public agregarCurso() {
@@ -83,10 +110,16 @@ export class ListaCursoComponent implements OnInit {
       }
     });
 
+    if (!Array.isArray(this.curso.grupos)) {
+      this.curso.grupos = Array.from(this.curso.grupos);
+    }
+
+    this.curso.idPrograma = this.curso.idPrograma.split(',')[1];
 
     this.cursoServicio.agregar(this.curso).subscribe({
       next: data => {
         this.showSuccess(data.message);
+        this.limpiarCampos();
         this.listar();
       },
       error: error => {
@@ -94,6 +127,7 @@ export class ListaCursoComponent implements OnInit {
       }
     });
     this.cursos = [];
+    this.listar();
   }
 
   public editarCurso() {
@@ -103,10 +137,12 @@ export class ListaCursoComponent implements OnInit {
       }
     });
 
+    this.curso.idPrograma = this.curso.idPrograma.split(',')[1];
 
     this.cursoServicio.actualizar(this.curso).subscribe({
       next: data => {
         this.showSuccess(data.message);
+        this.limpiarCampos();
         this.listar();
       },
       error: error => {
@@ -129,18 +165,26 @@ export class ListaCursoComponent implements OnInit {
   }
 
   public editar(curso: CursoGetDTO) {
-    this.recursos.map(r => r.checked = false);
+    this.limpiarCampos();
+    this.listarProgramasPorFacultad(curso.idFacultad);
     this.curso.idFacultad = curso.idFacultad;
-    this.curso.idPrograma = curso.idPrograma;
+    this.curso.idPrograma = curso.idFacultad + ',' + curso.idPrograma;
     this.curso.idCurso = curso.idCurso;
     this.curso.idDocente = curso.idDocente;
     this.curso.nombre = curso.nombre;
-    this.curso.descripcion = curso.descripcion;
     this.curso.pensum = curso.pensum;
     this.curso.creditos = curso.creditos;
     this.curso.nivel = curso.nivel;
     this.curso.horas = curso.horas;
-    this.curso.cupos = curso.cupos;
+    curso.grupos.map(g => {
+      let index = this.grupos.findIndex(g2 => g.idGrupo === g2.idGrupo);
+      if (index !== -1) {
+        const grupo = this.grupos[index];
+        grupo.cupos = g.cupos;
+        this.curso.grupos.push(grupo);
+      }
+    });
+
     this.recursos.map(r1 => {
       let recursoIndex = curso.recursos.findIndex(r2 => r1.nombre === r2);
       if (recursoIndex !== -1) {
@@ -167,14 +211,53 @@ export class ListaCursoComponent implements OnInit {
     this.curso.idDocente = "";
     this.curso.idCurso = "";
     this.curso.nombre = "";
-    this.curso.descripcion = "";
     this.curso.pensum = "";
     this.curso.creditos = 0;
     this.curso.nivel = 0;
     this.curso.horas = 0;
-    this.curso.cupos = 0;
+    this.curso.grupos = [];
+    this.curso.recursos = [];
     this.recursos.map(r => r.checked = false);
   };
+
+  public agregarGrupo() {
+    let grupo = this.grupos.find(g => g.idGrupo === Number.parseInt(this.grupoSelected));
+    if (grupo !== undefined) {
+      if (!this.curso.grupos.some(g => g.idGrupo === Number.parseInt(this.grupoSelected))) {
+        this.curso.grupos.push({ idGrupo: grupo.idGrupo, nombre: grupo.nombre, cupos: this.cupos })
+        this.grupoSelected = '';
+        this.cupos = 0;
+      } else {
+        this.showWarn('El grupo ya fue agregado');
+      }
+    } else {
+      this.showError('Error al agregar el grupo');
+    }
+
+  }
+
+  public editarGrupo() {
+    let index = this.curso.grupos.findIndex(g => g.idGrupo === Number.parseInt(this.grupoSelected));
+    if (index !== -1) {
+      let grupo = this.grupos.find(g => g.idGrupo === this.curso.grupos[index].idGrupo);
+      if (grupo !== undefined) {
+        this.curso.grupos[index] = { idGrupo: grupo.idGrupo, nombre: grupo.nombre, cupos: this.cupos };
+        this.grupoSelected = '';
+        this.cupos = 0;
+        this.esEdicionGrupo = false;
+      }
+    }
+  }
+
+  public seleccionGrupo(grupo: Grupo) {
+    this.grupoSelected = "" + grupo.idGrupo;
+    this.cupos = grupo.cupos;
+    this.esEdicionGrupo = true;
+  }
+
+  public eliminarGrupo(grupo: Grupo) {
+    this.curso.grupos = this.curso.grupos.filter(g => g.idGrupo !== grupo.idGrupo);
+  }
 
   showSuccess(message: string) {
     this.messageService.add({ severity: 'success', summary: 'Correcto', detail: message });
@@ -225,6 +308,12 @@ interface Recurso {
   idRecurso: number;
   nombre: string;
   checked: boolean;
+}
+
+interface Grupo {
+  idGrupo: number;
+  nombre: string;
+  cupos: number;
 }
 
 interface Column {

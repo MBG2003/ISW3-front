@@ -6,15 +6,17 @@ import { CompleteLayoutComponent } from './pagina/layout/complete-layout/complet
 import { AuthGuard } from './guards/auth-guard.service';
 import { ListaAulaComponent } from './pagina/lista-aula/lista-aula.component';
 import { ListaCursoComponent } from './pagina/lista-curso/lista-curso.component';
-import { ListaMejoraProblemaComponent } from './pagina/mejora-problema/lista-mejora-problema/lista-mejora-problema.component';
+import { ListaMejoraProblemaComponent } from './pagina/lista-mejora-problema/lista-mejora-problema.component';
+import { ListaReservaComponent } from './pagina/lista-reserva/lista-reserva.component';
 
 const routes: Routes = [
   {title: "SGA | Login" ,path: "gestion_aulas/login", component: LoginComponent},
   {title: "SGA", path: "gestion_aulas", component: CompleteLayoutComponent, children: [
     {path: "", component: HomeComponent},
     {title: "SGA | Listado de Aulas",path: "listado_aulas", component: ListaAulaComponent},
-    {path: "listado_cursos", component: ListaCursoComponent},
-    {path: "listado_mejoras_problemas", component: ListaMejoraProblemaComponent}
+    {title: "SGA | Listado de Cursos", path: "listado_cursos", component: ListaCursoComponent},
+    {title: "SGA | Listado de Reservas", path: "listado_reservas", component: ListaReservaComponent},
+    {title: "SGA | Listado de Mejoras y Problemas", path: "listado_mejoras_problemas", component: ListaMejoraProblemaComponent}
   ], canActivate: [AuthGuard]},
   {path: "**", pathMatch: "full", redirectTo: "gestion_aulas"},
   {path: "", pathMatch: "full", redirectTo: "gestion_aulas"},
