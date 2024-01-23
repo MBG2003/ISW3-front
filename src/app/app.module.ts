@@ -11,8 +11,15 @@ import { FileSaverModule } from 'ngx-filesaver';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { DropdownModule } from 'primeng/dropdown';
 import { TagModule } from 'primeng/tag';
-import { CalendarModule, DateAdapter } from 'angular-calendar';
-import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
+import {
+  CalendarDateFormatter,
+  CalendarModule,
+  CalendarMomentDateFormatter,
+  DateAdapter,
+  MOMENT,
+} from 'angular-calendar';
+import * as moment from 'moment-timezone'
+import { adapterFactory } from 'angular-calendar/date-adapters/moment';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -28,6 +35,11 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ListaMejoraProblemaComponent } from './pagina/lista-mejora-problema/lista-mejora-problema.component';
 import { ListaReservaComponent } from './pagina/lista-reserva/lista-reserva.component';
 import { HorarioAulaComponent } from './pagina/horario-aula/horario-aula.component';
+import { AsignarHorarioComponent } from './pagina/asignar-horario/asignar-horario.component';
+
+export function momentAdapterFactory() {
+  return adapterFactory(moment);
+}
 
 @NgModule({
   declarations: [
@@ -43,6 +55,7 @@ import { HorarioAulaComponent } from './pagina/horario-aula/horario-aula.compone
     ListaMejoraProblemaComponent,
     ListaReservaComponent,
     HorarioAulaComponent,
+    AsignarHorarioComponent
   ],
   imports: [
     BrowserModule,
@@ -59,10 +72,18 @@ import { HorarioAulaComponent } from './pagina/horario-aula/horario-aula.compone
     DropdownModule,
     TagModule,
     NgxMaterialTimepickerModule,
-    CalendarModule.forRoot({
-      provide: DateAdapter,
-      useFactory: adapterFactory
-    }),
+    CalendarModule.forRoot(
+      {
+        provide: DateAdapter,
+        useFactory: momentAdapterFactory,
+      },
+      {
+        dateFormatter: {
+          provide: CalendarDateFormatter,
+          useClass: CalendarMomentDateFormatter,
+        },
+      }
+    ),
     JwtModule.forRoot({
       config: {
         tokenGetter: () => {
@@ -71,7 +92,12 @@ import { HorarioAulaComponent } from './pagina/horario-aula/horario-aula.compone
       }
     })
   ],
-  providers: [],
+  providers: [
+    {
+      provide: MOMENT,
+      useValue: moment,
+    },
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

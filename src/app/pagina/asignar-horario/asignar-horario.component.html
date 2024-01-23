@@ -1,0 +1,63 @@
+<div class="p-5 justify-content-center h-100">
+    <p-toast [showTransformOptions]="'translateY(100%)'" [showTransitionOptions]="'500ms'"
+        [hideTransitionOptions]="'500ms'" [showTransformOptions]="'translateX(100%)'"></p-toast>
+    <div class="mb-4">
+        <h2 class="mb-5"><strong>Asignación de Aulas</strong></h2>
+    </div>
+
+    <!--<div class="mb-4">
+        <h2 class="mb-5"><strong>Aulas</strong></h2>
+    </div>
+    <p-table #dt [value]="aulas" [columns]="cols" [exportHeader]="'customExportHeader'" [paginator]="true" [rows]="10"
+        [showCurrentPageReport]="true" currentPageReportTemplate="Mostrando {first} - {last} de {totalRecords} resultados"
+        [rowsPerPageOptions]="[10, 25, 50]" [globalFilterFields]="['idAula']">
+        <ng-template pTemplate="header">
+            <tr>
+                <th pSortableColumn="idAula" style="min-width:150px">ID Aula <p-sortIcon field="idAula"></p-sortIcon>
+                </th>
+                <th pSortableColumn="nombre" style="min-width:150px">Nombre <p-sortIcon field="nombre"></p-sortIcon>
+                </th>
+                <th pSortableColumn="idFacultad" style="min-width:150px">Facultad <p-sortIcon
+                        field="idFacultad"></p-sortIcon></th>
+                <th pSortableColumn="capacidad" style="min-width:150px">Capacidad <p-sortIcon
+                        field="capacidad"></p-sortIcon></th>
+                <th pSortableColumn="estado" style="min-width:150px">Estado <p-sortIcon field="estado"></p-sortIcon>
+                </th>
+                <th pSortableColumn="recursos" style="min-width:150px">Recursos Audiovisuales <p-sortIcon
+                        field="recursos"></p-sortIcon></th>
+                <th style="min-width:100px">Horario </th>
+                <th style="min-width:150px">Opciones </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-aulaLista>
+            <tr>
+                <td>{{aulaLista.idAula}}</td>
+                <td>{{aulaLista.nombre}}</td>
+                <td>{{aulaLista.idFacultad}}</td>
+                <td>{{aulaLista.capacidad}}</td>
+                <td><p-tag [value]="aulaLista.estado" [severity]="getSeverity(aulaLista.estado)"></p-tag></td>
+                <td class="text-center">
+                    <i *ngIf="estaEnLista('COMPUTADORA', aulaLista.recursos)"
+                        class="fa-solid fa-computer fa-xl me-2"></i>
+                    <i *ngIf="estaEnLista('VIDEOBEAM', aulaLista.recursos)" class="fa-solid fa-video fa-xl ms-2"></i>
+                </td>
+                <td class="text-center"><i class="fa-solid fa-eye fa-xl"></i></td>
+                <td class="text-center" style="min-width:120px;max-width:120px;">
+                    <button class="btn btn-primary me-2" (click)="editar(aulaLista)" data-bs-toggle="modal"
+                        data-bs-target="#agregarEditar">
+                        <i class="fa-solid fa-pen"></i>
+                    </button>
+                    <button class="btn btn-danger" (click)="eliminar(aulaLista)" data-bs-toggle="modal"
+                        data-bs-target="#borrar">
+                        <i class="fa-solid fa-trash-can"></i>
+                    </button>
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td colspan="8">No hay aulas</td>
+            </tr>
+        </ng-template>
+    </p-table>-->
+</div>

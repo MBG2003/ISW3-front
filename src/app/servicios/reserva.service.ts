@@ -26,6 +26,10 @@ export class ReservaService {
     return this.http.get<MensajeDTO>(`${this.aulaUrl}/listar`, { headers: this.headers });
   }
 
+  public listarPorAula(idFacultad: string, idAula:string): Observable<MensajeDTO> {
+    return this.http.get<MensajeDTO>(`${this.aulaUrl}/listarPorAula?idFacultad=${idFacultad}&idAula=${idAula}`, { headers: this.headers });
+  }
+
   public agregar(reserva: ReservaDTO) {
     return this.http.post<MensajeDTO>(`${this.aulaUrl}/crear`, reserva, { headers: this.headers });
   }

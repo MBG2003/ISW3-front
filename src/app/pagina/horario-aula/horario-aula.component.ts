@@ -3,6 +3,8 @@ import {
   ChangeDetectionStrategy,
   ViewChild,
   TemplateRef,
+  OnInit,
+  ChangeDetectorRef,
 } from '@angular/core';
 
 import {
@@ -16,146 +18,167 @@ import {
   addHours,
 } from 'date-fns';
 
-import { Subject } from 'rxjs';
+import { RRule } from 'rrule';
+
+import { Subject, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import * as moment from 'moment-timezone';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import {
+  CalendarDayViewBeforeRenderEvent,
   CalendarEvent,
   CalendarEventAction,
   CalendarEventTimesChangedEvent,
+  CalendarMonthViewBeforeRenderEvent,
   CalendarView,
+  CalendarWeekViewBeforeRenderEvent,
 } from 'angular-calendar';
-import { EventColor } from 'calendar-utils';
 
-const colors: Record<string, EventColor> = {
-  red: {
-    primary: '#ad2121',
-    secondary: '#FAE3E3',
-  },
-  blue: {
-    primary: '#1e90ff',
-    secondary: '#D1E8FF',
-  },
-  yellow: {
-    primary: '#e3bc08',
-    secondary: '#FDF1BA',
-  },
-};
+import { ViewPeriod } from 'calendar-utils';
+
+import { EventColor } from 'calendar-utils';
+import { ReservaService } from 'src/app/servicios/reserva.service';
+import { ReservaGetDTO } from 'src/app/modelo/reserva-get-dto';
+import { CursoGetDTO } from 'src/app/modelo/curso-get-dto';
+import { FacultadGetDTO } from 'src/app/modelo/facultad-get-dto';
+import { AulaGetDTO } from 'src/app/modelo/aula-get-dto';
+import { AulaService } from 'src/app/servicios/aula.service';
+import { MessageService } from 'primeng/api';
+import { FacultadService } from 'src/app/servicios/facultad.service';
+
+moment.tz.setDefault('Utc');
+
+interface RecurringEvent {
+  title: string;
+  color: any;
+  rrule?: {
+    freq: any;
+    bymonth?: number;
+    bymonthday?: number;
+    byweekday?: any;
+  };
+}
 
 @Component({
   selector: 'app-horario-aula',
   templateUrl: './horario-aula.component.html',
-  styles: [
-    `
-      h3 {
-        margin: 0 0 10px;
-      }
-
-      pre {
-        background-color: #f5f5f5;
-        padding: 15px;
-      }
-    `,
-  ],
-  styleUrls: ['./horario-aula.component.css']
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  styleUrls: ['./horario-aula.component.css'],
+  providers: [MessageService]
 })
-export class HorarioAulaComponent {
+export class HorarioAulaComponent implements OnInit {
   @ViewChild('modalContent', { static: true }) modalContent!: TemplateRef<any>;
 
   view: CalendarView = CalendarView.Month;
 
   CalendarView = CalendarView;
 
-  viewDate: Date = new Date();
+  viewDate = moment().toDate();
+
+  calendarEvents: CalendarEvent<{reserva: ReservaGetDTO}>[] = [];
+
+  viewPeriod!: ViewPeriod;
+
+  reservas: ReservaGetDTO[];
 
   modalData!: {
     action: string;
     event: CalendarEvent;
   };
 
-  actions: CalendarEventAction[] = [
-    {
-      label: '<i class="fas fa-fw fa-pencil-alt"></i>',
-      a11yLabel: 'Edit',
-      onClick: ({ event }: { event: CalendarEvent }): void => {
-        this.handleEvent('Edited', event);
-      },
-    },
-    {
-      label: '<i class="fas fa-fw fa-trash-alt"></i>',
-      a11yLabel: 'Delete',
-      onClick: ({ event }: { event: CalendarEvent }): void => {
-        this.events = this.events.filter((iEvent) => iEvent !== event);
-        this.handleEvent('Deleted', event);
-      },
-    },
-  ];
-
   refresh = new Subject<void>();
 
-  events: CalendarEvent[] = [
-    {
-      start: subDays(startOfDay(new Date()), 1),
-      end: addDays(new Date(), 1),
-      title: 'A 3 day event',
-      color: {
-        ...{
-          primary: '#ad2121',
-          secondary: '#FAE3E3',
-        }
-      },
-      actions: this.actions,
-      allDay: true,
-      resizable: {
-        beforeStart: true,
-        afterEnd: true,
-      },
-      draggable: true,
-    },
-    {
-      start: startOfDay(new Date()),
-      title: 'An event with no end date',
-      color: {
-        ...{
-          primary: '#e3bc08',
-          secondary: '#FDF1BA',
-        }
-      },
-      actions: this.actions,
-    },
-    {
-      start: subDays(endOfMonth(new Date()), 3),
-      end: addDays(endOfMonth(new Date()), 3),
-      title: 'A long event that spans 2 months',
-      color: {
-        ...{
-          primary: '#1e90ff',
-          secondary: '#D1E8FF',
-        }
-      },
-      allDay: true,
-    },
-    {
-      start: addHours(startOfDay(new Date()), 2),
-      end: addHours(new Date(), 2),
-      title: 'A draggable and resizable event',
-      color: {
-        ...{
-          primary: '#e3bc08',
-          secondary: '#FDF1BA',
-        }
-      },
-      actions: this.actions,
-      resizable: {
-        beforeStart: true,
-        afterEnd: true,
-      },
-      draggable: true,
-    },
-  ];
+  events$!: Observable<CalendarEvent<{ reserva: ReservaGetDTO }>[]>;
+
+  clases: RecurringEvent[];
 
   activeDayIsOpen: boolean = true;
 
-  constructor(private modal: NgbModal) { }
+  facultades: FacultadGetDTO[];
+
+  idFacultad!: string;
+
+  aulas: AulaGetDTO[];
+
+  idAula!: string;
+
+  constructor(private cdr: ChangeDetectorRef, private reservaServicio: ReservaService, private facultadServicio:FacultadService, private aulaServicio: AulaService, private messageService: MessageService) {
+    this.reservas = [];
+    this.clases = [];
+    this.facultades = [];
+    this.aulas = [];
+    this.idFacultad = "";
+    this.idAula = "";
+    
+  }
+
+  updateCalendarEvents(
+    viewRender:
+      | CalendarMonthViewBeforeRenderEvent
+      | CalendarWeekViewBeforeRenderEvent
+      | CalendarDayViewBeforeRenderEvent
+  ): void {
+    if (
+      !this.viewPeriod ||
+      !moment(this.viewPeriod.start).isSame(viewRender.period.start) ||
+      !moment(this.viewPeriod.end).isSame(viewRender.period.end)
+    ) {
+      this.viewPeriod = viewRender.period;
+      this.calendarEvents = [];
+
+      this.clases.forEach((event) => {
+        const rule: RRule = new RRule({
+          ...event.rrule,
+          dtstart: moment(viewRender.period.start).startOf('day').toDate(),
+          until: moment(viewRender.period.end).endOf('day').toDate(),
+        });
+        const { title, color } = event;
+
+        rule.all().forEach((date) => {
+          this.calendarEvents.push({
+            title,
+            color,
+            start: moment(date).toDate(),
+          });
+        });
+      });
+      this.cdr.detectChanges();
+    }
+  }
+
+  public listarAulasPorFacultad(idFacultad: any) {
+    if (idFacultad instanceof EventTarget) {
+      idFacultad = (idFacultad as HTMLSelectElement).value;
+    }
+    this.aulaServicio.listarPorFacultad(idFacultad).subscribe({
+      next: data => {
+        this.aulas = data.response;
+      },
+      error: error => {
+        this.aulas = [];
+        this.showInfo(error.error.message);
+      }
+    });
+  }
+
+  public listarHorarioPorAula(idAula: any) {
+    if (idAula instanceof EventTarget) {
+      idAula = (idAula as HTMLSelectElement).value;
+    }
+    this.aulaServicio.listarHorarioPorAula(idAula.split(',')[0], idAula.split(',')[1]).subscribe({
+      next: data => {
+        this.aulas = data.response;
+      },
+      error: error => {
+        this.aulas = [];
+        this.showInfo(error.error.message);
+      }
+    });
+  }
+
+  showInfo(message: string) {
+    this.messageService.add({ severity: 'info', summary: 'Info', detail: message });
+  }
 
   dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
     if (isSameMonth(date, this.viewDate)) {
@@ -171,51 +194,56 @@ export class HorarioAulaComponent {
     }
   }
 
-  eventTimesChanged({
-    event,
-    newStart,
-    newEnd,
-  }: CalendarEventTimesChangedEvent): void {
-    this.events = this.events.map((iEvent) => {
-      if (iEvent === event) {
-        return {
-          ...event,
-          start: newStart,
-          end: newEnd,
-        };
-      }
-      return iEvent;
-    });
-    this.handleEvent('Dropped or resized', event);
-  }
+  ngOnInit(): void {
 
-  handleEvent(action: string, event: CalendarEvent): void {
-    this.modalData = { event, action };
-    this.modal.open(this.modalContent, { size: 'lg' });
-  }
-
-  addEvent(): void {
-    this.events = [
-      ...this.events,
-      {
-        title: 'New event',
-        start: startOfDay(new Date()),
-        end: endOfDay(new Date()),
-        color: {
-          primary: '#1e90ff',
-          secondary: '#D1E8FF',
-        },
-        draggable: true,
-        resizable: {
-          beforeStart: true,
-          afterEnd: true,
-        },
+    this.facultadServicio.listar().subscribe({
+      next: data => {
+        this.facultades = data.response;
       },
-    ];
-  }
+      error: error => {
+        this.showInfo(error.error.message);
+      }
+    });
 
-  deleteEvent(eventToDelete: CalendarEvent) {
-    this.events = this.events.filter((event) => event !== eventToDelete);
+    this.events$ = this.reservaServicio.listar().pipe(
+      map(({ response }: { response: ReservaGetDTO[] }) => {
+        return response.map((reserva: ReservaGetDTO) => {
+          return {
+            title: reserva.asunto,
+            start: addHours(startOfDay(new Date(new Date(reserva.fecha).toISOString())), reserva.horaInicio),
+            end: addHours(startOfDay(new Date(new Date(reserva.fecha).toISOString())), reserva.horaFin),
+            color: {
+              primary: '#1e90ff',
+              secondary: '#D1E8FF',
+            },
+            draggable: false,
+            resizable: {
+              beforeStart: false,
+              afterEnd: false,
+            }
+          };
+        });
+      })
+    );
+
+
+    /*this.clases.forEach((event) => {
+      const rule: RRule = new RRule({
+        ...event.rrule,
+        dtstart: moment(viewRender.period.start).startOf('day').toDate(),
+        until: moment(viewRender.period.end).endOf('day').toDate(),
+      });
+      const { title, color } = event;
+
+      rule.all().forEach((date) => {
+        this.calendarEvents.push({
+          title,
+          color,
+          start: moment(date).toDate(),
+        });
+      });
+    });*/
+    this.cdr.detectChanges();
   }
 
   setView(view: CalendarView) {
