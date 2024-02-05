@@ -4,6 +4,7 @@ import { MessageService } from 'primeng/api';
 import { SesionDTO } from 'src/app/modelo/sesion-dto';
 import { AuthService } from 'src/app/servicios/auth.service';
 import { TokenService } from 'src/app/servicios/token.service';
+import { UsuarioService } from 'src/app/servicios/usuario.service';
 
 
 @Component({
@@ -32,7 +33,7 @@ export class LoginComponent implements OnInit {
         this.showSuccess(data.message);
       },
       error: error => {
-        this.showError(error.error.message);
+        this.showError(error.error.message != undefined ? error.error.message : error.error);
       }
     })
   }

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MessageService } from 'primeng/api';
 import { FileSaverService } from 'ngx-filesaver';
 import { AulaDTO } from 'src/app/modelo/aula-dto';
@@ -6,6 +6,9 @@ import { AulaGetDTO } from 'src/app/modelo/aula-get-dto';
 import { FacultadGetDTO } from 'src/app/modelo/facultad-get-dto';
 import { AulaService } from 'src/app/servicios/aula.service';
 import { FacultadService } from 'src/app/servicios/facultad.service';
+import * as $AB from 'jquery';
+import * as bootstrap from "bootstrap";
+import { FormBuilder, FormGroup, NgForm, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-lista-aula',
@@ -14,6 +17,9 @@ import { FacultadService } from 'src/app/servicios/facultad.service';
   providers: [MessageService]
 })
 export class ListaAulaComponent implements OnInit {
+
+  @ViewChild('f') f!: NgForm;
+  formEnviado = false;
 
   cols!: Column[];
   exportColumns!: ExportColumn[];
@@ -28,7 +34,7 @@ export class ListaAulaComponent implements OnInit {
     { idRecurso: 1, nombre: 'VIDEOBEAM', checked: false }
   ]
 
-  constructor(private aulaServicio: AulaService, private facultadServicio: FacultadService, private messageService: MessageService, private fileSaverService:FileSaverService) {
+  constructor(private aulaServicio: AulaService, private facultadServicio: FacultadService, private messageService: MessageService, private fileSaverService: FileSaverService) {
     this.textoEliminar = "";
     this.aulas = [];
     this.facultades = [];
@@ -55,7 +61,7 @@ export class ListaAulaComponent implements OnInit {
     this.exportColumns = this.cols.map((col) => ({ title: col.header, dataKey: col.field }));
   }
 
-  public editar(aula: AulaGetDTO) {
+  editar(aula: AulaGetDTO) {
     this.recursos.map(r => r.checked = false);
     this.aula.idFacultad = aula.idFacultad;
     this.aula.idAula = aula.idAula;
@@ -71,23 +77,24 @@ export class ListaAulaComponent implements OnInit {
     this.esEdicion = true;
   }
 
-  public eliminar(aula: AulaGetDTO) {
+  eliminar(aula: AulaGetDTO) {
     this.aula.idFacultad = aula.idFacultad;
     this.aula.idAula = aula.idAula;
     this.textoEliminar = aula.idAula;
   }
 
-  public listar() {
+  listar() {
     this.aulaServicio.listar().subscribe({
       next: data => {
         this.aulas = data.response;
       },
       error: error => {
+        this.aulas = [];
       }
     });
   }
 
-  public agregarAula() {
+  agregarAula() {
     this.recursos.map(r => {
       if (r.checked === true) {
         this.aula.recursos.push(r.idRecurso);
@@ -100,6 +107,8 @@ export class ListaAulaComponent implements OnInit {
         this.showSuccess(data.message);
         this.limpiarCampos();
         this.listar();
+        $('#agregarEditar').modal('hide');
+        this.formEnviado = false;
       },
       error: error => {
         this.showError(error.error.message);
@@ -108,7 +117,7 @@ export class ListaAulaComponent implements OnInit {
     this.aulas = [];
   }
 
-  public editarAula() {
+  editarAula() {
     this.recursos.map(r => {
       if (r.checked === true) {
         this.aula.recursos.push(r.idRecurso);
@@ -121,6 +130,7 @@ export class ListaAulaComponent implements OnInit {
         this.showSuccess(data.message);
         this.limpiarCampos();
         this.listar();
+        $('#agregarEditar').modal('hide');
       },
       error: error => {
         this.showError(error.error.message);
@@ -129,7 +139,7 @@ export class ListaAulaComponent implements OnInit {
     this.aulas = [];
   }
 
-  public borrarAula() {
+  borrarAula() {
     this.aulaServicio.eliminar(this.aula.idFacultad, this.aula.idAula).subscribe({
       next: data => {
         this.showSuccess(data.message);
@@ -141,11 +151,11 @@ export class ListaAulaComponent implements OnInit {
     });
   }
 
-  public estaEnLista(idRecurso: any, recursos: any[]): boolean {
+  estaEnLista(idRecurso: any, recursos: any[]): boolean {
     return recursos.findIndex(r => r === idRecurso) !== -1;
   }
 
-  public limpiarCampos() {
+  limpiarCampos() {
     this.aula.idFacultad = "";
     this.aula.idAula = "";
     this.aula.nombre = "";

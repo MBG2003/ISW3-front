@@ -84,6 +84,7 @@ export class ListaCursoComponent implements OnInit {
         this.cursos = data.response;
       },
       error: error => {
+        this.cursos = [];
       }
     });
   }
