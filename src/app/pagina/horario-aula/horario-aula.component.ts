@@ -46,8 +46,6 @@ import { AulaService } from 'src/app/servicios/aula.service';
 import { MessageService } from 'primeng/api';
 import { FacultadService } from 'src/app/servicios/facultad.service';
 
-moment.tz.setDefault('Utc');
-
 interface RecurringEvent {
   title: string;
   color: any;
@@ -67,7 +65,7 @@ interface RecurringEvent {
   providers: [MessageService]
 })
 export class HorarioAulaComponent implements OnInit {
-  @ViewChild('modalContent', { static: true }) modalContent!: TemplateRef<any>;
+  @ViewChild('eventInfo', { static: true }) eventInfo!: TemplateRef<any>;
 
   view: CalendarView = CalendarView.Month;
 
@@ -92,7 +90,7 @@ export class HorarioAulaComponent implements OnInit {
 
   clases: RecurringEvent[];
 
-  activeDayIsOpen: boolean = true;
+  activeDayIsOpen: boolean = false;
 
   facultades: FacultadGetDTO[];
 
@@ -102,7 +100,7 @@ export class HorarioAulaComponent implements OnInit {
 
   idAula!: string;
 
-  constructor(private cdr: ChangeDetectorRef, private reservaServicio: ReservaService, private facultadServicio:FacultadService, private aulaServicio: AulaService, private messageService: MessageService) {
+  constructor(private cdr: ChangeDetectorRef, private reservaServicio: ReservaService, private facultadServicio:FacultadService, private aulaServicio: AulaService, private messageService: MessageService, private eventInfoModal: NgbModal) {
     this.reservas = [];
     this.clases = [];
     this.facultades = [];
@@ -210,16 +208,16 @@ export class HorarioAulaComponent implements OnInit {
         return response.map((reserva: ReservaGetDTO) => {
           return {
             title: reserva.asunto,
-            start: addHours(startOfDay(new Date(new Date(reserva.fecha).toISOString())), reserva.horaInicio),
-            end: addHours(startOfDay(new Date(new Date(reserva.fecha).toISOString())), reserva.horaFin),
+            start: addHours(new Date(reserva.fecha), reserva.horaInicio),
+            end: addHours(new Date(reserva.fecha), reserva.horaFin),
             color: {
               primary: '#1e90ff',
               secondary: '#D1E8FF',
             },
-            draggable: false,
+            draggable: true,
             resizable: {
-              beforeStart: false,
-              afterEnd: false,
+              beforeStart: true,
+              afterEnd: true,
             }
           };
         });
@@ -253,4 +251,9 @@ export class HorarioAulaComponent implements OnInit {
   closeOpenMonthViewDay() {
     this.activeDayIsOpen = false;
   }
+
+  handleEvent(event: CalendarEvent): void {
+    this.eventInfoModal.open(this.eventInfo, { size: 'lg' });
+  }
+
 }

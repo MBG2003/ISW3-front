@@ -96,6 +96,7 @@ export class ListaMejoraProblemaComponent implements OnInit {
         this.solicitudes = data.response;
       },
       error: error => {
+        this.solicitudes = [];
       }
     });
   }

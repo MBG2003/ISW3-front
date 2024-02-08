@@ -11,11 +11,6 @@
                     <div class="row g-2 justify-content-center">
                         <div class="col px-3">
                             <div class="mb-3">
-                                <label for="idReserva" class="form-label">Cod. Reserva</label>
-                                <input type="text" name="idReserva" id="idReserva" class="form-control"
-                                    [(ngModel)]="reserva.idReserva" disabled>
-                            </div>
-                            <div class="mb-3">
                                 <label for="idFacultad" class="form-label">Facultad</label>
                                 <select name="idFacultad" id="idFacultad" class="form-select"
                                     [(ngModel)]="reserva.idFacultad" (change)="listarAulasPorFacultad($event.target);">
@@ -28,7 +23,7 @@
                                 <label for="idAula" class="form-label">Aula</label>
                                 <select name="idAula" id="idAula" class="form-select" [(ngModel)]="reserva.idAula">
                                     <option value="">-Seleccione una opción-</option>
-                                    <option *ngFor="let item of aulas" value="{{item.idFacultad}},{{item.idAula}}">
+                                    <option *ngFor="let item of aulas" value="{{item.idAula}}">
                                         {{item.nombre}}
                                     </option>
                                 </select>
@@ -41,22 +36,21 @@
                         </div>
                         <div class="col px-3">
                             <div class="mb-3">
-                                <label for="asunto" class="form-label">Asunto</label>
-                                <input type="text" name="asunto" id="asunto" class="form-control"
-                                    [(ngModel)]="reserva.asunto">
-                            </div>
-                            <div class="mb-3">
                                 <label for="fecha" class="form-label">Fecha</label>
                                 <input type="date" name="fecha" id="fecha" class="form-control"
                                     [(ngModel)]="reserva.fecha">
                             </div>
                             <div class="mb-3">
                                 <label for="horaInicio" class="form-label">Hora inicio</label>
-                                <ngx-timepicker-field name="horaInicio" [controlOnly]="true" [minutesGap]="60" [min]="'7:00 am'" [max]="horaFin" [(ngModel)]="horaInicio" (timeChanged)="onChangeHoraInicio($event)"></ngx-timepicker-field>
+                                <ngx-timepicker-field name="horaInicio" [controlOnly]="true" [minutesGap]="60"
+                                    [min]="'7:00 am'" [max]="horaFin" [(ngModel)]="horaInicio"
+                                    (timeChanged)="onChangeHoraInicio($event)"></ngx-timepicker-field>
                             </div>
                             <div class="mb-3">
                                 <label for="horaFin" class="form-label">Hora fin</label>
-                                <ngx-timepicker-field name="horaFin" [controlOnly]="true" [minutesGap]="60" [min]="horaInicio" [max]="'10:00 pm'" [(ngModel)]="horaFin" (timeChanged)="onChangeHoraFin($event)"></ngx-timepicker-field>
+                                <ngx-timepicker-field name="horaFin" [controlOnly]="true" [minutesGap]="60"
+                                    [min]="horaInicio" [max]="'10:00 pm'" [(ngModel)]="horaFin"
+                                    (timeChanged)="onChangeHoraFin($event)"></ngx-timepicker-field>
                             </div>
                         </div>
                     </div>
@@ -70,6 +64,14 @@
                                 <option value="REVISION">En revisión</option>
                                 <option value="SOLUCIONADO">Solucionado</option>
                             </select>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row g-2 justify-content-center mb-3">
+                        <div class="col px-3">
+                            <label for="asunto" class="form-label">Asunto</label>
+                            <input type="text" name="asunto" id="asunto" class="form-control"
+                                [(ngModel)]="reserva.asunto">
                         </div>
                     </div>
                     <div class="row g-2 justify-content-center mb-3">
@@ -89,7 +91,8 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-success" (click)="esEdicion ? editarReserva() : agregarReserva()">Guardar</button>
+                <button class="btn btn-success"
+                    (click)="esEdicion ? editarReserva() : agregarReserva()">Guardar</button>
                 <button #cerrarForm class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
             </div>
         </div>
@@ -137,7 +140,7 @@
                         placeholder="Ingrese el ID del aula" class="form-control" />
                 </span>
                 <button class="btn btn-primary float-end" data-bs-toggle="modal" data-bs-target="#agregarEditar"
-                    (click)="esEdicion = false; limpiarCampos(); reserva.idReserva = reservas.length + 1;">
+                    (click)="esEdicion = false; limpiarCampos();">
                     <i class="fa-solid fa-circle-plus"></i>
                     Agregar
                 </button>
@@ -175,7 +178,7 @@
                 <td>{{reservaLista.idAula}}</td>
                 <td>{{reservaLista.idFacultad}}</td>
                 <td>{{reservaLista.emisor}}</td>
-                <td>{{formatFecha(reservaLista.fecha)}}</td>
+                <td>{{reservaLista.fecha}}</td>
                 <td>{{horaString(reservaLista.horaInicio)}}</td>
                 <td>{{horaString(reservaLista.horaFin)}}</td>
                 <td><p-tag [value]="reservaLista.estado" [severity]="getSeverity(reservaLista.estado)"></p-tag></td>

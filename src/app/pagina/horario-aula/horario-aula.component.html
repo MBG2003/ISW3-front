@@ -34,19 +34,19 @@
       <div class="btn-group">
         <div class="btn btn-primary" mwlCalendarPreviousView [view]="view" [(viewDate)]="viewDate"
           (viewDateChange)="closeOpenMonthViewDay()">
-          Previous
+          Anterior
         </div>
         <div class="btn btn-outline-secondary" mwlCalendarToday [(viewDate)]="viewDate">
-          Today
+          Hoy
         </div>
         <div class="btn btn-primary" mwlCalendarNextView [view]="view" [(viewDate)]="viewDate"
           (viewDateChange)="closeOpenMonthViewDay()">
-          Next
+          Siguiente
         </div>
       </div>
     </div>
     <div class="col-md-4">
-      <h3>{{ viewDate | calendarDate:(view + 'ViewTitle'):'en' }}</h3>
+      <h3>{{ viewDate | calendarDate:(view + 'ViewTitle'):'es' }}</h3>
     </div>
     <div class="col-md-4">
       <div class="btn-group">
@@ -72,8 +72,12 @@
 
   <div *ngIf="events$ | async; else loading; let events">
     <div [ngSwitch]="view">
-      <mwl-calendar-month-view *ngSwitchCase="'month'" [viewDate]="viewDate" [events]="events"
-        (beforeViewRender)="updateCalendarEvents($event)">
+      <mwl-calendar-month-view *ngSwitchCase="'month'" 
+      [viewDate]="viewDate" 
+      [events]="events"
+      [activeDayIsOpen]="activeDayIsOpen" 
+      (beforeViewRender)="updateCalendarEvents($event)"
+      (dayClicked)="dayClicked($event.day)">
       </mwl-calendar-month-view>
       <mwl-calendar-week-view *ngSwitchCase="'week'" [viewDate]="viewDate" [events]="events"
         (beforeViewRender)="updateCalendarEvents($event)">
@@ -83,4 +87,14 @@
       </mwl-calendar-day-view>
     </div>
   </div>
-</div>
+
+  <ng-template #eventInfo let-close="close">
+    <div class="modal-header bg-color-u">
+      <h3 class="modal-title">Evento</h3>
+    </div>
+    <div class="modal-body">
+      Asunto:
+
+    </div>
+  </ng-template>
+  </div>

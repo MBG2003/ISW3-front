@@ -89,7 +89,7 @@ export class ListaCursoComponent implements OnInit {
     });
   }
 
-  public listarProgramasPorFacultad(idFacultad: any) {
+  listarProgramasPorFacultad(idFacultad: any) {
     if(idFacultad instanceof EventTarget) {
       idFacultad = (idFacultad as HTMLSelectElement).value;
     }
@@ -104,7 +104,7 @@ export class ListaCursoComponent implements OnInit {
     })
   }
 
-  public agregarCurso() {
+  agregarCurso() {
     this.recursos.map(r => {
       if (r.checked === true) {
         this.curso.recursos.push(r.idRecurso);
@@ -131,7 +131,7 @@ export class ListaCursoComponent implements OnInit {
     this.listar();
   }
 
-  public editarCurso() {
+  editarCurso() {
     this.recursos.map(r => {
       if (r.checked === true) {
         this.curso.recursos.push(r.idRecurso);
@@ -153,7 +153,7 @@ export class ListaCursoComponent implements OnInit {
     this.cursos = [];
   }
 
-  public borrarCurso() {
+  borrarCurso() {
     this.cursoServicio.eliminar(this.curso.idFacultad, this.curso.idPrograma, this.curso.idCurso).subscribe({
       next: data => {
         this.showSuccess(data.message);
@@ -165,7 +165,7 @@ export class ListaCursoComponent implements OnInit {
     });
   }
 
-  public editar(curso: CursoGetDTO) {
+  editar(curso: CursoGetDTO) {
     this.limpiarCampos();
     this.listarProgramasPorFacultad(curso.idFacultad);
     this.curso.idFacultad = curso.idFacultad;
@@ -195,18 +195,18 @@ export class ListaCursoComponent implements OnInit {
     this.esEdicion = true;
   }
 
-  public eliminar(curso: CursoGetDTO) {
+  cambiarTxtEliminar(curso: CursoGetDTO) {
     this.curso.idFacultad = curso.idFacultad;
     this.curso.idPrograma = curso.idPrograma;
     this.curso.idCurso = curso.idCurso;
     this.textoEliminar = curso.idCurso;
   }
 
-  public estaEnLista(idRecurso: any, recursos: any[]): boolean {
+  estaEnLista(idRecurso: any, recursos: any[]): boolean {
     return recursos.findIndex(r => r === idRecurso) !== -1;
   }
 
-  public limpiarCampos() {
+  limpiarCampos() {
     this.curso.idFacultad = "";
     this.curso.idPrograma = "";
     this.curso.idDocente = "";
@@ -221,7 +221,7 @@ export class ListaCursoComponent implements OnInit {
     this.recursos.map(r => r.checked = false);
   };
 
-  public agregarGrupo() {
+  agregarGrupo() {
     let grupo = this.grupos.find(g => g.idGrupo === Number.parseInt(this.grupoSelected));
     if (grupo !== undefined) {
       if (!this.curso.grupos.some(g => g.idGrupo === Number.parseInt(this.grupoSelected))) {
@@ -237,7 +237,7 @@ export class ListaCursoComponent implements OnInit {
 
   }
 
-  public editarGrupo() {
+  editarGrupo() {
     let index = this.curso.grupos.findIndex(g => g.idGrupo === Number.parseInt(this.grupoSelected));
     if (index !== -1) {
       let grupo = this.grupos.find(g => g.idGrupo === this.curso.grupos[index].idGrupo);
@@ -250,7 +250,7 @@ export class ListaCursoComponent implements OnInit {
     }
   }
 
-  public seleccionGrupo(grupo: Grupo) {
+  seleccionGrupo(grupo: Grupo) {
     this.grupoSelected = "" + grupo.idGrupo;
     this.cupos = grupo.cupos;
     this.esEdicionGrupo = true;

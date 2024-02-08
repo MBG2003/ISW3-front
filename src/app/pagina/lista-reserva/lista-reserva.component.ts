@@ -44,7 +44,7 @@ export class ListaReservaComponent implements OnInit {
         this.facultades = data.response;
       },
       error: error => {
-
+        this.facultades = [];
       }
     });
 
@@ -67,7 +67,7 @@ export class ListaReservaComponent implements OnInit {
     this.exportColumns = this.cols.map((col) => ({ title: col.header, dataKey: col.field }));
   }
 
-  public listarAulasPorFacultad(idFacultad: any) {
+  listarAulasPorFacultad(idFacultad: any) {
     if (idFacultad instanceof EventTarget) {
       idFacultad = (idFacultad as HTMLSelectElement).value;
     }
@@ -83,18 +83,15 @@ export class ListaReservaComponent implements OnInit {
   }
 
   public editar(reserva: ReservaGetDTO) {
-    console.log(reserva.fecha);
     this.listarAulasPorFacultad(reserva.idFacultad);
     this.reserva.idReserva = reserva.idReserva;
     this.reserva.idFacultad = reserva.idFacultad;
-    this.reserva.idAula = reserva.idFacultad + ',' + reserva.idAula;
+    this.reserva.idAula = reserva.idAula;
     this.reserva.emisor = reserva.emisor;
     this.reserva.asunto = reserva.asunto;
     this.reserva.descripcion = reserva.descripcion;
     this.reserva.estado = reserva.estado;
-    console.log(this.formatFechaISO(reserva.fecha));
-    this.reserva.fecha = this.formatFechaISO(reserva.fecha);
-    console.log(this.reserva.fecha);
+    this.reserva.fecha = reserva.fecha;
     this.reserva.horaInicio = reserva.horaInicio;
     this.reserva.horaFin = reserva.horaFin;
     this.reserva.observaciones = reserva.observaciones;
@@ -114,6 +111,7 @@ export class ListaReservaComponent implements OnInit {
         this.reservas = data.response;
       },
       error: error => {
+        this.reservas = [];
       }
     });
   }
@@ -125,20 +123,6 @@ export class ListaReservaComponent implements OnInit {
     return hora + ':00 AM';
   }
 
-  public formatFecha(fecha: Date) {
-    fecha = new Date(fecha);
-    return fecha.toLocaleDateString('es-ES', { year: 'numeric', month: 'short', day: '2-digit' }).replace(/ /g, '-');
-  }
-
-  public formatFechaISO(fecha: any):string {
-    const anio = fecha.split('-')[0];
-    const mes = fecha.split('-')[1];
-    const dia = fecha.split('-')[2].split('T')[0];
-
-    return `${anio}-${mes}-${dia}`;
-  }
-
-
   onChangeHoraInicio(event: string) {
     this.horaInicio = event;
   }
@@ -147,18 +131,14 @@ export class ListaReservaComponent implements OnInit {
     this.horaFin = event;
   }
 
-  public agregarReserva() {
-    this.reserva.idAula = this.reserva.idAula.split(',')[1];
-
+  agregarReserva() {
     if (this.horaInicio.endsWith('PM')) {
       this.reserva.horaInicio = 12 + Number.parseInt(this.horaInicio.split(':')[0]);
     } else {
       this.reserva.horaInicio = Number.parseInt(this.horaInicio.split(':')[0]);
     }
 
-    console.log(this.horaFin);
     if (this.horaFin.endsWith('PM')) {
-
       this.reserva.horaFin = 12 + Number.parseInt(this.horaFin.split(':')[0]);
     } else {
       this.reserva.horaFin = Number.parseInt(this.horaFin.split(':')[0]);
@@ -189,7 +169,6 @@ export class ListaReservaComponent implements OnInit {
       this.reserva.horaInicio = Number.parseInt(this.horaInicio.split(':')[0]);
     }
 
-    console.log(this.horaFin);
     if (this.horaFin.endsWith('PM')) {
 
       this.reserva.horaFin = 12 + Number.parseInt(this.horaFin.split(':')[0]);
@@ -211,7 +190,7 @@ export class ListaReservaComponent implements OnInit {
     });
   }
 
-  public borrarReserva() {
+  borrarReserva() {
     this.reservaServicio.eliminar("" + this.reserva.idReserva).subscribe({
       next: data => {
         this.showSuccess(data.message);
@@ -223,7 +202,7 @@ export class ListaReservaComponent implements OnInit {
     });
   }
 
-  public limpiarCampos() {
+  limpiarCampos() {
     this.reserva.idReserva = 0;
     this.reserva.idFacultad = "";
     this.reserva.idAula = "";

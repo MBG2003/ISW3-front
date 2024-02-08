@@ -77,7 +77,7 @@ export class ListaAulaComponent implements OnInit {
     this.esEdicion = true;
   }
 
-  eliminar(aula: AulaGetDTO) {
+  cambiarTxtEliminar(aula: AulaGetDTO) {
     this.aula.idFacultad = aula.idFacultad;
     this.aula.idAula = aula.idAula;
     this.textoEliminar = aula.idAula;
