@@ -114,7 +114,6 @@ export class ListaAulaComponent implements OnInit {
         this.showError(error.error.message);
       }
     });
-    this.aulas = [];
   }
 
   editarAula() {
@@ -131,6 +130,7 @@ export class ListaAulaComponent implements OnInit {
         this.limpiarCampos();
         this.listar();
         $('#agregarEditar').modal('hide');
+        this.formEnviado = false;
       },
       error: error => {
         this.showError(error.error.message);

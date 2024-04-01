@@ -24,14 +24,25 @@ export class ListaCursoComponent implements OnInit {
   esEdicionGrupo!: boolean;
   cursos: CursoGetDTO[];
   curso: CursoDTO;
-  grupoSelected: string;
+  grupoSelected: Grupo = {idGrupo: -1, nombre: '', cupos: 0, horario: [{diaSemana: -1, horaInicio: 0, horaFin: 0}]};
+  diaSelected: string;
+  horaInicio!: string;
+  horaFin!: string;
   cupos: number;
   grupos: Grupo[] = [
-    { idGrupo: 0, nombre: '01-D', cupos: 0 },
-    { idGrupo: 1, nombre: '02-D', cupos: 0 },
-    { idGrupo: 2, nombre: '03-D', cupos: 0 },
-    { idGrupo: 3, nombre: '01-N', cupos: 0 },
-    { idGrupo: 4, nombre: '02-N', cupos: 0 }
+    { idGrupo: 1, nombre: '01-D', cupos: 0, horario: [{diaSemana: -1, horaInicio: 0, horaFin: 0}] },
+    { idGrupo: 2, nombre: '02-D', cupos: 0, horario: [{diaSemana: -1, horaInicio: 0, horaFin: 0}]},
+    { idGrupo: 3, nombre: '03-D', cupos: 0, horario: [{diaSemana: -1, horaInicio: 0, horaFin: 0}] },
+    { idGrupo: 4, nombre: '01-N', cupos: 0, horario: [{diaSemana: -1, horaInicio: 0, horaFin: 0}] },
+    { idGrupo: 5, nombre: '02-N', cupos: 0, horario: [{diaSemana: -1, horaInicio: 0, horaFin: 0}] }
+  ];
+  diasSemana: DiaSemana[] = [
+    {idDia: 0, nombre: 'Lunes'},
+    {idDia: 1, nombre: 'Martes'},
+    {idDia: 2, nombre: 'Miércoles'},
+    {idDia: 3, nombre: 'Jueves'},
+    {idDia: 4, nombre: 'Viernes'},
+    {idDia: 5, nombre: 'Sábado'}
   ]
   facultades: FacultadGetDTO[];
   programas: ProgramaGetDTO[];
@@ -46,7 +57,7 @@ export class ListaCursoComponent implements OnInit {
     this.programas = [];
     this.textoEliminar = '';
     this.curso = new CursoDTO();
-    this.grupoSelected = '';
+    this.diaSelected = '';
     this.cupos = 0;
   }
 
@@ -222,11 +233,11 @@ export class ListaCursoComponent implements OnInit {
   };
 
   agregarGrupo() {
-    let grupo = this.grupos.find(g => g.idGrupo === Number.parseInt(this.grupoSelected));
+    let grupo = this.grupos.find(g => g.idGrupo === this.grupoSelected.idGrupo);
     if (grupo !== undefined) {
-      if (!this.curso.grupos.some(g => g.idGrupo === Number.parseInt(this.grupoSelected))) {
-        this.curso.grupos.push({ idGrupo: grupo.idGrupo, nombre: grupo.nombre, cupos: this.cupos })
-        this.grupoSelected = '';
+      if (!this.curso.grupos.some(g => g.idGrupo === this.grupoSelected.idGrupo)) {
+        this.curso.grupos.push({ idGrupo: grupo.idGrupo, nombre: grupo.nombre, cupos: this.cupos, horario: [] })
+        this.grupoSelected = {idGrupo: -1, nombre: '', cupos: 0, horario: []};
         this.cupos = 0;
       } else {
         this.showWarn('El grupo ya fue agregado');
@@ -238,12 +249,12 @@ export class ListaCursoComponent implements OnInit {
   }
 
   editarGrupo() {
-    let index = this.curso.grupos.findIndex(g => g.idGrupo === Number.parseInt(this.grupoSelected));
+    let index = this.curso.grupos.findIndex(g => g.idGrupo === this.grupoSelected.idGrupo);
     if (index !== -1) {
       let grupo = this.grupos.find(g => g.idGrupo === this.curso.grupos[index].idGrupo);
       if (grupo !== undefined) {
-        this.curso.grupos[index] = { idGrupo: grupo.idGrupo, nombre: grupo.nombre, cupos: this.cupos };
-        this.grupoSelected = '';
+        this.curso.grupos[index] = { idGrupo: grupo.idGrupo, nombre: grupo.nombre, cupos: this.cupos, horario: [] };
+        this.grupoSelected = {idGrupo: -1, nombre: '', cupos: 0, horario: []};
         this.cupos = 0;
         this.esEdicionGrupo = false;
       }
@@ -251,13 +262,27 @@ export class ListaCursoComponent implements OnInit {
   }
 
   seleccionGrupo(grupo: Grupo) {
-    this.grupoSelected = "" + grupo.idGrupo;
+    this.grupoSelected = {idGrupo: grupo.idGrupo, nombre: grupo.nombre, cupos: grupo.cupos, horario: grupo.horario};
     this.cupos = grupo.cupos;
     this.esEdicionGrupo = true;
   }
 
+  changeGrupoSelected(idGrupo: string) {
+    console.log('cambiando grupo...');
+    let grupo = this.grupos.find(g => g.idGrupo === Number.parseInt(idGrupo));
+    if(grupo !== undefined) {
+      this.grupoSelected = grupo;
+    } else {
+      this.showInfo('Debe seleccionar un grupo');
+    }
+  }
+
   public eliminarGrupo(grupo: Grupo) {
     this.curso.grupos = this.curso.grupos.filter(g => g.idGrupo !== grupo.idGrupo);
+  }
+
+  agregarHorario() {
+    this.grupoSelected.horario.push({diaSemana: -1, horaInicio: 0, horaFin: 0});
   }
 
   showSuccess(message: string) {
@@ -315,6 +340,18 @@ interface Grupo {
   idGrupo: number;
   nombre: string;
   cupos: number;
+  horario: Horario[];
+}
+
+interface Horario {
+  diaSemana: number;
+  horaInicio: number;
+  horaFin: number;
+}
+
+interface DiaSemana {
+  idDia: number;
+  nombre: string;
 }
 
 interface Column {

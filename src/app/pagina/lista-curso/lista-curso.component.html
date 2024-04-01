@@ -8,70 +8,96 @@
             </div>
             <div class="modal-body">
                 <form #f="ngForm">
-                    <div class="row g-3 justify-content-center">
-                        <div class="col px-3">
-                            <div class="mb-3">
-                                <label for="idCurso" class="form-label">Cod. Asignatura</label>
-                                <input type="text" name="idCurso" id="idCurso" class="form-control"
-                                    [(ngModel)]="curso.idCurso">
+                    <div class="col px-4">
+                        <div class="row my-4">
+                            <div class="col">
+                                <div class="form-floating">
+                                    <input type="text" name="idCurso" id="idCurso" placeholder="Cod. Asignatura"
+                                        class="form-control" [(ngModel)]="curso.idCurso">
+                                    <label for="idCurso" class="form-label">Cod. Asignatura</label>
+                                </div>
                             </div>
-                            <div class="mb-3">
-                                <label for="asignatura" class="form-label">Asignatura</label>
-                                <input type="text" name="asignatura" id="asignatura" class="form-control"
-                                    [(ngModel)]="curso.nombre">
-                            </div>
-                            <div class="mb-3">
-                                <label for="idFacultad" class="form-label">Facultad</label>
-                                <select name="idFacultad" id="idFacultad" class="form-select"
-                                    [(ngModel)]="curso.idFacultad" (change)="listarProgramasPorFacultad($event.target)">
-                                    <option value="">-Seleccione una opción-</option>
-                                    <option *ngFor="let item of facultades" value="{{item.idFacultad}}">{{item.nombre}}
-                                    </option>
-                                </select>
-                            </div>
-                            <div class="mb-3">
-                                <label for="idPrograma" class="form-label">Programa</label>
-                                <select name="idPrograma" id="idPrograma" class="form-select"
-                                    [(ngModel)]="curso.idPrograma">
-                                    <option value="">-Seleccione una opción-</option>
-                                    <option *ngFor="let item of programas"
-                                        value="{{item.idFacultad}},{{item.idPrograma}}">{{item.nombre}}</option>
-                                </select>
+                            <div class="col">
+                                <div class="form-floating">
+                                    <input type="text" name="idDocente" id="idDocente" placeholder="Docente"
+                                        class="form-control" [(ngModel)]="curso.idDocente">
+                                    <label for="idDocente" class="form-label">Docente</label>
+                                </div>
                             </div>
                         </div>
-                        <div class="col px-3">
-                            <div class="col mb-3">
-                                <label for="idDocente" class="form-label">Docente</label>
-                                <input type="text" name="idDocente" id="idDocente" class="form-control"
-                                    [(ngModel)]="curso.idDocente">
-                            </div>
-                            <div class="row">
-                                <div class="col-6">
-                                    <div class="mb-3">
-                                        <label for="pensum" class="form-label">Pensum</label>
-                                        <input type="text" name="pensum" id="pensum" class="form-control"
-                                            [(ngModel)]="curso.pensum">
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="creditos" class="form-label">Créditos</label>
-                                        <input type="number" name="creditos" id="creditos" class="form-control"
-                                            [(ngModel)]="curso.creditos">
-                                    </div>
+                        <div class="row my-4">
+                            <div class="col">
+                                <div class="form-floating">
+                                    <input type="text" name="asignatura" id="asignatura" placeholder="Asignatura"
+                                        class="form-control" [(ngModel)]="curso.nombre">
+                                    <label for="asignatura" class="form-label">Asignatura</label>
                                 </div>
-                                <div class="col-6">
-                                    <div class="mb-3">
-                                        <label for="nivel" class="form-label">Nivel</label>
-                                        <input type="number" name="nivel" id="nivel" class="form-control"
-                                            [(ngModel)]="curso.nivel">
+                            </div>
+                            <div class="col">
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="form-floating">
+                                            <input type="text" name="pensum" id="pensum" placeholder="Pensum"
+                                                class="form-control" [(ngModel)]="curso.pensum">
+                                            <label for="pensum" class="form-label">Pensum</label>
+                                        </div>
                                     </div>
-                                    <div class="mb-3">
-                                        <label for="horas" class="form-label">Horas</label>
-                                        <input type="number" name="horas" id="horas" class="form-control"
-                                            [(ngModel)]="curso.horas">
+                                    <div class="col">
+                                        <div class="form-floating">
+                                            <input type="number" name="nivel" id="nivel" placeholder="Nivel"
+                                                class="form-control" [(ngModel)]="curso.nivel">
+                                            <label for="nivel" class="form-label">Nivel</label>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col mb-3">
+                        </div>
+                        <div class="row my-4">
+                            <div class="col">
+                                <div class="form-floating">
+                                    <select name="idFacultad" id="idFacultad" class="form-select"
+                                        [(ngModel)]="curso.idFacultad"
+                                        (change)="listarProgramasPorFacultad($event.target)">
+                                        <option value="">-Seleccione una opción-</option>
+                                        <option *ngFor="let item of facultades" value="{{item.idFacultad}}">
+                                            {{item.nombre}}
+                                        </option>
+                                    </select>
+                                    <label for="idFacultad" class="form-label">Facultad</label>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="form-floating">
+                                            <input type="number" name="creditos" id="creditos" placeholder="Créditos"
+                                                class="form-control" [(ngModel)]="curso.creditos">
+                                            <label for="creditos" class="form-label">Créditos</label>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="form-floating">
+                                            <input type="number" name="horas" id="horas" placeholder="Horas"
+                                                class="form-control" [(ngModel)]="curso.horas">
+                                            <label for="horas" class="form-label">Horas</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row my-4">
+                            <div class="col">
+                                <div class="form-floating">
+                                    <select name="idPrograma" id="idPrograma" class="form-select"
+                                        [(ngModel)]="curso.idPrograma">
+                                        <option value="">-Seleccione una opción-</option>
+                                        <option *ngFor="let item of programas"
+                                            value="{{item.idFacultad}},{{item.idPrograma}}">{{item.nombre}}</option>
+                                    </select>
+                                    <label for="idPrograma" class="form-label">Programa</label>
+                                </div>
+                            </div>
+                            <div class="col">
                                 <div class="row">
                                     <label for="recursos" class="form-label">Necesidades Audiovisuales</label>
                                 </div>
@@ -91,33 +117,77 @@
                         </div>
                     </div>
                     <hr>
-                    <div class="row">
+                    <div class="col px-4">
                         <h3 class="my-2">Grupos</h3>
                         <div class="row my-4">
-                            <div class="col-5">
-                                <div>
-                                    <select name="grupo" id="grupo" class="form-select" [(ngModel)]="grupoSelected">
-                                        <option value="">-Seleccione una opción-</option>
+                            <div class="col">
+                                <div class="form-floating">
+                                    <select #grupoSelect name="grupo" id="grupo" class="form-select"
+                                        (change)="changeGrupoSelected(grupoSelect.value)">
+                                        <option value="-1">-Seleccione una opción-</option>
                                         <option *ngFor="let grupo of grupos" value="{{grupo.idGrupo}}">{{grupo.nombre}}
                                         </option>
                                     </select>
+                                    <label for="grupo" class="form-label">Grupo</label>
                                 </div>
                             </div>
-                            <div class="col-5">
-                                <input type="number" name="cupos" id="cupos" placeholder="Cupos" class="form-control"
-                                    [(ngModel)]="cupos">
-                            </div>
-                            <div class="col-2">
-                                <button *ngIf="esEdicionGrupo" class="btn btn-primary" (click)="editarGrupo()">
-                                    <i class="fa-solid fa-pen"></i>
-                                    Editar
-                                </button>
-                                <button *ngIf="!esEdicionGrupo" class="btn btn-primary" (click)="agregarGrupo()">
-                                    <i class="fa-solid fa-circle-plus"></i>
-                                    Agregar
-                                </button>
+                            <div class="col">
+                                <div class="form-floating">
+                                    <input type="number" name="cupos" id="cupos" placeholder="Cupos"
+                                        class="form-control" [(ngModel)]="cupos">
+                                    <label for="cupos" class="form-label">Cupos</label>
+                                </div>
                             </div>
                         </div>
+                        <h4 class="my-2">Horarios</h4>
+                        <div *ngFor="let nuevoHorario of grupoSelected.horario; let i = index">
+                            <div class="row my-2">
+                                <div class="col">
+                                    <div class="form-floating">
+                                        <select name="diaSemana{{i + 2}}" id="diaSemana{{i + 2}}" class="form-select"
+                                            [(ngModel)]="diaSelected">
+                                            <option value="">-Seleccione una opción-</option>
+                                            <option *ngFor="let dia of diasSemana" value="{{dia.idDia}}">{{dia.nombre}}
+                                            </option>
+                                        </select>
+                                        <label for="diaSemana{{i + 2}}" class="form-label">Día</label>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="form-floating">
+                                                <input type="number" name="horaIncio{{i + 2}}" id="horaIncio{{i + 2}}"
+                                                    placeholder="Hora inicio" class="form-control"
+                                                    [(ngModel)]="horaInicio">
+                                                <label for="horaIncio{{i + 2}}" class="form-label">Hora inicio</label>
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="form-floating mb-3">
+                                                <input type="number" name="horaFin{{i + 2}}" id="horaFin{{i + 2}}"
+                                                    placeholder="Hora fin" class="form-control" [(ngModel)]="horaFin">
+                                                <label for="horaFin{{i + 2}}" class="form-label">Hora fin</label>
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <button *ngIf="esEdicionGrupo" class="btn btn-primary"
+                                                (click)="editarGrupo()">
+                                                <i class="fa-solid fa-pen"></i>
+                                                Editar
+                                            </button>
+                                            <button *ngIf="!esEdicionGrupo" class="btn btn-primary"
+                                                (click)="agregarHorario()">
+                                                <i class="fa-solid fa-circle-plus"></i>
+                                                Agregar
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
                         <p-table #dt [value]="curso.grupos" styleClass="p-datatable-striped">
                             <ng-template pTemplate="header">
                                 <tr>
@@ -126,12 +196,14 @@
                                     <th pSortableColumn="nombre" style="min-width:150px">Cupos <p-sortIcon
                                             field="cupos"></p-sortIcon>
                                     </th>
+                                    <th style="min-width:150px">Horario </th>
                                     <th style="min-width:150px">Opciones </th>
                                 </tr>
                             </ng-template>
                             <ng-template pTemplate="body" let-grupoLista>
                                 <tr>
                                     <td>{{grupoLista.nombre}}</td>
+                                    <td>{{grupoLista.cupos}}</td>
                                     <td>{{grupoLista.cupos}}</td>
                                     <td class="text-center" style="min-width:120px;max-width:120px;">
                                         <button class="btn btn-primary me-2" (click)="seleccionGrupo(grupoLista)"
@@ -169,7 +241,7 @@
                 <h1 class="modal-title fs-5" id="borrarModalLabel">Eliminar Curso</h1>
             </div>
             <div class="modal-body">
-                <p>¿Está seguro que desea borrar el curso {{textoEliminar}}?</p>
+                <p>¿Está seguro que desea eliminar el curso {{textoEliminar}}?</p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger" data-bs-dismiss="modal" (click)="borrarCurso()">Sí</button>
@@ -188,7 +260,7 @@
         <p-table #dt [value]="cursos" [columns]="cols" styleClass="p-datatable-striped"
             [exportHeader]="'customExportHeader'" [scrollable]="true" [paginator]="true" [rows]="10"
             [showCurrentPageReport]="true"
-            currentPageReportTemplate="Mostrando de {first} a {last} para {totalRecords} resultados"
+            currentPageReportTemplate="Mostrando {first} - {last} de {totalRecords} resultados"
             [rowsPerPageOptions]="[10, 25, 50]" [globalFilterFields]="['idAula']">
             <ng-template pTemplate="caption">
                 <div class="flex">

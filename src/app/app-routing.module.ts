@@ -16,8 +16,8 @@ const routes: Routes = [
   {title: "SGA", path: "gestion_aulas", component: CompleteLayoutComponent, children: [
     {path: "", component: HomeComponent},
     {title: "SGA | Listado de Aulas",path: "listado_aulas", component: ListaAulaComponent},
-    {title: "SGA | Horario de Aulas",path: "asignar_aulas", component: AsignarHorarioComponent},
-    {title: "SGA | Asignación de Aulas",path: "horario_aulas", component: HorarioAulaComponent},
+    {title: "SGA | Asignación de Aulas",path: "asignacion_aulas", component: AsignarHorarioComponent},
+    {title: "SGA | Horario de Aulas",path: "horario_aulas", component: HorarioAulaComponent},
     {title: "SGA | Listado de Cursos", path: "listado_cursos", component: ListaCursoComponent},
     {title: "SGA | Listado de Reservas", path: "listado_reservas", component: ListaReservaComponent},
     {title: "SGA | Listado de Mejoras y Problemas", path: "listado_mejoras_problemas", component: ListaMejoraProblemaComponent}

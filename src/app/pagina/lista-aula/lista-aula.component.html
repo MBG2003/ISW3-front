@@ -9,73 +9,91 @@
             </div>
             <div class="modal-body">
                 <form #f="ngForm" novalidate>
-                    <div class="row g-2 justify-content-center">
-                        <div class="col px-3">
-                            <div class="mb-3 from-group">
-                                <label for="idAula" class="form-label">ID Aula</label>
-                                <input type="text" name="idAula" id="idAula" class="form-control"
-                                    [(ngModel)]="aula.idAula" #idAula="ngModel" pattern="[A-Z][0-9]-[0-9][0-9][0-9]" required maxlength="10"
-                                    [ngClass]="{'is-invalid': formEnviado && idAula.invalid, 'is-valid': formEnviado && idAula.valid}">
-                                <div *ngIf="formEnviado && idAula.invalid" class="invalid-feedback">
-                                    <div *ngIf="idAula.errors && idAula.errors['required']">El ID es obligatorio
-                                    </div>
-                                    <div *ngIf="idAula.errors && idAula.errors['pattern']">El formato del ID es incorrecto. Ej: D4-401
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="mb-3">
-                                <label for="nombre" class="form-label">Nombre Aula</label>
-                                <input type="text" name="nombre" id="nombre" class="form-control"
-                                    [(ngModel)]="aula.nombre" #nombre="ngModel" required maxlength="10"
-                                    [ngClass]="{'is-invalid': formEnviado && nombre.invalid, 'is-valid': formEnviado && nombre.valid}">
-                                <div *ngIf="formEnviado && nombre.invalid" class="invalid-feedback">
-                                    <div *ngIf="nombre.errors && nombre.errors['required']">El nombre es obligatorio
+                    <div class="col px-4">
+                        <div class="row my-4">
+                            <div class="col">
+                                <div class="form-floating">
+                                    <input type="text" name="idAula" id="idAula" class="form-control"
+                                        placeholder="Ingrese el ID" [(ngModel)]="aula.idAula" #idAula="ngModel"
+                                        pattern="[A-Z][0-9]-[0-9][0-9][0-9]" required maxlength="10"
+                                        [ngClass]="{'is-invalid': formEnviado && idAula.invalid, 'is-valid': formEnviado && idAula.valid}">
+                                    <label for="idAula" class="form-label">ID Aula</label>
+                                    <div *ngIf="formEnviado && idAula.invalid" class="invalid-feedback">
+                                        <div *ngIf="idAula.errors && idAula.errors['required']">El ID es obligatorio
+                                        </div>
+                                        <div *ngIf="idAula.errors && idAula.errors['pattern']">El formato del ID es incorrecto. Ej:
+                                            D4-401
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="mb-3">
-                                <label for="idFacultad" class="form-label">Facultad</label>
-                                <select name="idFacultad" id="idFacultad" class="form-select"
-                                    [(ngModel)]="aula.idFacultad" #idFacultad="ngModel" required
-                                    [ngClass]="{'is-invalid': formEnviado && idFacultad.invalid, 'is-valid': formEnviado && idFacultad.valid}">
-                                    <option value="">-Seleccione una opción-</option>
-                                    <option *ngFor="let item of facultades" value="{{item.idFacultad}}">{{item.nombre}}
-                                    </option>
-                                </select>
-                                <div *ngIf="formEnviado && idFacultad.invalid" class="invalid-feedback">
-                                    <div *ngIf="idFacultad.errors && idFacultad.errors['required']">Debe escoger una facultad
+                            <div class="col">
+                                <div class="form-floating">
+                                    <select name="estado" id="estado" class="form-select" [(ngModel)]="aula.estado"
+                                        #estado="ngModel" required
+                                        [ngClass]="{'is-invalid': formEnviado && estado.invalid, 'is-valid': formEnviado && estado.valid}">
+                                        <option value="" selected>-Seleccione una opción-</option>
+                                        <option value="MANTENIMIENTO">En mantenimiento</option>
+                                        <option value="FUNCIONANDO">Funcionando</option>
+                                    </select>
+                                    <label for="estado" class="form-label">Estado</label>
+                                    <div *ngIf="formEnviado && estado.invalid" class="invalid-feedback">
+                                        <div *ngIf="estado.errors && estado.errors['required']">Debe escoger un estado
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="col px-3">
-                            <div class="mb-3">
-                                <label for="estado" class="form-label">Estado</label>
-                                <select name="estado" id="estado" class="form-select" [(ngModel)]="aula.estado" #estado="ngModel" required
-                                [ngClass]="{'is-invalid': formEnviado && estado.invalid, 'is-valid': formEnviado && estado.valid}">
-                                    <option value="" selected>-Seleccione una opción-</option>
-                                    <option value="MANTENIMIENTO">En mantenimiento</option>
-                                    <option value="FUNCIONANDO">Funcionando</option>
-                                </select>
-                                <div *ngIf="formEnviado && estado.invalid" class="invalid-feedback">
-                                    <div *ngIf="estado.errors && estado.errors['required']">Debe escoger un estado
+                        <div class="row my-4">
+                            <div class="col">
+                                <div class="form-floating">
+                                    <input type="text" name="nombre" id="nombre" class="form-control" placeholder="Ingrese el nombre"
+                                        [(ngModel)]="aula.nombre" #nombre="ngModel" required maxlength="30"
+                                        [ngClass]="{'is-invalid': formEnviado && nombre.invalid, 'is-valid': formEnviado && nombre.valid}">
+                                    <label for="nombre" class="form-label">Nombre Aula</label>
+                                    <div *ngIf="formEnviado && nombre.invalid" class="invalid-feedback">
+                                        <div *ngIf="nombre.errors && nombre.errors['required']">El nombre es obligatorio
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="mb-3">
-                                <label for="capacidad" class="form-label">Capacidad</label>
-                                <input type="number" name="capacidad" id="capacidad" class="form-control"
-                                    [(ngModel)]="aula.capacidad" #capacidad="ngModel" required min="1" max="50">
+                            <div class="col">
+                                <div class="form-floating">
+                                    <input type="number" name="capacidad" id="capacidad" class="form-control"
+                                        [(ngModel)]="aula.capacidad" #capacidad="ngModel" required min="1" max="50">
+                                    <label for="capacidad" class="form-label">Capacidad</label>
+                                </div>
                                 <div *ngIf="formEnviado && capacidad.invalid" class="invalid-feedback">
                                     <div *ngIf="capacidad.errors && capacidad.errors['required']">Debe ingresar un valor
                                     </div>
                                     <div *ngIf="capacidad.errors && capacidad.errors['min']">El valor debe ser mayor a 0
                                     </div>
-                                    <div *ngIf="capacidad.errors && capacidad.errors['max']">El valor debe ser menor a 50
+                                    <div *ngIf="capacidad.errors && capacidad.errors['max']">El valor debe ser menor a
+                                        50
                                     </div>
                                 </div>
                             </div>
-                            <div class="col mb-3">
+                        </div>
+                        <div class="row my-4">
+                            <div class="col">
+                                <div class="form-floating">
+                                    <select name="idFacultad" id="idFacultad" class="form-select"
+                                        [(ngModel)]="aula.idFacultad" #idFacultad="ngModel" required
+                                        [ngClass]="{'is-invalid': formEnviado && idFacultad.invalid, 'is-valid': formEnviado && idFacultad.valid}">
+                                        <option value="">-Seleccione una opción-</option>
+                                        <option *ngFor="let item of facultades" value="{{item.idFacultad}}">
+                                            {{item.nombre}}
+                                        </option>
+                                    </select>
+                                    <label for="idFacultad" class="form-label">Facultad</label>
+                                </div>
+                                <div *ngIf="formEnviado && idFacultad.invalid" class="invalid-feedback">
+                                    <div *ngIf="idFacultad.errors && idFacultad.errors['required']">Debe escoger una
+                                        facultad
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col">
                                 <div class="row">
                                     <label for="recursos" class="form-label">Recursos Audiovisuales</label>
                                 </div>
@@ -112,7 +130,7 @@
                 <h1 class="modal-title fs-5" id="borrarModalLabel">Eliminar Aula</h1>
             </div>
             <div class="modal-body">
-                <p>¿Está seguro que desea borrar el aula {{textoEliminar}}?</p>
+                <p>¿Está seguro que desea eliminar el aula {{textoEliminar}}?</p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger" data-bs-dismiss="modal" (click)="borrarAula()">Sí</button>
@@ -127,18 +145,10 @@
     <div class="mb-4">
         <h2 class="mb-5"><strong>Aulas</strong></h2>
     </div>
-    <p-table 
-        #dt 
-        [value]="aulas" 
-        [columns]="cols" 
-        [exportHeader]="'customExportHeader'" 
-        [paginator]="true" 
-        [rows]="10"
-        [showCurrentPageReport]="true"
+    <p-table #dt [value]="aulas" [columns]="cols" [exportHeader]="'customExportHeader'" [paginator]="true" [rows]="10"
+        styleClass="p-datatable-striped" [showCurrentPageReport]="true"
         currentPageReportTemplate="Mostrando {first} - {last} de {totalRecords} resultados"
-        [rowsPerPageOptions]="[10, 25, 50]" 
-        [globalFilterFields]="['idAula']"
-        >
+        [rowsPerPageOptions]="[10, 25, 50]" [globalFilterFields]="['idAula']">
         <ng-template pTemplate="caption">
             <div class="flex">
                 <button type="button" (click)="dt.exportCSV()" class="btn btn-secondary mx-2"><i

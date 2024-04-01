@@ -13,7 +13,14 @@ export class CursoDTO {
 }
 
 interface Grupo {
-    idGrupo: number;
-    nombre: string;
-    cupos: number;
+    idGrupo:number;
+    nombre:string;
+    cupos:number;
+    horario:Horario[];
+}
+
+interface Horario {
+    diaSemana:number;
+    horaInicio:number;
+    horaFin:number;
 }
