@@ -11,27 +11,33 @@
                     <div class="row g-2 justify-content-center">
                         <div class="col px-3">
                             <div class="mb-3">
-                                <label for="idFacultad" class="form-label">Facultad</label>
-                                <select name="idFacultad" id="idFacultad" class="form-select"
-                                    [(ngModel)]="reserva.idFacultad" (change)="listarAulasPorFacultad($event.target);">
-                                    <option value="">-Seleccione una opción-</option>
-                                    <option *ngFor="let item of facultades" value="{{item.idFacultad}}">{{item.nombre}}
-                                    </option>
-                                </select>
+                                <div class="form-floating">
+                                    <select name="idFacultad" id="idFacultad" class="form-select"
+                                        [(ngModel)]="reserva.idFacultad" (change)="listarAulasPorFacultad($event.target);">
+                                        <option value="">-Seleccione una opción-</option>
+                                        <option *ngFor="let item of facultades" value="{{item.idFacultad}}">{{item.nombre}}
+                                        </option>
+                                    </select>
+                                    <label for="idFacultad" class="form-label">Facultad</label>
+                                </div>
                             </div>
                             <div class="mb-3">
-                                <label for="idAula" class="form-label">Aula</label>
-                                <select name="idAula" id="idAula" class="form-select" [(ngModel)]="reserva.idAula">
-                                    <option value="">-Seleccione una opción-</option>
-                                    <option *ngFor="let item of aulas" value="{{item.idAula}}">
-                                        {{item.nombre}}
-                                    </option>
-                                </select>
+                                <div class="form-floating">
+                                    <select name="idAula" id="idAula" class="form-select" [(ngModel)]="reserva.idAula">
+                                        <option value="">-Seleccione una opción-</option>
+                                        <option *ngFor="let item of aulas" value="{{item.idAula}}">
+                                            {{item.nombre}}
+                                        </option>
+                                    </select>
+                                    <label for="idAula" class="form-label">Aula</label>
+                                </div>
                             </div>
                             <div class="mb-3">
-                                <label for="emisor" class="form-label">Emisor</label>
-                                <input type="text" name="emisor" id="emisor" class="form-control"
-                                    [(ngModel)]="reserva.emisor">
+                                <div class="form-floating">
+                                    <label for="emisor" class="form-label">Emisor</label>
+                                    <input type="text" name="emisor" id="emisor" class="form-control"
+                                        [(ngModel)]="reserva.emisor">
+                                </div>
                             </div>
                         </div>
                         <div class="col px-3">
@@ -184,14 +190,16 @@
                 <td><p-tag [value]="reservaLista.estado" [severity]="getSeverity(reservaLista.estado)"></p-tag></td>
                 <td>{{reservaLista.observaciones}}</td>
                 <td class="text-center" style="min-width:120px;max-width:120px;">
-                    <button class="btn btn-primary me-2" (click)="editar(reservaLista)" data-bs-toggle="modal"
-                        data-bs-target="#agregarEditar">
-                        <i class="fa-solid fa-pen"></i>
-                    </button>
-                    <button class="btn btn-danger" (click)="eliminar(reservaLista)" data-bs-toggle="modal"
-                        data-bs-target="#borrar">
-                        <i class="fa-solid fa-trash-can"></i>
-                    </button>
+                    <div class="btn-group">
+                        <button class="btn btn-primary" (click)="editar(reservaLista)" data-bs-toggle="modal"
+                            data-bs-target="#agregarEditar">
+                            <i class="fa-solid fa-pen"></i>
+                        </button>
+                        <button class="btn btn-danger" (click)="eliminar(reservaLista)" data-bs-toggle="modal"
+                            data-bs-target="#borrar">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </button>
+                    </div>
                 </td>
             </tr>
         </ng-template>

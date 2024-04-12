@@ -4,27 +4,27 @@
             <div class="d-flex align-items-center col-9">
                 <a routerLink="/gestion_aulas" title="Inicio">
                     <img src="../../../assets/logo-universidad-del-quindio.png" alt="logo-universidad-del-quindio"
-                        class="img-fluid rounded-circle shadow" width="80px">
+                        class="img-fluid rounded-circle shadow user-select-none" width="80px">
                 </a>
                 <div class="d-inline ms-3">
                     <h1 class="fs-1">
-                        <a routerLink="/gestion_aulas" class="d-block text-white text-decoration-underline"
+                        <a routerLink="/gestion_aulas" class="d-block text-white text-decoration-underline user-select-none"
                             title="Inicio">SISTEMA DE GESTION DE AULAS</a>
                     </h1>
-                    <span class="d-block fs-5 text-dark"><strong>Universidad del Quindio</strong></span>
+                    <span class="d-block fs-5 text-dark user-select-none"><strong>Universidad del Quindio</strong></span>
                 </div>
             </div>
-            <div class="shadow col-3 py-3">
-                <button routerLink="/" class="fs-5 mx-2 btn text-dark">Ayuda</button>
-                <button routerLink="/" class="fs-5 mx-2 btn text-dark">Mi cuenta</button>
-                <button (click)="logout()" class="btn fs-5 mx-2 text-dark">Salir</button>
+            <div class="shadow col-3 p-3">
+                <a routerLink="/" class="fs-5 mx-2 text-dark">Ayuda</a>
+                <a routerLink="/" class="fs-5 mx-2 text-dark">Mi cuenta</a>
+                <a (click)="logout()" class="fs-5 mx-2 text-dark" role="button">Salir</a>
             </div>
         </div>
     </div>
 </header>
 <div class="d-flex">
     <div class="sidebar" style="overflow-y:hidden;">
-        <div class="row-4 my-4">
+        <div class="row-4 my-4 border-end border-2 border-success">
             <div class="col">
                 <div class="d-flex row-8 mb-3 align-items-center justify-content-center">
                     <img src="../assets/user.png" alt="foto-usuario" class="mx-auto" width="120px">
@@ -36,46 +36,42 @@
             </div>
         </div>
         <div class="row-8 menu h-100">
-            <ul class="list-unstyled bg-color-u p-3 m-0 h-100">
-                <li class="mb-1">
-                    <button class="btn btn-toggle rounded collapsed w-100 text-start" data-bs-toggle="collapse"
-                        data-bs-target="#aulas-collapse" aria-expanded="false">
-                        <i class="fa-solid fa-caret-right me-3"></i>
+            <ul class="list-unstyled bg-color-u m-0 h-100">
+                <li>
+                    <a class="btn-toggle border-0 rounded-0 d-inline-flex collapsed w-100 p-3 justify-content-start align-items-center" data-bs-toggle="collapse"
+                        href="#aulas-collapse" aria-expanded="false">
                         Aulas
-                    </button>
+                    </a>
                     <div class="collapse" id="aulas-collapse">
-                        <ul class="btn-toggle-nav list-unstyled fw-normal pl-2 pb-1 small">
-                            <li><a routerLink="/gestion_aulas/listado_aulas" class="link-dark rounded">Listado de
+                        <ul class="btn-toggle-nav list-unstyled fw-normal m-3 small">
+                            <li><a routerLink="/gestion_aulas/listado_aulas">Listado de
                                     aulas</a></li>
-                            <li><a routerLink="/gestion_aulas/asignacion_aulas" class="link-dark rounded">Asignación de aulas</a></li>
-                            <li><a routerLink="/gestion_aulas/horario_aulas" class="link-dark rounded">Horario de aulas</a></li>
+                            <li><a routerLink="/gestion_aulas/asignacion_aulas">Asignación de aulas</a></li>
+                            <li><a routerLink="/gestion_aulas/horario_aulas">Horario de aulas</a></li>
                         </ul>
                     </div>
                 </li>
-                <li class="mb-1">
-                    <button class="btn btn-toggle rounded collapsed w-100 text-start" data-bs-toggle="collapse"
-                        data-bs-target="#cursos-collapse" aria-expanded="false">
-                        <i class="fa-solid fa-caret-right me-3"></i>
+                <li>
+                    <a class="btn-toggle border-0 rounded-0 d-inline-flex collapsed w-100 p-3 justify-content-start align-items-center" data-bs-toggle="collapse"
+                        href="#cursos-collapse" aria-expanded="false">
                         Cursos
-                    </button>
+                    </a>
                     <div class="collapse" id="cursos-collapse">
-                        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                            <li><a routerLink="/gestion_aulas/listado_cursos" class="link-dark rounded">Listado de
+                        <ul class="btn-toggle-nav list-unstyled fw-normal m-3 small">
+                            <li><a routerLink="/gestion_aulas/listado_cursos">Listado de
                                     cursos</a></li>
                         </ul>
                     </div>
                 </li>
-                <li class="mb-1">
-                    <button class="btn btn-toggle rounded collapsed w-100 text-start" data-bs-toggle="collapse"
-                        data-bs-target="#tramites-collapse" aria-expanded="false">
-                        <i class="fa-solid fa-caret-right me-3"></i>
+                <li>
+                    <a class="btn-toggle border-0 rounded-0 d-inline-flex collapsed w-100 p-3 justify-content-start align-items-center" data-bs-toggle="collapse"
+                        href="#tramites-collapse" aria-expanded="false">
                         Trámites
-                    </button>
+                    </a>
                     <div class="collapse" id="tramites-collapse">
-                        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                            <li><a routerLink="/gestion_aulas/listado_reservas" class="link-dark rounded">Reservas</a></li>
-                            <li><a routerLink="/gestion_aulas/listado_mejoras_problemas"
-                                    class="link-dark rounded">Problemas y Mejoras</a></li>
+                        <ul class="btn-toggle-nav list-unstyled fw-normal m-3 small">
+                            <li><a routerLink="/gestion_aulas/listado_reservas">Reservas</a></li>
+                            <li><a routerLink="/gestion_aulas/listado_mejoras_problemas">Problemas y Mejoras</a></li>
                         </ul>
                     </div>
                 </li>

@@ -141,12 +141,13 @@
                         </div>
                         <h4 class="my-2">Horarios</h4>
                         <div *ngFor="let nuevoHorario of grupoSelected.horario; let i = index">
-                            <div class="row my-2">
+                            <div class="row py-2">
                                 <div class="col">
                                     <div class="form-floating">
                                         <select name="diaSemana{{i + 2}}" id="diaSemana{{i + 2}}" class="form-select"
-                                            [(ngModel)]="diaSelected">
-                                            <option value="">-Seleccione una opción-</option>
+                                            [(ngModel)]="diaEdicion[nuevoHorario.idHorario]"
+                                            [disabled]="idEdicionHorario !== nuevoHorario.idHorario || !esEdicionHorario">
+                                            <option value="-1">-Seleccione una opción-</option>
                                             <option *ngFor="let dia of diasSemana" value="{{dia.idDia}}">{{dia.nombre}}
                                             </option>
                                         </select>
@@ -154,41 +155,101 @@
                                     </div>
                                 </div>
                                 <div class="col">
-                                    <div class="row">
+                                    <div class="row align-items-center">
                                         <div class="col">
                                             <div class="form-floating">
                                                 <input type="number" name="horaIncio{{i + 2}}" id="horaIncio{{i + 2}}"
                                                     placeholder="Hora inicio" class="form-control"
-                                                    [(ngModel)]="horaInicio">
+                                                    [(ngModel)]="horaInicioEdicion[nuevoHorario.idHorario]"
+                                                    [disabled]="idEdicionHorario !== nuevoHorario.idHorario || !esEdicionHorario">
                                                 <label for="horaIncio{{i + 2}}" class="form-label">Hora inicio</label>
                                             </div>
                                         </div>
                                         <div class="col">
-                                            <div class="form-floating mb-3">
+                                            <div class="form-floating">
                                                 <input type="number" name="horaFin{{i + 2}}" id="horaFin{{i + 2}}"
-                                                    placeholder="Hora fin" class="form-control" [(ngModel)]="horaFin">
+                                                    placeholder="Hora fin" class="form-control"
+                                                    [(ngModel)]="horaFinEdicion[nuevoHorario.idHorario]"
+                                                    [disabled]="idEdicionHorario !== nuevoHorario.idHorario || !esEdicionHorario">
                                                 <label for="horaFin{{i + 2}}" class="form-label">Hora fin</label>
                                             </div>
                                         </div>
-                                        <div class="col">
-                                            <button *ngIf="esEdicionGrupo" class="btn btn-primary"
-                                                (click)="editarGrupo()">
-                                                <i class="fa-solid fa-pen"></i>
-                                                Editar
-                                            </button>
-                                            <button *ngIf="!esEdicionGrupo" class="btn btn-primary"
-                                                (click)="agregarHorario()">
-                                                <i class="fa-solid fa-circle-plus"></i>
-                                                Agregar
-                                            </button>
+                                        <div class="col d-flex justify-content-center">
+                                            <div class="btn-group">
+                                                <button *ngIf="idEdicionHorario === nuevoHorario.idHorario && esEdicionHorario" class="btn btn-success"
+                                                    (click)="editarHorario(nuevoHorario.idHorario)">
+                                                    <i class="fa-solid fa-check"></i>
+                                                </button>
+                                                <button *ngIf="idEdicionHorario === nuevoHorario.idHorario && esEdicionHorario" class="btn btn-danger"
+                                                    (click)="esEdicionHorario = false; idEdicionHorario = -1;">
+                                                    <i class="fa-solid fa-xmark"></i>
+                                                </button>
+                                                <button *ngIf="!esEdicionHorario" class="btn btn-primary"
+                                                    (click)="changeEsEdicionHorario(nuevoHorario)">
+                                                    <i class="fa-solid fa-pen"></i>
+                                                </button>
+                                                <button *ngIf="!esEdicionHorario" class="btn btn-danger"
+                                                    (click)="eliminarHorario(nuevoHorario.idHorario)">
+                                                    <i class="fa-solid fa-trash-can"></i>
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                        <div class="row py-2">
+                            <div class="col">
+                                <div class="form-floating">
+                                    <select name="diaSemana" id="diaSemana" class="form-select"
+                                        [(ngModel)]="diaSelected">
+                                        <option value="-1">-Seleccione una opción-</option>
+                                        <option *ngFor="let dia of diasSemana" value="{{dia.idDia}}">{{dia.nombre}}
+                                        </option>
+                                    </select>
+                                    <label for="diaSemana" class="form-label">Día</label>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="form-floating">
+                                            <input type="number" name="horaIncio" id="horaIncio"
+                                                placeholder="Hora inicio" class="form-control"
+                                                [(ngModel)]="horaInicio">
+                                            <label for="horaIncio" class="form-label">Hora inicio</label>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="form-floating">
+                                            <input type="number" name="horaFin" id="horaFin"
+                                                placeholder="Hora fin" class="form-control" [(ngModel)]="horaFin">
+                                            <label for="horaFin" class="form-label">Hora fin</label>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <button class="btn btn-primary"
+                                            (click)="agregarHorario()">
+                                            <i class="fa-solid fa-circle-plus"></i>
+                                            Agregar
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row justify-content-center my-4">
+                            <button *ngIf="esEdicionGrupo" class="btn btn-primary w-50" (click)="editarGrupo()">
+                                <i class="fa-solid fa-pen"></i>
+                                Guardar cambios
+                            </button>
+                            <button *ngIf="!esEdicionGrupo" class="btn btn-success w-50" (click)="agregarGrupo()">
+                                <i class="fa-solid fa-circle-plus"></i>
+                                Agregar grupo
+                            </button>
+                        </div>
                     </div>
-                    <div class="row">
-                        <p-table #dt [value]="curso.grupos" styleClass="p-datatable-striped">
+                    <div class="row mt-3">
+                        <p-table #dtGrupos [value]="curso.grupos" styleClass="p-datatable-striped">
                             <ng-template pTemplate="header">
                                 <tr>
                                     <th pSortableColumn="idCurso" style="min-width:180px">Grupo <p-sortIcon
@@ -257,25 +318,25 @@
         <div class="mb-4">
             <h2 class="mb-5"><strong>Cursos</strong></h2>
         </div>
-        <p-table #dt [value]="cursos" [columns]="cols" styleClass="p-datatable-striped"
+        <p-table #dtCursos [value]="cursos" [columns]="cols" styleClass="p-datatable-striped"
             [exportHeader]="'customExportHeader'" [scrollable]="true" [paginator]="true" [rows]="10"
             [showCurrentPageReport]="true"
             currentPageReportTemplate="Mostrando {first} - {last} de {totalRecords} resultados"
-            [rowsPerPageOptions]="[10, 25, 50]" [globalFilterFields]="['idAula']">
+            [rowsPerPageOptions]="[10, 25, 50]" [globalFilterFields]="['idCurso']">
             <ng-template pTemplate="caption">
                 <div class="flex">
-                    <button type="button" (click)="dt.exportCSV()" class="btn btn-secondary mx-2"><i
+                    <button type="button" (click)="dtCursos.exportCSV()" class="btn btn-secondary mx-2"><i
                             class="fa-solid fa-file-csv"></i></button>
                     <button type="button" (click)="exportExcel()" class="btn btn-success mx-2"><i
                             class="fa-solid fa-file-excel"></i></button>
                     <button type="button" (click)="exportPdf()" class="btn btn-danger mx-2"><i
                             class="fa-solid fa-file-pdf"></i></button>
-                    <button type="button" (click)="dt.exportCSV({ selectionOnly: true })"
+                    <button type="button" (click)="dtCursos.exportCSV({ selectionOnly: true })"
                         class="btn btn-primary float-end" pTooltip="Selection Only"><i
                             class="fa-solid fa-filter"></i></button>
                     <span class="float-end mx-3">
-                        <input type="text" (input)="dt.filterGlobal($any($event.target).value, 'contains')"
-                            placeholder="Ingrese el ID del curso" class="form-control" />
+                        <input type="text" (input)="dtCursos.filterGlobal($any($event.target).value, 'contains')"
+                            placeholder="Ingrese el ID del Curso" class="form-control" />
                     </span>
                     <button class="btn btn-primary float-end" data-bs-toggle="modal" data-bs-target="#agregarEditar"
                         (click)="esEdicion = false; limpiarCampos();">
@@ -307,10 +368,8 @@
                             field="idFacultad"></p-sortIcon></th>
                     <th pSortableColumn="idDocente" style="min-width:150px">Docente <p-sortIcon
                             field="idDocente"></p-sortIcon></th>
-                    <th pSortableColumn="recursos" style="min-width:150px">Necesidades Audiovisuales <p-sortIcon
-                            field="recursos"></p-sortIcon></th>
-                    <th pSortableColumn="cupos" style="min-width:150px">Horario <p-sortIcon field="cupos"></p-sortIcon>
-                    </th>
+                    <th style="min-width:150px">Necesidades AV </th>
+                    <th style="min-width:150px">Horario </th>
                     <th style="min-width:150px">Opciones </th>
                 </tr>
             </ng-template>
@@ -334,14 +393,16 @@
                     </td>
                     <td class="text-center"><i class="fa-solid fa-eye fa-xl"></i></td>
                     <td class="text-center" style="min-width:120px;max-width:120px;">
-                        <button class="btn btn-primary me-2" (click)="editar(cursoLista)" data-bs-toggle="modal"
-                            data-bs-target="#agregarEditar">
-                            <i class="fa-solid fa-pen"></i>
-                        </button>
-                        <button class="btn btn-danger" (click)="cambiarTxtEliminar(cursoLista)" data-bs-toggle="modal"
-                            data-bs-target="#borrar">
-                            <i class="fa-solid fa-trash-can"></i>
-                        </button>
+                        <div class="btn-group">
+                            <button class="btn btn-primary" (click)="editar(cursoLista)" data-bs-toggle="modal"
+                                data-bs-target="#agregarEditar">
+                                <i class="fa-solid fa-pen"></i>
+                            </button>
+                            <button class="btn btn-danger" (click)="cambiarTxtEliminar(cursoLista)" data-bs-toggle="modal"
+                                data-bs-target="#borrar">
+                                <i class="fa-solid fa-trash-can"></i>
+                            </button>
+                        </div>
                     </td>
                 </tr>
             </ng-template>

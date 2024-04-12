@@ -182,8 +182,7 @@
                         field="capacidad"></p-sortIcon></th>
                 <th pSortableColumn="estado" style="min-width:150px">Estado <p-sortIcon field="estado"></p-sortIcon>
                 </th>
-                <th pSortableColumn="recursos" style="min-width:150px">Recursos Audiovisuales <p-sortIcon
-                        field="recursos"></p-sortIcon></th>
+                <th style="min-width:150px">Recursos AV </th>
                 <th style="min-width:100px">Horario </th>
                 <th style="min-width:150px">Opciones </th>
             </tr>
@@ -202,14 +201,16 @@
                 </td>
                 <td class="text-center"><i class="fa-solid fa-eye fa-xl"></i></td>
                 <td class="text-center" style="min-width:120px;max-width:120px;">
-                    <button class="btn btn-primary me-2" (click)="editar(aulaLista)" data-bs-toggle="modal"
-                        data-bs-target="#agregarEditar">
-                        <i class="fa-solid fa-pen"></i>
-                    </button>
-                    <button class="btn btn-danger" (click)="cambiarTxtEliminar(aulaLista)" data-bs-toggle="modal"
-                        data-bs-target="#borrar">
-                        <i class="fa-solid fa-trash-can"></i>
-                    </button>
+                    <div class="btn-group">
+                        <button class="btn btn-primary" (click)="editar(aulaLista)" data-bs-toggle="modal"
+                            data-bs-target="#agregarEditar">
+                            <i class="fa-solid fa-pen"></i>
+                        </button>
+                        <button class="btn btn-danger" (click)="cambiarTxtEliminar(aulaLista)" data-bs-toggle="modal"
+                            data-bs-target="#borrar">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </button>
+                    </div>
                 </td>
             </tr>
         </ng-template>
