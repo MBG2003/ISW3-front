@@ -28,12 +28,11 @@ export class ListaCursoComponent implements OnInit {
   curso: CursoDTO;
   grupoSelected: Grupo = {idGrupo: -1, nombre: '', cupos: 0, horario: []};
   diaSelected: number;
-  horaInicio!: number;
-  horaFin!: number;
+  horaInicio!: string;
+  horaFin!: string;
   diaEdicion: number[];
-  horaInicioEdicion: number[];
-  horaFinEdicion: number[];
-  cupos: number;
+  horaInicioEdicion: string[];
+  horaFinEdicion: string[];
   grupos: Grupo[] = [
     { idGrupo: 1, nombre: '01-D', cupos: 0, horario: [] },
     { idGrupo: 2, nombre: '02-D', cupos: 0, horario: []},
@@ -66,7 +65,6 @@ export class ListaCursoComponent implements OnInit {
     this.diaEdicion = [];
     this.horaInicioEdicion = [];
     this.horaFinEdicion = [];
-    this.cupos = 0;
   }
 
   ngOnInit(): void {
@@ -244,9 +242,13 @@ export class ListaCursoComponent implements OnInit {
     let grupo = this.grupos.find(g => g.idGrupo === this.grupoSelected.idGrupo);
     if (grupo !== undefined) {
       if (!this.curso.grupos.some(g => g.idGrupo === this.grupoSelected.idGrupo)) {
-        this.curso.grupos.push({ idGrupo: grupo.idGrupo, nombre: grupo.nombre, cupos: this.cupos, horario: this.grupoSelected.horario })
+        this.curso.grupos.push({ idGrupo: grupo.idGrupo, nombre: grupo.nombre, cupos: this.grupoSelected.cupos, horario: this.grupoSelected.horario })
         this.grupoSelected = {idGrupo: -1, nombre: '', cupos: 0, horario: []};
-        this.cupos = 0;
+        this.grupos[this.grupoSelected.idGrupo].cupos = 0;
+        this.grupos[this.grupoSelected.idGrupo].horario = [];
+        this.diaEdicion = [];
+        this.horaInicioEdicion = [];
+        this.horaFinEdicion = [];
       } else {
         this.showWarn('El grupo ya fue agregado');
       }
@@ -261,10 +263,9 @@ export class ListaCursoComponent implements OnInit {
     if (index !== -1) {
       let grupo = this.grupos.find(g => g.idGrupo === this.grupoSelected.idGrupo);
       if (grupo !== undefined) {
-        this.curso.grupos[index].cupos = this.cupos;
+        this.curso.grupos[index].cupos = this.grupoSelected.cupos;
         this.curso.grupos[index].horario = this.grupoSelected.horario;
         this.grupoSelected = {idGrupo: -1, nombre: '', cupos: 0, horario: []};
-        this.cupos = 0;
         this.esEdicionGrupo = false;
       }
     }
@@ -272,34 +273,48 @@ export class ListaCursoComponent implements OnInit {
 
   seleccionGrupo(grupo: Grupo) {
     this.grupoSelected = {idGrupo: grupo.idGrupo, nombre: grupo.nombre, cupos: grupo.cupos, horario: grupo.horario};
-    this.cupos = grupo.cupos;
     this.esEdicionGrupo = true;
   }
 
   changeGrupoSelected(idGrupo: string) {
-    console.log('cambiando grupo...');
     let grupo = this.grupos.find(g => g.idGrupo === Number.parseInt(idGrupo));
     if(grupo !== undefined) {
-      this.grupoSelected = grupo;
-      console.log(this.grupoSelected)
+      this.grupoSelected.idGrupo = grupo.idGrupo;
     } else {
       this.showInfo('Debe seleccionar un grupo');
     }
   }
 
-  public eliminarGrupo(grupo: Grupo) {
+  eliminarGrupo(grupo: Grupo) {
     this.curso.grupos = this.curso.grupos.filter(g => g.idGrupo !== grupo.idGrupo);
+  }
+
+  obtenerHorarioGrupo(grupo: Grupo) {
+    let horario: string = '';
+
+    for (let h of grupo.horario) {
+      horario += this.diasSemana[h.diaSemana].nombre + ' ' + this.horaString(h.horaInicio) + ' - ' + this.horaString(h.horaFin) + ', ';
+    }
+
+    return horario;
+  }
+
+  horaString(hora: number) {
+    if (hora > 12) {
+      return (hora - 12) + ':00 PM';
+    }
+    return hora + ':00 AM';
   }
 
   agregarHorario() {
     let idHorario = this.grupoSelected.horario.length;
-    this.grupoSelected.horario.push({idHorario: idHorario, diaSemana: this.diaSelected, horaInicio: this.horaInicio, horaFin: this.horaFin});
+    this.grupoSelected.horario.push({idHorario: idHorario, diaSemana: this.diaSelected, horaInicio: Number.parseInt(this.horaInicio.split(":")[0]), horaFin: Number.parseInt(this.horaFin.split(":")[0])});
     this.diaEdicion.push(this.diaSelected);
     this.horaInicioEdicion.push(this.horaInicio);
     this.horaFinEdicion.push(this.horaFin);
     this.diaSelected = -1;
-    this.horaInicio = 0;
-    this.horaFin = 0;
+    this.horaInicio = '';
+    this.horaFin = '';
   }
 
   editarHorario(idHorario: number) {
@@ -308,9 +323,8 @@ export class ListaCursoComponent implements OnInit {
       let horario = this.grupoSelected.horario.find(h => h.idHorario === idHorario);
       if (horario !== undefined) {
         console.log(this.diaEdicion, this.horaInicioEdicion, this.horaFinEdicion);
-        this.grupoSelected.horario[index] = { idHorario: horario.idHorario, diaSemana: this.diaEdicion[idHorario], horaInicio: this.horaInicioEdicion[idHorario], horaFin: this.horaFinEdicion[idHorario] };
+        this.grupoSelected.horario[index] = { idHorario: horario.idHorario, diaSemana: this.diaEdicion[idHorario], horaInicio: Number.parseInt(this.horaInicioEdicion[idHorario].split(":")[0]), horaFin: Number.parseInt(this.horaFinEdicion[idHorario].split(":")[0]) };
         this.esEdicionHorario = false;
-        console.log(this.grupoSelected.horario);
       }
     }
   }
@@ -323,7 +337,6 @@ export class ListaCursoComponent implements OnInit {
   }
 
   changeEsEdicionHorario(nuevoHorario: Horario) {
-    console.log(nuevoHorario);
     this.idEdicionHorario = nuevoHorario.idHorario;
     this.esEdicionHorario = true;
   }

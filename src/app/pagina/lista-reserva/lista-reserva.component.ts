@@ -132,18 +132,8 @@ export class ListaReservaComponent implements OnInit {
   }
 
   agregarReserva() {
-    if (this.horaInicio.endsWith('PM')) {
-      this.reserva.horaInicio = 12 + Number.parseInt(this.horaInicio.split(':')[0]);
-    } else {
-      this.reserva.horaInicio = Number.parseInt(this.horaInicio.split(':')[0]);
-    }
-
-    if (this.horaFin.endsWith('PM')) {
-      this.reserva.horaFin = 12 + Number.parseInt(this.horaFin.split(':')[0]);
-    } else {
-      this.reserva.horaFin = Number.parseInt(this.horaFin.split(':')[0]);
-    }
-
+    this.reserva.horaInicio = Number.parseInt(this.horaInicio.split(':')[0]);
+    this.reserva.horaFin = Number.parseInt(this.horaFin.split(':')[0]);
     this.reserva.observaciones = 'No aplica.';
     this.reserva.estado = 'REVISION';
 
@@ -162,21 +152,10 @@ export class ListaReservaComponent implements OnInit {
   }
 
   public editarReserva() {
-
-    if (this.horaInicio.endsWith('PM')) {
-      this.reserva.horaInicio = 12 + Number.parseInt(this.horaInicio.split(':')[0]);
-    } else {
-      this.reserva.horaInicio = Number.parseInt(this.horaInicio.split(':')[0]);
-    }
-
-    if (this.horaFin.endsWith('PM')) {
-
-      this.reserva.horaFin = 12 + Number.parseInt(this.horaFin.split(':')[0]);
-    } else {
-      this.reserva.horaFin = Number.parseInt(this.horaFin.split(':')[0]);
-    }
-
+    this.reserva.horaInicio = Number.parseInt(this.horaInicio.split(':')[0]);
+    this.reserva.horaFin = Number.parseInt(this.horaFin.split(':')[0]);
     this.reserva.idAula = this.reserva.idAula.split(',')[1];
+    
     this.reservaServicio.actualizar(this.reserva).subscribe({
       next: data => {
         this.cerrarForm.nativeElement.click();

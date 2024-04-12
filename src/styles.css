@@ -10,8 +10,9 @@ ul {
     padding: 0;
 }
 
-textarea {
-    resize: none;
+/* Muestra el scrollbar solo cuando se esté haciendo scroll */
+body::-webkit-scrollbar {
+    display: none;
 }
 
 .p-multiselect {

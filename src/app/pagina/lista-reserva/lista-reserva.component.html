@@ -8,20 +8,31 @@
             </div>
             <div class="modal-body">
                 <form #f="ngForm">
-                    <div class="row g-2 justify-content-center">
-                        <div class="col px-3">
-                            <div class="mb-3">
+                    <div class="col px-4">
+                        <div class="row my-4">
+                            <div class="col">
                                 <div class="form-floating">
                                     <select name="idFacultad" id="idFacultad" class="form-select"
-                                        [(ngModel)]="reserva.idFacultad" (change)="listarAulasPorFacultad($event.target);">
+                                        [(ngModel)]="reserva.idFacultad"
+                                        (change)="listarAulasPorFacultad($event.target);">
                                         <option value="">-Seleccione una opción-</option>
-                                        <option *ngFor="let item of facultades" value="{{item.idFacultad}}">{{item.nombre}}
+                                        <option *ngFor="let item of facultades" value="{{item.idFacultad}}">
+                                            {{item.nombre}}
                                         </option>
                                     </select>
                                     <label for="idFacultad" class="form-label">Facultad</label>
                                 </div>
                             </div>
-                            <div class="mb-3">
+                            <div class="col">
+                                <div class="form-floating">
+                                    <input type="date" name="fecha" id="fecha" class="form-control"
+                                        [(ngModel)]="reserva.fecha">
+                                    <label for="fecha" class="form-label">Fecha</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row my-4">
+                            <div class="col">
                                 <div class="form-floating">
                                     <select name="idAula" id="idAula" class="form-select" [(ngModel)]="reserva.idAula">
                                         <option value="">-Seleccione una opción-</option>
@@ -32,31 +43,28 @@
                                     <label for="idAula" class="form-label">Aula</label>
                                 </div>
                             </div>
-                            <div class="mb-3">
+                            <div class="col">
                                 <div class="form-floating">
-                                    <label for="emisor" class="form-label">Emisor</label>
-                                    <input type="text" name="emisor" id="emisor" class="form-control"
-                                        [(ngModel)]="reserva.emisor">
+                                    <input type="time" name="horaInicio" id="horaInicio" class="form-control"
+                                        [(ngModel)]="horaInicio" min="7:00" [max]="horaFin">
+                                    <label for="horaInicio" class="form-label">Hora inicio</label>
                                 </div>
                             </div>
                         </div>
-                        <div class="col px-3">
-                            <div class="mb-3">
-                                <label for="fecha" class="form-label">Fecha</label>
-                                <input type="date" name="fecha" id="fecha" class="form-control"
-                                    [(ngModel)]="reserva.fecha">
+                        <div class="row my-4">
+                            <div class="col">
+                                <div class="form-floating">
+                                    <input type="text" name="emisor" id="emisor" placeholder="Emisor"
+                                        class="form-control" [(ngModel)]="reserva.emisor">
+                                    <label for="emisor" class="form-label">Emisor</label>
+                                </div>
                             </div>
-                            <div class="mb-3">
-                                <label for="horaInicio" class="form-label">Hora inicio</label>
-                                <ngx-timepicker-field name="horaInicio" [controlOnly]="true" [minutesGap]="60"
-                                    [min]="'7:00 am'" [max]="horaFin" [(ngModel)]="horaInicio"
-                                    (timeChanged)="onChangeHoraInicio($event)"></ngx-timepicker-field>
-                            </div>
-                            <div class="mb-3">
-                                <label for="horaFin" class="form-label">Hora fin</label>
-                                <ngx-timepicker-field name="horaFin" [controlOnly]="true" [minutesGap]="60"
-                                    [min]="horaInicio" [max]="'10:00 pm'" [(ngModel)]="horaFin"
-                                    (timeChanged)="onChangeHoraFin($event)"></ngx-timepicker-field>
+                            <div class="col">
+                                <div class="form-floating">
+                                    <input type="time" name="horaFin" id="horaFin" class="form-control"
+                                        [(ngModel)]="horaFin" [min]="horaInicio" max="22:00">
+                                    <label for="horaFin" class="form-label">Hora fin</label>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -73,25 +81,35 @@
                         </div>
                     </div>
                     <hr>
-                    <div class="row g-2 justify-content-center mb-3">
-                        <div class="col px-3">
-                            <label for="asunto" class="form-label">Asunto</label>
-                            <input type="text" name="asunto" id="asunto" class="form-control"
-                                [(ngModel)]="reserva.asunto">
+                    <div class="col px-4">
+                        <div class="row my-4">
+                            <div class="col">
+                                <div class="form-floating">
+                                    <input type="text" name="asunto" id="asunto" placeholder="Asunto"
+                                        class="form-control" [(ngModel)]="reserva.asunto">
+                                    <label for="asunto" class="form-label">Asunto</label>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="row g-2 justify-content-center mb-3">
-                        <div class="col px-3">
-                            <label for="descripcion" class="form-label">Descripción</label>
-                            <textarea name="descripcion" id="descripcion" cols="30" rows="5" class="form-control"
-                                [(ngModel)]="reserva.descripcion" maxlength="2000"></textarea>
+                        <div class="row my-4">
+                            <div class="col">
+                                <div class="form-floating">
+                                    <textarea name="descripcion" id="descripcion" placeholder="Descripción" cols="30"
+                                        rows="5" class="form-control" [(ngModel)]="reserva.descripcion"
+                                        maxlength="2000"></textarea>
+                                    <label for="descripcion" class="form-label">Descripción</label>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    <div *ngIf="esEdicion" class="row g-2 justify-content-center mb-3">
-                        <div class="col px-3">
-                            <label for="observaciones" class="form-label">Observaciones</label>
-                            <textarea name="observaciones" id="observaciones" cols="30" rows="5" class="form-control"
-                                [(ngModel)]="reserva.observaciones" maxlength="1000"></textarea>
+                        <div *ngIf="esEdicion" class="row my-4">
+                            <div class="col">
+                                <div class="form-floating">
+                                    <textarea name="observaciones" id="observaciones" cols="30" rows="5"
+                                        class="form-control" [(ngModel)]="reserva.observaciones"
+                                        maxlength="1000"></textarea>
+                                    <label for="observaciones" class="form-label">Observaciones</label>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </form>
