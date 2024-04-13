@@ -10,7 +10,6 @@ ul {
     padding: 0;
 }
 
-/* Muestra el scrollbar solo cuando se esté haciendo scroll */
 body::-webkit-scrollbar {
     display: none;
 }
@@ -120,6 +119,10 @@ body::-webkit-scrollbar {
 
 .pie-pagina {
     font-size: 13px;
+}
+
+input[type="time"]::-webkit-calendar-picker-indicator {
+    display: block;
 }
 
 @import "primeng/resources/themes/lara-light-blue/theme.css";

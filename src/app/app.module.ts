@@ -1,5 +1,4 @@
 import { NgModule } from '@angular/core';
-import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
@@ -71,7 +70,6 @@ export function momentAdapterFactory() {
     MultiSelectModule,
     DropdownModule,
     TagModule,
-    NgxMaterialTimepickerModule,
     CalendarModule.forRoot(
       {
         provide: DateAdapter,
