@@ -6,7 +6,7 @@ export class ReservaGetDTO {
     asunto: string = "";
     descripcion: string = "";
     estado: string = "";
-    fecha: Date = new Date();
+    fecha: Date;
     horaInicio: number = 0;
     horaFin: number = 0;
     observaciones: string = "";

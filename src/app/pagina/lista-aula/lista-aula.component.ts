@@ -101,7 +101,6 @@ export class ListaAulaComponent implements OnInit {
       }
     });
 
-
     this.aulaServicio.agregar(this.aula).subscribe({
       next: data => {
         this.showSuccess(data.message);

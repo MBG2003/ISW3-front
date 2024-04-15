@@ -18,7 +18,7 @@ export class AuthService {
   }
 
   isAuthenticated(): boolean {
-    const token = sessionStorage.getItem('AuthToken'); // Reemplaza esto por tu forma de obtener el token
+    const token = localStorage.getItem('AuthToken'); // Reemplaza esto por tu forma de obtener el token
 
     try {
       if (token && !this.jwt.isTokenExpired(token)) {
@@ -29,7 +29,6 @@ export class AuthService {
         return false;
       }
     } catch (error) {
-      console.error("Error al validar token");
       return false;
     }
   }

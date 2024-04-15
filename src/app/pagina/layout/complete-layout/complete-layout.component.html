@@ -37,32 +37,34 @@
         </div>
         <div class="row-8 menu h-100">
             <ul class="list-unstyled bg-color-u m-0 h-100">
-                <li>
-                    <a class="btn-toggle border-0 rounded-0 d-inline-flex collapsed w-100 p-3 justify-content-start align-items-center" data-bs-toggle="collapse"
-                        href="#aulas-collapse" aria-expanded="false">
-                        Aulas
-                    </a>
-                    <div class="collapse" id="aulas-collapse">
-                        <ul class="btn-toggle-nav list-unstyled fw-normal m-3 small">
-                            <li><a routerLink="/gestion_aulas/listado_aulas">Listado de
-                                    aulas</a></li>
-                            <li><a routerLink="/gestion_aulas/asignacion_aulas">Asignación de aulas</a></li>
-                            <li><a routerLink="/gestion_aulas/horario_aulas">Horario de aulas</a></li>
-                        </ul>
-                    </div>
-                </li>
-                <li>
-                    <a class="btn-toggle border-0 rounded-0 d-inline-flex collapsed w-100 p-3 justify-content-start align-items-center" data-bs-toggle="collapse"
-                        href="#cursos-collapse" aria-expanded="false">
-                        Cursos
-                    </a>
-                    <div class="collapse" id="cursos-collapse">
-                        <ul class="btn-toggle-nav list-unstyled fw-normal m-3 small">
-                            <li><a routerLink="/gestion_aulas/listado_cursos">Listado de
-                                    cursos</a></li>
-                        </ul>
-                    </div>
-                </li>
+                <div *ngIf="isAdmin">
+                    <li>
+                        <a class="btn-toggle border-0 rounded-0 d-inline-flex collapsed w-100 p-3 justify-content-start align-items-center" data-bs-toggle="collapse"
+                            href="#aulas-collapse" aria-expanded="false">
+                            Aulas
+                        </a>
+                        <div class="collapse" id="aulas-collapse">
+                            <ul class="btn-toggle-nav list-unstyled fw-normal m-3 small">
+                                <li><a routerLink="/gestion_aulas/listado_aulas">Listado de
+                                        aulas</a></li>
+                                <li><a routerLink="/gestion_aulas/asignacion_aulas">Asignación de aulas</a></li>
+                                <li><a routerLink="/gestion_aulas/horario_aulas">Horario de aulas</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <a class="btn-toggle border-0 rounded-0 d-inline-flex collapsed w-100 p-3 justify-content-start align-items-center" data-bs-toggle="collapse"
+                            href="#cursos-collapse" aria-expanded="false">
+                            Cursos
+                        </a>
+                        <div class="collapse" id="cursos-collapse">
+                            <ul class="btn-toggle-nav list-unstyled fw-normal m-3 small">
+                                <li><a routerLink="/gestion_aulas/listado_cursos">Listado de
+                                        cursos</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                </div>
                 <li>
                     <a class="btn-toggle border-0 rounded-0 d-inline-flex collapsed w-100 p-3 justify-content-start align-items-center" data-bs-toggle="collapse"
                         href="#tramites-collapse" aria-expanded="false">

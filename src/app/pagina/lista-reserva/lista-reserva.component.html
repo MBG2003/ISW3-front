@@ -7,47 +7,72 @@
                 <h3 *ngIf="esEdicion" class="modal-title">Editar reserva</h3>
             </div>
             <div class="modal-body">
-                <form #f="ngForm">
+                <form #f="ngForm" novalidate>
                     <div class="col px-4">
                         <div class="row my-4">
                             <div class="col">
                                 <div class="form-floating">
                                     <select name="idFacultad" id="idFacultad" class="form-select"
-                                        [(ngModel)]="reserva.idFacultad"
-                                        (change)="listarAulasPorFacultad($event.target);">
+                                        [(ngModel)]="reserva.idFacultad" #idFacultad="ngModel" required
+                                        (change)="listarAulasPorFacultad($event.target);"                                        
+                                        [ngClass]="{'is-invalid': formEnviado && idFacultad.invalid, 'is-valid': formEnviado && idFacultad.valid}">
                                         <option value="">-Seleccione una opción-</option>
                                         <option *ngFor="let item of facultades" value="{{item.idFacultad}}">
                                             {{item.nombre}}
                                         </option>
                                     </select>
                                     <label for="idFacultad" class="form-label">Facultad</label>
+                                    <div *ngIf="formEnviado && idFacultad.invalid" class="invalid-feedback">
+                                        <div *ngIf="idFacultad.errors && idFacultad.errors['required']">Debe escoger una
+                                            facultad
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="col">
                                 <div class="form-floating">
-                                    <input type="date" name="fecha" id="fecha" class="form-control"
-                                        [(ngModel)]="reserva.fecha">
-                                    <label for="fecha" class="form-label">Fecha</label>
+                                    <input type="date" name="fecha" id="fecha" class="form-control" [(ngModel)]="reserva.fecha"
+                                        #fecha="ngModel" required pattern="\d{4}-\d{2}-\d{2}"
+                                        [ngClass]="{'is-invalid': formEnviado && fecha.invalid, 'is-valid': formEnviado && fecha.valid}">
+                                    <label for="fecha" class="form-label">Fecha {{reserva.fecha}}</label>
+                                    <div *ngIf="formEnviado && fecha.invalid" class="invalid-feedback">
+                                        <div *ngIf="fecha.errors && fecha.errors['required']">Debe escoger una fecha
+                                        </div>
+                                        <div *ngIf="fecha.errors && fecha.errors['pattern']">Fecha no valida
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                         <div class="row my-4">
                             <div class="col">
                                 <div class="form-floating">
-                                    <select name="idAula" id="idAula" class="form-select" [(ngModel)]="reserva.idAula">
+                                    <select name="idAula" id="idAula" class="form-select" [(ngModel)]="reserva.idAula"
+                                        #idAula="ngModel" required
+                                        [ngClass]="{'is-invalid': formEnviado && idAula.invalid, 'is-valid': formEnviado && idAula.valid}">
                                         <option value="">-Seleccione una opción-</option>
                                         <option *ngFor="let item of aulas" value="{{item.idAula}}">
                                             {{item.nombre}}
                                         </option>
                                     </select>
                                     <label for="idAula" class="form-label">Aula</label>
+                                    <div *ngIf="formEnviado && idAula.invalid" class="invalid-feedback">
+                                        <div *ngIf="idAula.errors && idAula.errors['required']">Debe escoger un aula
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="col">
                                 <div class="form-floating">
                                     <input type="time" name="horaInicio" id="horaInicio" class="form-control"
-                                        [(ngModel)]="horaInicio" min="7:00" [max]="horaFin">
+                                        [(ngModel)]="reserva.horaInicio" min="7:00" [max]="horaFin" step="1800"
+                                        #horaInicio="ngModel" required
+                                        [ngClass]="{'is-invalid': formEnviado && horaInicio.invalid, 'is-valid': formEnviado && horaInicio.valid}">
                                     <label for="horaInicio" class="form-label">Hora inicio</label>
+                                    <div *ngIf="formEnviado && horaInicio.invalid" class="invalid-feedback">
+                                        <div *ngIf="horaInicio.errors && horaInicio.errors['required']">Debe ingresar la hora inicial
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -55,29 +80,48 @@
                             <div class="col">
                                 <div class="form-floating">
                                     <input type="text" name="emisor" id="emisor" placeholder="Emisor"
-                                        class="form-control" [(ngModel)]="reserva.emisor">
+                                        class="form-control" [(ngModel)]="reserva.emisor" #emisor="ngModel" required
+                                        [ngClass]="{'is-invalid': formEnviado && emisor.invalid, 'is-valid': formEnviado && emisor.valid}">
                                     <label for="emisor" class="form-label">Emisor</label>
+                                    <div *ngIf="formEnviado && emisor.invalid" class="invalid-feedback">
+                                        <div *ngIf="emisor.errors && emisor.errors['required']">Debe ingresar el documento del emisor
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="col">
                                 <div class="form-floating">
                                     <input type="time" name="horaFin" id="horaFin" class="form-control"
-                                        [(ngModel)]="horaFin" [min]="horaInicio" max="22:00">
+                                        [(ngModel)]="reserva.horaFin" [min]="horaInicio" max="22:00" step="1800"
+                                        #horaFin="ngModel" required
+                                        [ngClass]="{'is-invalid': formEnviado && horaFin.invalid, 'is-valid': formEnviado && horaFin.valid}">
                                     <label for="horaFin" class="form-label">Hora fin</label>
+                                    <div *ngIf="formEnviado && horaFin.invalid" class="invalid-feedback">
+                                        <div *ngIf="horaFin.errors && horaFin.errors['required']">Debe ingresar la hora final
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div *ngIf="esEdicion" class="row g-2 justify-content-center mb-3">
-                        <div class="col px-3">
-                            <label for="estado" class="form-label">Estado</label>
-                            <select name="estado" id="estado" class="form-select" [(ngModel)]="reserva.estado">
-                                <option value="" selected>-Seleccione una opción-</option>
-                                <option value="ACEPTADO">Aceptada</option>
-                                <option value="RECHAZADO">Rechazada</option>
-                                <option value="REVISION">En revisión</option>
-                                <option value="SOLUCIONADO">Solucionado</option>
-                            </select>
+                        <div *ngIf="esEdicion" class="row my-4">
+                            <div class="col">
+                                <div class="form-floating">
+                                    <select name="estado" id="estado" class="form-select" [(ngModel)]="reserva.estado"
+                                    #estado="ngModel" required
+                                    [ngClass]="{'is-invalid': formEnviado && estado.invalid, 'is-valid': formEnviado && estado.valid}">
+                                        <option value="" selected>-Seleccione una opción-</option>
+                                        <option value="ACEPTADO">Aceptada</option>
+                                        <option value="RECHAZADO">Rechazada</option>
+                                        <option value="REVISION">En revisión</option>
+                                        <option value="SOLUCIONADO">Solucionado</option>
+                                    </select>
+                                    <label for="estado" class="form-label">Estado</label>
+                                    <div *ngIf="formEnviado && estado.invalid" class="invalid-feedback">
+                                        <div *ngIf="estado.errors && estado.errors['required']">Debe escoger un estado
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <hr>
@@ -86,8 +130,13 @@
                             <div class="col">
                                 <div class="form-floating">
                                     <input type="text" name="asunto" id="asunto" placeholder="Asunto"
-                                        class="form-control" [(ngModel)]="reserva.asunto">
+                                        class="form-control" [(ngModel)]="reserva.asunto" #asunto="ngModel" required
+                                        [ngClass]="{'is-invalid': formEnviado && asunto.invalid, 'is-valid': formEnviado && asunto.valid}">
                                     <label for="asunto" class="form-label">Asunto</label>
+                                    <div *ngIf="formEnviado && asunto.invalid" class="invalid-feedback">
+                                        <div *ngIf="asunto.errors && asunto.errors['required']">El asunto es obligatorio
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -95,9 +144,14 @@
                             <div class="col">
                                 <div class="form-floating">
                                     <textarea name="descripcion" id="descripcion" placeholder="Descripción" cols="30"
-                                        rows="5" class="form-control" [(ngModel)]="reserva.descripcion"
-                                        maxlength="2000"></textarea>
+                                        rows="5" class="form-control" [(ngModel)]="reserva.descripcion" #descripcion="ngModel"
+                                        required maxlength="2000"
+                                        [ngClass]="{'is-invalid': formEnviado && descripcion.invalid, 'is-valid': formEnviado && descripcion.valid}"></textarea>
                                     <label for="descripcion" class="form-label">Descripción</label>
+                                    <div *ngIf="formEnviado && descripcion.invalid" class="invalid-feedback">
+                                        <div *ngIf="descripcion.errors && descripcion.errors['required']">La descripción es obligatoria
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -116,7 +170,7 @@
             </div>
             <div class="modal-footer">
                 <button class="btn btn-success"
-                    (click)="esEdicion ? editarReserva() : agregarReserva()">Guardar</button>
+                    (click)="formEnviado = true; !f.invalid ? esEdicion ? editarReserva() : agregarReserva() : null">Guardar</button>
                 <button #cerrarForm class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
             </div>
         </div>

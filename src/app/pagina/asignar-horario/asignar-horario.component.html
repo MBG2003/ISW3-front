@@ -14,10 +14,10 @@
             styleClass="p-datatable-striped"
             [exportHeader]="'customExportHeader'"
             [scrollable]="true" [paginator]="true"
-            [rows]="10"
+            [rows]="5"
             [showCurrentPageReport]="true"
             currentPageReportTemplate="Mostrando {first} - {last} de {totalRecords} resultados"
-            [rowsPerPageOptions]="[10, 25, 50]" [globalFilterFields]="['idCurso']">
+            [rowsPerPageOptions]="[5, 10, 15]" [globalFilterFields]="['idCurso']">
             <ng-template pTemplate="caption">
                 <div class="flex">
                     <input type="text" (input)="dtCursos.filterGlobal($any($event.target).value, 'contains')"
@@ -49,7 +49,6 @@
                     <th pSortableColumn="idDocente" style="min-width:150px">Docente <p-sortIcon
                             field="idDocente"></p-sortIcon></th>
                     <th style="min-width:150px">Necesidades AV </th>
-                    <th style="min-width:150px">Horario </th>
                 </tr>
             </ng-template>
             <ng-template pTemplate="body" let-cursoLista let-expanded="expanded">
@@ -74,7 +73,6 @@
                         <i *ngIf="estaEnLista('VIDEOBEAM', cursoLista.recursos)"
                             class="fa-solid fa-video fa-xl ms-2"></i>
                     </td>
-                    <td class="text-center"><i class="fa-solid fa-eye fa-xl"></i></td>
             </ng-template>
             <ng-template pTemplate="emptymessage">
                 <tr>
@@ -122,13 +120,13 @@
         [columns]="cols" 
         [exportHeader]="'customExportHeader'" 
         [paginator]="true" 
-        [rows]="10"
+        [rows]="5"
         [(selection)]="aulaSelected"
         dataKey="idAula"
         styleClass="p-datatable-striped"
         [showCurrentPageReport]="true"
         currentPageReportTemplate="Mostrando {first} - {last} de {totalRecords} resultados"
-        [rowsPerPageOptions]="[10, 25, 50]" 
+        [rowsPerPageOptions]="[5, 10, 15]" 
         [globalFilterFields]="['idAula']"
         >
         <ng-template pTemplate="caption">

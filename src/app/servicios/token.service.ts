@@ -9,12 +9,28 @@ const TOKEN_KEY = "AuthToken";
 export class TokenService {
   constructor(private router: Router) { }
   public setToken(token: string) {
-    window.sessionStorage.removeItem(TOKEN_KEY);
-    window.sessionStorage.setItem(TOKEN_KEY, token);
+    window.localStorage.removeItem(TOKEN_KEY);
+    window.localStorage.setItem(TOKEN_KEY, token);
   }
 
   public getToken(): string | null {
-    return sessionStorage.getItem(TOKEN_KEY);
+    return localStorage.getItem(TOKEN_KEY);
+  }
+
+  public getUsername(): string {
+    const token = this.getToken();
+    if (token) {
+      return this.decodePayload().name;
+    }
+    return '';
+  }
+
+  public getRole(): string[] {
+    const token = this.getToken();
+    if (token) {
+      return this.decodePayload().authorities;
+    }
+    return [];
   }
 
   public isLogged(): boolean {
@@ -30,7 +46,7 @@ export class TokenService {
   }
 
   public logout() {
-    window.sessionStorage.clear();
+    window.localStorage.clear();
     this.router.navigate(["/gestion_aulas/login"]);
   }
 

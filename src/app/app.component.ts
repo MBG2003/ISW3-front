@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { TokenService } from './servicios/token.service';
 
 @Component({
   selector: 'app-root',
@@ -7,5 +8,18 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'SISTEMA DE GESTIÓN DE AULAS';
-  usuario = 'Mateo Baez Guevara';
+  isLogged = false;
+  username:string = '';
+
+  constructor(private tokenService: TokenService) { }
+  ngOnInit(): void {
+    this.isLogged = this.tokenService.isLogged();
+    if (this.isLogged) {
+      this.username = this.tokenService.getUsername();
+    }
+  }
+  
+  public logout() {
+    this.tokenService.logout();
+  }
 }

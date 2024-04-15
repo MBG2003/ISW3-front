@@ -1,4 +1,5 @@
 import { Component, ElementRef, EventEmitter, OnInit, ViewChild } from '@angular/core';
+import { NgForm } from '@angular/forms';
 import { FileSaverService } from 'ngx-filesaver';
 import { MessageService } from 'primeng/api';
 import { AulaGetDTO } from 'src/app/modelo/aula-get-dto';
@@ -18,6 +19,9 @@ import { ReservaService } from 'src/app/servicios/reserva.service';
 export class ListaReservaComponent implements OnInit {
 
   @ViewChild('cerrarForm') cerrarForm!: ElementRef
+
+  @ViewChild('f') f!: NgForm;
+  formEnviado = false;
 
   cols!: Column[];
   exportColumns!: ExportColumn[];
@@ -92,8 +96,8 @@ export class ListaReservaComponent implements OnInit {
     this.reserva.descripcion = reserva.descripcion;
     this.reserva.estado = reserva.estado;
     this.reserva.fecha = reserva.fecha;
-    this.reserva.horaInicio = reserva.horaInicio;
-    this.reserva.horaFin = reserva.horaFin;
+    this.reserva.horaInicio = reserva.horaInicio < 10 ? '0' : '' + reserva.horaInicio + ':00';
+    this.reserva.horaFin = reserva.horaFin < 10 ? '0' : '' + reserva.horaFin + ':00';
     this.reserva.observaciones = reserva.observaciones;
     this.horaInicio = this.horaString(reserva.horaInicio);
     this.horaFin = this.horaString(reserva.horaFin);
@@ -132,8 +136,12 @@ export class ListaReservaComponent implements OnInit {
   }
 
   agregarReserva() {
-    this.reserva.horaInicio = Number.parseInt(this.horaInicio.split(':')[0]);
-    this.reserva.horaFin = Number.parseInt(this.horaFin.split(':')[0]);
+    console.log(this.reserva.fecha);
+    var fecha = new Date(this.reserva.fecha);
+    fecha.setMinutes(fecha.getMinutes() + fecha.getTimezoneOffset())
+    this.reserva.fecha = fecha;
+    this.reserva.horaInicio = this.reserva.horaInicio.split(':')[0];
+    this.reserva.horaFin = this.reserva.horaFin.split(':')[0];
     this.reserva.observaciones = 'No aplica.';
     this.reserva.estado = 'REVISION';
 
@@ -143,6 +151,8 @@ export class ListaReservaComponent implements OnInit {
         this.showSuccess(data.message);
         this.limpiarCampos();
         this.listar();
+        $('#agregarEditar').modal('hide');
+        this.formEnviado = false;
       },
       error: error => {
         this.showError(error.error.message);
@@ -152,16 +162,18 @@ export class ListaReservaComponent implements OnInit {
   }
 
   public editarReserva() {
-    this.reserva.horaInicio = Number.parseInt(this.horaInicio.split(':')[0]);
-    this.reserva.horaFin = Number.parseInt(this.horaFin.split(':')[0]);
+    this.reserva.horaInicio = this.reserva.horaInicio.split(':')[0];
+    this.reserva.horaFin = this.reserva.horaFin.split(':')[0];
     this.reserva.idAula = this.reserva.idAula.split(',')[1];
-    
+
     this.reservaServicio.actualizar(this.reserva).subscribe({
       next: data => {
         this.cerrarForm.nativeElement.click();
         this.showSuccess(data.message);
         this.limpiarCampos();
         this.listar();
+        $('#agregarEditar').modal('hide');
+        this.formEnviado = false;
       },
       error: error => {
         this.showError(error.error.message);
@@ -190,8 +202,8 @@ export class ListaReservaComponent implements OnInit {
     this.reserva.descripcion = "";
     this.reserva.estado = "";
     this.reserva.fecha = new Date();
-    this.reserva.horaInicio = 0;
-    this.reserva.horaFin = 0;
+    this.reserva.horaInicio = "";
+    this.reserva.horaFin = "";
     this.reserva.observaciones = "";
   };
 

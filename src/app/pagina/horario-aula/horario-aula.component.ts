@@ -1,3 +1,6 @@
+import { registerLocaleData } from '@angular/common';
+import localeEs from '@angular/common/locales/es-CO';
+
 import {
   Component,
   ChangeDetectionStrategy,
@@ -5,6 +8,7 @@ import {
   TemplateRef,
   OnInit,
   ChangeDetectorRef,
+  ViewEncapsulation,
 } from '@angular/core';
 
 import {
@@ -18,7 +22,7 @@ import {
   addHours,
 } from 'date-fns';
 
-import { RRule } from 'rrule';
+import { RRule, RRuleSet } from 'rrule';
 
 import { Subject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -31,12 +35,11 @@ import {
   CalendarEventTimesChangedEvent,
   CalendarMonthViewBeforeRenderEvent,
   CalendarView,
-  CalendarWeekViewBeforeRenderEvent,
+  CalendarWeekViewBeforeRenderEvent
 } from 'angular-calendar';
 
 import { ViewPeriod } from 'calendar-utils';
 
-import { EventColor } from 'calendar-utils';
 import { ReservaService } from 'src/app/servicios/reserva.service';
 import { ReservaGetDTO } from 'src/app/modelo/reserva-get-dto';
 import { CursoGetDTO } from 'src/app/modelo/curso-get-dto';
@@ -45,10 +48,14 @@ import { AulaGetDTO } from 'src/app/modelo/aula-get-dto';
 import { AulaService } from 'src/app/servicios/aula.service';
 import { MessageService } from 'primeng/api';
 import { FacultadService } from 'src/app/servicios/facultad.service';
+import { CursoService } from 'src/app/servicios/curso.service';
+import { error } from 'jquery';
 
 interface RecurringEvent {
   title: string;
   color: any;
+  start: number;
+  end: number;
   rrule?: {
     freq: any;
     bymonth?: number;
@@ -56,6 +63,8 @@ interface RecurringEvent {
     byweekday?: any;
   };
 }
+
+registerLocaleData(localeEs);
 
 @Component({
   selector: 'app-horario-aula',
@@ -68,16 +77,12 @@ export class HorarioAulaComponent implements OnInit {
   @ViewChild('eventInfo', { static: true }) eventInfo!: TemplateRef<any>;
 
   view: CalendarView = CalendarView.Month;
-
   CalendarView = CalendarView;
-
   viewDate = moment().toDate();
-
-  calendarEvents: CalendarEvent<{reserva: ReservaGetDTO}>[] = [];
-
   viewPeriod!: ViewPeriod;
+  calendarEvents: CalendarEvent[] = [];
 
-  reservas: ReservaGetDTO[];
+  locale: string = 'es-CO';
 
   modalData!: {
     action: string;
@@ -93,21 +98,23 @@ export class HorarioAulaComponent implements OnInit {
   activeDayIsOpen: boolean = false;
 
   facultades: FacultadGetDTO[];
-
   idFacultad!: string;
-
   aulas: AulaGetDTO[];
-
   idAula!: string;
 
-  constructor(private cdr: ChangeDetectorRef, private reservaServicio: ReservaService, private facultadServicio:FacultadService, private aulaServicio: AulaService, private messageService: MessageService, private eventInfoModal: NgbModal) {
+  cursos: CursoGetDTO[];
+  reservas: ReservaGetDTO[];
+
+  constructor(private cdr: ChangeDetectorRef, private reservaServicio: ReservaService, private facultadServicio: FacultadService, private aulaServicio: AulaService, private cursoServicio: CursoService, private messageService: MessageService, private eventInfoModal: NgbModal) {
     this.reservas = [];
     this.clases = [];
     this.facultades = [];
     this.aulas = [];
+    this.cursos = [];
+    this.reservas = [];
     this.idFacultad = "";
     this.idAula = "";
-    
+
   }
 
   updateCalendarEvents(
@@ -124,23 +131,67 @@ export class HorarioAulaComponent implements OnInit {
       this.viewPeriod = viewRender.period;
       this.calendarEvents = [];
 
+      const currentYear = new Date().getFullYear();
+
       this.clases.forEach((event) => {
         const rule: RRule = new RRule({
           ...event.rrule,
-          dtstart: moment(viewRender.period.start).startOf('day').toDate(),
-          until: moment(viewRender.period.end).endOf('day').toDate(),
+          dtstart: moment(viewRender.period.start).startOf('week').toDate(),
+          until: moment(viewRender.period.end).endOf('week').toDate(),
         });
+
         const { title, color } = event;
 
-        rule.all().forEach((date) => {
+        // Primer semestre
+        rule.between(new Date(`${currentYear}-02-05`), new Date(`${currentYear}-06-01`), true).forEach((date) => {
           this.calendarEvents.push({
             title,
             color,
-            start: moment(date).toDate(),
+            start: addHours(startOfDay(new Date(date)), event.start),
+            end: addHours(startOfDay(new Date(date)), event.end)
+          });
+        });
+
+        // Segundo semestre
+        rule.between(new Date(`${currentYear}-08-08`), new Date(`${currentYear}-11-25`), true).forEach((date) => {
+          this.calendarEvents.push({
+            title,
+            color,
+            start: addHours(startOfDay(new Date(date)), event.start),
+            end: addHours(startOfDay(new Date(date)), event.end)
           });
         });
       });
-      this.cdr.detectChanges();
+
+
+      this.reservaServicio.listar().subscribe({
+        next: data => {
+          this.reservas = data.response;
+          this.reservas.forEach(r => {
+            var fecha = new Date(r.fecha);
+            fecha.setMinutes(fecha.getMinutes() + fecha.getTimezoneOffset());
+            this.calendarEvents.push({
+              title: r.asunto,
+              start: addHours(startOfDay(new Date(fecha)), r.horaInicio),
+              end: addHours(startOfDay(new Date(fecha)), r.horaFin),
+              color: {
+                primary: '#1e90ff',
+                secondary: '#D1E8FF',
+              },
+              draggable: true,
+              resizable: {
+                beforeStart: true,
+                afterEnd: true,
+              }
+            });
+          })
+          this.refresh.next();
+        },
+        error: error => {
+          this.showInfo(error.error.message);
+        }
+      });
+      this.refresh.next();
     }
   }
 
@@ -203,27 +254,33 @@ export class HorarioAulaComponent implements OnInit {
       }
     });
 
-    this.events$ = this.reservaServicio.listar().pipe(
-      map(({ response }: { response: ReservaGetDTO[] }) => {
-        return response.map((reserva: ReservaGetDTO) => {
-          return {
-            title: reserva.asunto,
-            start: addHours(new Date(reserva.fecha), reserva.horaInicio),
-            end: addHours(new Date(reserva.fecha), reserva.horaFin),
-            color: {
-              primary: '#1e90ff',
-              secondary: '#D1E8FF',
-            },
-            draggable: true,
-            resizable: {
-              beforeStart: true,
-              afterEnd: true,
-            }
-          };
+    this.cursoServicio.listar().subscribe({
+      next: data => {
+        this.cursos = data.response;
+        this.cursos.forEach(c => {
+          c.grupos.forEach(g => {
+            g.horario.forEach(h => {
+              this.clases.push({
+                title: c.nombre + ' (' + g.nombre + ')',
+                color: {
+                  primary: '#3A9B4A',
+                  secondary: '#E8F3EE'
+                },
+                start: h.horaInicio,
+                end: h.horaFin,
+                rrule: {
+                  freq: RRule.WEEKLY,
+                  byweekday: h.diaSemana
+                }
+              })
+            })
+          })
         });
-      })
-    );
-
+      },
+      error: error => {
+        this.showInfo(error.error.message);
+      }
+    });
 
     /*this.clases.forEach((event) => {
       const rule: RRule = new RRule({
@@ -241,7 +298,6 @@ export class HorarioAulaComponent implements OnInit {
         });
       });
     });*/
-    this.cdr.detectChanges();
   }
 
   setView(view: CalendarView) {

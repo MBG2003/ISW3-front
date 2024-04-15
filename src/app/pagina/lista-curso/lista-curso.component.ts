@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MessageService } from 'primeng/api';
 import { FileSaverService } from 'ngx-filesaver';
 import { CursoGetDTO } from 'src/app/modelo/curso-get-dto';
@@ -8,6 +8,7 @@ import { FacultadService } from 'src/app/servicios/facultad.service';
 import { ProgramaGetDTO } from 'src/app/modelo/programa-get-dto';
 import { CursoService } from 'src/app/servicios/curso.service';
 import { ProgramaService } from 'src/app/servicios/programa.service';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-lista-curso',
@@ -16,6 +17,9 @@ import { ProgramaService } from 'src/app/servicios/programa.service';
   providers: [MessageService]
 })
 export class ListaCursoComponent implements OnInit {
+
+  @ViewChild('f') f!: NgForm;
+  formEnviado = false;
 
   cols!: Column[];
   exportColumns!: ExportColumn[];
@@ -106,6 +110,7 @@ export class ListaCursoComponent implements OnInit {
       },
       error: error => {
         this.cursos = [];
+        this.showError(error.error.message);
       }
     });
   }
@@ -143,13 +148,13 @@ export class ListaCursoComponent implements OnInit {
         this.showSuccess(data.message);
         this.limpiarCampos();
         this.listar();
+        $('#agregarEditar').modal('hide');
+        this.formEnviado = false;
       },
       error: error => {
         this.showError(error.error.message);
       }
     });
-    this.cursos = [];
-    this.listar();
   }
 
   editarCurso() {
@@ -166,12 +171,13 @@ export class ListaCursoComponent implements OnInit {
         this.showSuccess(data.message);
         this.limpiarCampos();
         this.listar();
+        $('#agregarEditar').modal('hide');
+        this.formEnviado = false;
       },
       error: error => {
         this.showError(error.error.message);
       }
     });
-    this.cursos = [];
   }
 
   borrarCurso() {

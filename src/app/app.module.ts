@@ -10,15 +10,8 @@ import { FileSaverModule } from 'ngx-filesaver';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { DropdownModule } from 'primeng/dropdown';
 import { TagModule } from 'primeng/tag';
-import {
-  CalendarDateFormatter,
-  CalendarModule,
-  CalendarMomentDateFormatter,
-  DateAdapter,
-  MOMENT,
-} from 'angular-calendar';
-import * as moment from 'moment-timezone'
-import { adapterFactory } from 'angular-calendar/date-adapters/moment';
+import { CalendarModule, DateAdapter } from 'angular-calendar';
+import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -35,10 +28,6 @@ import { ListaMejoraProblemaComponent } from './pagina/lista-mejora-problema/lis
 import { ListaReservaComponent } from './pagina/lista-reserva/lista-reserva.component';
 import { HorarioAulaComponent } from './pagina/horario-aula/horario-aula.component';
 import { AsignarHorarioComponent } from './pagina/asignar-horario/asignar-horario.component';
-
-export function momentAdapterFactory() {
-  return adapterFactory(moment);
-}
 
 @NgModule({
   declarations: [
@@ -73,13 +62,7 @@ export function momentAdapterFactory() {
     CalendarModule.forRoot(
       {
         provide: DateAdapter,
-        useFactory: momentAdapterFactory,
-      },
-      {
-        dateFormatter: {
-          provide: CalendarDateFormatter,
-          useClass: CalendarMomentDateFormatter,
-        },
+        useFactory: adapterFactory,
       }
     ),
     JwtModule.forRoot({
@@ -89,12 +72,6 @@ export function momentAdapterFactory() {
         }
       }
     })
-  ],
-  providers: [
-    {
-      provide: MOMENT,
-      useValue: moment,
-    },
   ],
   bootstrap: [AppComponent]
 })

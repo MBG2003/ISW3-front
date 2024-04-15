@@ -11,10 +11,12 @@ import { UsuarioService } from 'src/app/servicios/usuario.service';
 })
 export class CompleteLayoutComponent {
   usuario: String;
+  isAdmin: boolean;
 
-  constructor(private tokenService:TokenService, private usuarioService: UsuarioService, private messageService:MessageService) {
+  constructor(private tokenService:TokenService, private messageService:MessageService) {
     this.usuario = "";
     this.consultarNombre();
+    this.isAdmin = tokenService.decodePayload().authorities == 'ADMINISTRADOR';
   }
 
   public logout() {
@@ -22,14 +24,7 @@ export class CompleteLayoutComponent {
   }
 
   public consultarNombre() {
-    this.usuarioService.consultarNombre(this.tokenService.decodePayload().userId).subscribe({
-      next: data => {
-        this.usuario = data.response;
-      },
-      error: error => {
-        this.showError(error.error.message != undefined ? error.error.message : error.error);
-      }
-    });
+    this.usuario = this.tokenService.decodePayload().name;
   }
 
   showSuccess(message: string) {

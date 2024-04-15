@@ -12,7 +12,7 @@ export class AulaService {
 
   private aulaUrl = "http://localhost:8080/aula";
 
-  private headers!:HttpHeaders;
+  private headers!: HttpHeaders;
 
   constructor(private http: HttpClient, public tokenService: TokenService) {
     if (tokenService.isLogged()) {
@@ -23,26 +23,26 @@ export class AulaService {
   }
 
   public listar(): Observable<MensajeDTO> {
-    return this.http.get<MensajeDTO>(`${this.aulaUrl}/listar`, {headers: this.headers});
+    return this.http.get<MensajeDTO>(`${this.aulaUrl}/listar`, { headers: this.headers });
   }
 
-  public listarPorFacultad(idFacultad:string): Observable<MensajeDTO> {
+  public listarPorFacultad(idFacultad: string): Observable<MensajeDTO> {
     return this.http.get<MensajeDTO>(`${this.aulaUrl}/listarPorFacultad/${idFacultad}`, { headers: this.headers });
   }
 
-  public listarHorarioPorAula(idFacultad:string, idAula:string): Observable<MensajeDTO> {
+  public listarHorarioPorAula(idFacultad: string, idAula: string): Observable<MensajeDTO> {
     return this.http.get<MensajeDTO>(`${this.aulaUrl}/listarHorario?idFacultad=${idFacultad}&idAula=${idAula}`, { headers: this.headers });
   }
 
-  public agregar(aula:AulaDTO) {
-    return this.http.post<MensajeDTO>(`${this.aulaUrl}/crear`, aula, {headers: this.headers});
+  public agregar(aula: AulaDTO) {
+    return this.http.post<MensajeDTO>(`${this.aulaUrl}/crear`, aula, { headers: this.headers });
   }
 
-  public actualizar(aula:AulaDTO) {
-    return this.http.put<MensajeDTO>(`${this.aulaUrl}/actualizar`, aula, {headers: this.headers});
+  public actualizar(aula: AulaDTO) {
+    return this.http.put<MensajeDTO>(`${this.aulaUrl}/actualizar`, aula, { headers: this.headers });
   }
 
-  public eliminar(idFacultad:string, idAula:string) {
-    return this.http.delete<MensajeDTO>(`${this.aulaUrl}/eliminar?idFacultad=${idFacultad}&idAula=${idAula}`, {headers: this.headers});
+  public eliminar(idFacultad: string, idAula: string) {
+    return this.http.delete<MensajeDTO>(`${this.aulaUrl}/eliminar?idFacultad=${idFacultad}&idAula=${idAula}`, { headers: this.headers });
   }
 }

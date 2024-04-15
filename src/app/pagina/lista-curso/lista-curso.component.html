@@ -123,7 +123,7 @@
                             <div class="col">
                                 <div class="form-floating">
                                     <select #grupoSelect name="grupo" id="grupo" class="form-select"
-                                    [disabled]="esEdicionGrupo" [(ngModel)]="grupoSelected">
+                                        [disabled]="esEdicionGrupo" [(ngModel)]="grupoSelected">
                                         <option value="-1">-Seleccione una opción-</option>
                                         <option *ngFor="let grupo of grupos" value="{{grupo.idGrupo}}">{{grupo.nombre}}
                                         </option>
@@ -178,7 +178,8 @@
                                         <div class="col-4">
                                             <div class="form-floating">
                                                 <input type="time" name="horaInicio{{i + 2}}" id="horaInicio{{i + 2}}"
-                                                    placeholder="Hora inicio" list="times" step="3600" class="form-control"
+                                                    placeholder="Hora inicio" list="times" step="3600"
+                                                    class="form-control"
                                                     [(ngModel)]="horaInicioEdicion[nuevoHorario.idHorario]"
                                                     [disabled]="idEdicionHorario !== nuevoHorario.idHorario || !esEdicionHorario">
                                                 <label for="horaInicio{{i + 2}}" class="form-label">Hora inicio</label>
@@ -195,11 +196,15 @@
                                         </div>
                                         <div class="col-4 d-flex justify-content-center">
                                             <div class="btn-group">
-                                                <button *ngIf="idEdicionHorario === nuevoHorario.idHorario && esEdicionHorario" class="btn btn-success"
+                                                <button
+                                                    *ngIf="idEdicionHorario === nuevoHorario.idHorario && esEdicionHorario"
+                                                    class="btn btn-success"
                                                     (click)="editarHorario(nuevoHorario.idHorario)">
                                                     <i class="fa-solid fa-check"></i>
                                                 </button>
-                                                <button *ngIf="idEdicionHorario === nuevoHorario.idHorario && esEdicionHorario" class="btn btn-danger"
+                                                <button
+                                                    *ngIf="idEdicionHorario === nuevoHorario.idHorario && esEdicionHorario"
+                                                    class="btn btn-danger"
                                                     (click)="esEdicionHorario = false; idEdicionHorario = -1;">
                                                     <i class="fa-solid fa-xmark"></i>
                                                 </button>
@@ -233,22 +238,20 @@
                                 <div class="row g-2 align-items-center">
                                     <div class="col-4">
                                         <div class="form-floating">
-                                            <input type="time" name="horaInicio" id="horaInicio"
-                                            list="times" step="3600" class="form-control"
-                                                [(ngModel)]="horaInicio">
+                                            <input type="time" name="horaInicio" id="horaInicio" list="times"
+                                                step="3600" class="form-control" [(ngModel)]="horaInicio">
                                             <label for="horaInicio" class="form-label">Hora inicio</label>
                                         </div>
                                     </div>
                                     <div class="col-4">
                                         <div class="form-floating">
-                                            <input type="time" name="horaFin" id="horaFin"
-                                                placeholder="Hora fin" list="times" step="3600" class="form-control" [(ngModel)]="horaFin">
+                                            <input type="time" name="horaFin" id="horaFin" placeholder="Hora fin"
+                                                list="times" step="3600" class="form-control" [(ngModel)]="horaFin">
                                             <label for="horaFin" class="form-label">Hora fin</label>
                                         </div>
                                     </div>
                                     <div class="col-4 d-flex align-items-center">
-                                        <button class="btn btn-primary"
-                                            (click)="agregarHorario()">
+                                        <button class="btn btn-primary" (click)="agregarHorario()">
                                             <i class="fa-solid fa-circle-plus"></i>
                                             Agregar
                                         </button>
@@ -315,8 +318,7 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-success" (click)="esEdicion ? editarCurso() : agregarCurso()"
-                    data-bs-dismiss="modal">Guardar</button>
+                <button class="btn btn-success" (click)="esEdicion ? editarCurso() : agregarCurso()">Guardar</button>
                 <button class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
             </div>
         </div>
@@ -338,106 +340,100 @@
         </div>
     </div>
 </div>
-<div class="d-flex justify-content-center h-100">
+<div class="p-5 justify-content-center h-100">
     <p-toast [showTransformOptions]="'translateY(100%)'" [showTransitionOptions]="'500ms'"
         [hideTransitionOptions]="'500ms'" [showTransformOptions]="'translateX(100%)'"></p-toast>
-    <div class="col px-5 justify-content-center pt-5" style="overflow-x:auto;">
-        <div class="mb-4">
-            <h2 class="mb-5"><strong>Cursos</strong></h2>
-        </div>
-        <p-table #dtCursos [value]="cursos" [columns]="cols" styleClass="p-datatable-striped"
-            [exportHeader]="'customExportHeader'" [scrollable]="true" [paginator]="true" [rows]="10"
-            [showCurrentPageReport]="true"
-            currentPageReportTemplate="Mostrando {first} - {last} de {totalRecords} resultados"
-            [rowsPerPageOptions]="[10, 25, 50]" [globalFilterFields]="['idCurso']">
-            <ng-template pTemplate="caption">
-                <div class="flex">
-                    <button type="button" (click)="dtCursos.exportCSV()" class="btn btn-secondary mx-2"><i
-                            class="fa-solid fa-file-csv"></i></button>
-                    <button type="button" (click)="exportExcel()" class="btn btn-success mx-2"><i
-                            class="fa-solid fa-file-excel"></i></button>
-                    <button type="button" (click)="exportPdf()" class="btn btn-danger mx-2"><i
-                            class="fa-solid fa-file-pdf"></i></button>
-                    <button type="button" (click)="dtCursos.exportCSV({ selectionOnly: true })"
-                        class="btn btn-primary float-end" pTooltip="Selection Only"><i
-                            class="fa-solid fa-filter"></i></button>
-                    <span class="float-end mx-3">
-                        <input type="text" (input)="dtCursos.filterGlobal($any($event.target).value, 'contains')"
-                            placeholder="Ingrese el ID del Curso" class="form-control" />
-                    </span>
-                    <button class="btn btn-primary float-end" data-bs-toggle="modal" data-bs-target="#agregarEditar"
-                        (click)="esEdicion = false; limpiarCampos();">
-                        <i class="fa-solid fa-circle-plus"></i>
-                        Agregar
-                    </button>
-                </div>
-            </ng-template>
-            <ng-template pTemplate="header">
-                <tr>
-                    <th pSortableColumn="idCurso" style="min-width:180px">Cod. Asignatura <p-sortIcon
-                            field="idCurso"></p-sortIcon></th>
-                    <th pSortableColumn="nombre" style="min-width:150px">Asignatura <p-sortIcon
-                            field="nombre"></p-sortIcon>
-                    </th>
-                    <th pSortableColumn="grupo" style="min-width:150px">Grupos <p-sortIcon field="grupo"></p-sortIcon>
-                    </th>
-                    <th pSortableColumn="nivel" style="min-width:150px">Nivel <p-sortIcon field="nivel"></p-sortIcon>
-                    </th>
-                    <th pSortableColumn="horas" style="min-width:150px">Horas <p-sortIcon field="horas"></p-sortIcon>
-                    </th>
-                    <th pSortableColumn="creditos" style="min-width:150px">Créditos <p-sortIcon
-                            field="creditos"></p-sortIcon></th>
-                    <th pSortableColumn="programa" style="min-width:150px">Programa <p-sortIcon
-                            field="programa"></p-sortIcon></th>
-                    <th pSortableColumn="pensum" style="min-width:150px">Pensum <p-sortIcon field="pensum"></p-sortIcon>
-                    </th>
-                    <th pSortableColumn="idFacultad" style="min-width:150px">Facultad <p-sortIcon
-                            field="idFacultad"></p-sortIcon></th>
-                    <th pSortableColumn="idDocente" style="min-width:150px">Docente <p-sortIcon
-                            field="idDocente"></p-sortIcon></th>
-                    <th style="min-width:150px">Necesidades AV </th>
-                    <th style="min-width:150px">Horario </th>
-                    <th style="min-width:150px">Opciones </th>
-                </tr>
-            </ng-template>
-            <ng-template pTemplate="body" let-cursoLista>
-                <tr>
-                    <td>{{cursoLista.idCurso}}</td>
-                    <td>{{cursoLista.nombre}}</td>
-                    <td>{{cursoLista.grupos.length}}</td>
-                    <td>{{cursoLista.nivel}}</td>
-                    <td>{{cursoLista.horas}}</td>
-                    <td>{{cursoLista.creditos}}</td>
-                    <td>{{cursoLista.idPrograma}}</td>
-                    <td>{{cursoLista.pensum}}</td>
-                    <td>{{cursoLista.idFacultad}}</td>
-                    <td>{{cursoLista.idDocente}}</td>
-                    <td class="text-center">
-                        <i *ngIf="estaEnLista('COMPUTADORA', cursoLista.recursos)"
-                            class="fa-solid fa-computer fa-xl me-2"></i>
-                        <i *ngIf="estaEnLista('VIDEOBEAM', cursoLista.recursos)"
-                            class="fa-solid fa-video fa-xl ms-2"></i>
-                    </td>
-                    <td class="text-center"><i class="fa-solid fa-eye fa-xl"></i></td>
-                    <td class="text-center" style="min-width:120px;max-width:120px;">
-                        <div class="btn-group">
-                            <button class="btn btn-primary" (click)="editar(cursoLista)" data-bs-toggle="modal"
-                                data-bs-target="#agregarEditar">
-                                <i class="fa-solid fa-pen"></i>
-                            </button>
-                            <button class="btn btn-danger" (click)="cambiarTxtEliminar(cursoLista)" data-bs-toggle="modal"
-                                data-bs-target="#borrar">
-                                <i class="fa-solid fa-trash-can"></i>
-                            </button>
-                        </div>
-                    </td>
-                </tr>
-            </ng-template>
-            <ng-template pTemplate="emptymessage">
-                <tr>
-                    <td colspan="14">No hay cursos</td>
-                </tr>
-            </ng-template>
-        </p-table>
+    <div class="mb-4">
+        <h2 class="mb-5"><strong>Cursos</strong></h2>
     </div>
+    <p-table #dtCursos [value]="cursos" [columns]="cols" styleClass="p-datatable-striped"
+        [exportHeader]="'customExportHeader'" [scrollable]="true" [paginator]="true" [rows]="5"
+        [showCurrentPageReport]="true"
+        currentPageReportTemplate="Mostrando {first} - {last} de {totalRecords} resultados"
+        [rowsPerPageOptions]="[5, 10, 15]" [globalFilterFields]="['idCurso']">
+        <ng-template pTemplate="caption">
+            <div class="flex">
+                <button type="button" (click)="dtCursos.exportCSV()" class="btn btn-secondary mx-2"><i
+                        class="fa-solid fa-file-csv"></i></button>
+                <button type="button" (click)="exportExcel()" class="btn btn-success mx-2"><i
+                        class="fa-solid fa-file-excel"></i></button>
+                <button type="button" (click)="exportPdf()" class="btn btn-danger mx-2"><i
+                        class="fa-solid fa-file-pdf"></i></button>
+                <button type="button" (click)="dtCursos.exportCSV({ selectionOnly: true })"
+                    class="btn btn-primary float-end" pTooltip="Selection Only"><i
+                        class="fa-solid fa-filter"></i></button>
+                <span class="float-end mx-3">
+                    <input type="text" (input)="dtCursos.filterGlobal($any($event.target).value, 'contains')"
+                        placeholder="Ingrese el ID del Curso" class="form-control" />
+                </span>
+                <button class="btn btn-primary float-end" data-bs-toggle="modal" data-bs-target="#agregarEditar"
+                    (click)="esEdicion = false; limpiarCampos();">
+                    <i class="fa-solid fa-circle-plus"></i>
+                    Agregar
+                </button>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th pSortableColumn="idCurso" style="min-width:180px">Cod. Asignatura <p-sortIcon
+                        field="idCurso"></p-sortIcon></th>
+                <th pSortableColumn="nombre" style="min-width:150px">Asignatura <p-sortIcon field="nombre"></p-sortIcon>
+                </th>
+                <th pSortableColumn="grupo" style="min-width:150px">Grupos <p-sortIcon field="grupo"></p-sortIcon>
+                </th>
+                <th pSortableColumn="nivel" style="min-width:150px">Nivel <p-sortIcon field="nivel"></p-sortIcon>
+                </th>
+                <th pSortableColumn="horas" style="min-width:150px">Horas <p-sortIcon field="horas"></p-sortIcon>
+                </th>
+                <th pSortableColumn="creditos" style="min-width:150px">Créditos <p-sortIcon
+                        field="creditos"></p-sortIcon></th>
+                <th pSortableColumn="programa" style="min-width:150px">Programa <p-sortIcon
+                        field="programa"></p-sortIcon></th>
+                <th pSortableColumn="pensum" style="min-width:150px">Pensum <p-sortIcon field="pensum"></p-sortIcon>
+                </th>
+                <th pSortableColumn="idFacultad" style="min-width:150px">Facultad <p-sortIcon
+                        field="idFacultad"></p-sortIcon></th>
+                <th pSortableColumn="idDocente" style="min-width:150px">Docente <p-sortIcon
+                        field="idDocente"></p-sortIcon></th>
+                <th style="min-width:150px">Necesidades AV </th>
+                <th style="min-width:150px">Opciones </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-cursoLista>
+            <tr>
+                <td>{{cursoLista.idCurso}}</td>
+                <td>{{cursoLista.nombre}}</td>
+                <td>{{cursoLista.grupos.length}}</td>
+                <td>{{cursoLista.nivel}}</td>
+                <td>{{cursoLista.horas}}</td>
+                <td>{{cursoLista.creditos}}</td>
+                <td>{{cursoLista.idPrograma}}</td>
+                <td>{{cursoLista.pensum}}</td>
+                <td>{{cursoLista.idFacultad}}</td>
+                <td>{{cursoLista.idDocente}}</td>
+                <td class="text-center">
+                    <i *ngIf="estaEnLista('COMPUTADORA', cursoLista.recursos)"
+                        class="fa-solid fa-computer fa-xl me-2"></i>
+                    <i *ngIf="estaEnLista('VIDEOBEAM', cursoLista.recursos)" class="fa-solid fa-video fa-xl ms-2"></i>
+                </td>
+                <td class="text-center" style="min-width:120px;max-width:120px;">
+                    <div class="btn-group">
+                        <button class="btn btn-primary" (click)="editar(cursoLista)" data-bs-toggle="modal"
+                            data-bs-target="#agregarEditar">
+                            <i class="fa-solid fa-pen"></i>
+                        </button>
+                        <button class="btn btn-danger" (click)="cambiarTxtEliminar(cursoLista)" data-bs-toggle="modal"
+                            data-bs-target="#borrar">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td colspan="14">No hay cursos</td>
+            </tr>
+        </ng-template>
+    </p-table>
 </div>

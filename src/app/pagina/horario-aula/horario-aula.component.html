@@ -34,19 +34,19 @@
       <div class="btn-group">
         <div class="btn btn-primary" mwlCalendarPreviousView [view]="view" [(viewDate)]="viewDate"
           (viewDateChange)="closeOpenMonthViewDay()">
-          Anterior
+          <i class="fa-solid fa-chevron-left"></i>
         </div>
-        <div class="btn btn-outline-secondary" mwlCalendarToday [(viewDate)]="viewDate">
+        <div class="btn btn-primary" mwlCalendarToday [(viewDate)]="viewDate">
           Hoy
         </div>
         <div class="btn btn-primary" mwlCalendarNextView [view]="view" [(viewDate)]="viewDate"
           (viewDateChange)="closeOpenMonthViewDay()">
-          Siguiente
+          <i class="fa-solid fa-chevron-right"></i>
         </div>
       </div>
     </div>
     <div class="col-md-4">
-      <h3>{{ viewDate | calendarDate:(view + 'ViewTitle'):'es' }}</h3>
+      <h3>{{ viewDate | calendarDate:(view + 'ViewTitle'):'es-CO' }}</h3>
     </div>
     <div class="col-md-4">
       <div class="btn-group">
@@ -65,28 +65,45 @@
   <br />
   <ng-template #loading>
     <div class="text-center">
-      <i class="fas fa-spin fa-spinner fa-5x"></i> <br />
-      Cargando eventos...
+      <i class="fa-solid fa-calendar-days fa-fade fa-10x my-5"></i>
+      <br>
+      <span class="fs-2">Cargando eventos...</span>
     </div>
   </ng-template>
 
-  <div *ngIf="events$ | async; else loading; let events">
-    <div [ngSwitch]="view">
-      <mwl-calendar-month-view *ngSwitchCase="'month'" 
-      [viewDate]="viewDate" 
-      [events]="events"
-      [activeDayIsOpen]="activeDayIsOpen" 
-      (beforeViewRender)="updateCalendarEvents($event)"
-      (dayClicked)="dayClicked($event.day)">
+  <div [ngSwitch]="view">
+      <mwl-calendar-month-view 
+        *ngSwitchCase="'month'" 
+        [viewDate]="viewDate" 
+        [events]="calendarEvents"
+        [refresh]="refresh"
+        [locale]="locale"
+        [activeDayIsOpen]="activeDayIsOpen" 
+        (dayClicked)="dayClicked($event.day)"
+        (beforeViewRender)="updateCalendarEvents($event)"
+      >
       </mwl-calendar-month-view>
-      <mwl-calendar-week-view *ngSwitchCase="'week'" [viewDate]="viewDate" [events]="events"
-        (beforeViewRender)="updateCalendarEvents($event)">
+      <mwl-calendar-week-view 
+        *ngSwitchCase="'week'" 
+        [viewDate]="viewDate" 
+        [events]="calendarEvents"
+        [refresh]="refresh"
+        [locale]="locale"
+        (beforeViewRender)="updateCalendarEvents($event)"
+      >
       </mwl-calendar-week-view>
-      <mwl-calendar-day-view *ngSwitchCase="'day'" [viewDate]="viewDate" [events]="events"
-        (beforeViewRender)="updateCalendarEvents($event)">
+      <mwl-calendar-day-view 
+        *ngSwitchCase="'day'" 
+        [viewDate]="viewDate" 
+        [events]="calendarEvents"
+        [refresh]="refresh"
+        [locale]="locale"
+        [dayStartHour]="6"
+        [dayEndHour]="22"
+        (beforeViewRender)="updateCalendarEvents($event)"
+      >
       </mwl-calendar-day-view>
     </div>
-  </div>
 
   <ng-template #eventInfo let-close="close">
     <div class="modal-header bg-color-u">
