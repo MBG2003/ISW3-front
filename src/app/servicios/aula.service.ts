@@ -31,7 +31,11 @@ export class AulaService {
   }
 
   public listarHorarioPorAula(idFacultad: string, idAula: string): Observable<MensajeDTO> {
-    return this.http.get<MensajeDTO>(`${this.aulaUrl}/listarHorario?idFacultad=${idFacultad}&idAula=${idAula}`, { headers: this.headers });
+    return this.http.get<MensajeDTO>(`${this.aulaUrl}/listarHorarioPorAula?idFacultad=${idFacultad}&idAula=${idAula}`, { headers: this.headers });
+  }
+
+  public listarPorHorario(diaSemana: number, horaInicio: number, horaFin: number): Observable<MensajeDTO> {
+    return this.http.get<MensajeDTO>(`${this.aulaUrl}/listarPorHorario?diaSemana=${diaSemana}&horaInicio=${horaInicio}&horaFin=${horaFin}`, { headers: this.headers });
   }
 
   public agregar(aula: AulaDTO) {

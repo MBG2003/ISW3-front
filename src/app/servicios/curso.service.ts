@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { TokenService } from './token.service';
 import { MensajeDTO } from '../modelo/mensaje-dto';
 import { CursoDTO } from '../modelo/curso-dto';
+import { AulaCursoDTO } from '../modelo/aula-curso-dto';
 
 @Injectable({
   providedIn: 'root'
@@ -36,5 +37,9 @@ export class CursoService {
 
   public eliminar(idFacultad:string, idPrograma:string, idCurso:string) {
     return this.http.delete<MensajeDTO>(`${this.cursoUrl}/eliminar?idFacultad=${idFacultad}&idPrograma=${idPrograma}&idCurso=${idCurso}`, {headers: this.headers});
+  }
+
+  public asignarAula(aulaCursoDTO:AulaCursoDTO) {
+    return this.http.post<MensajeDTO>(`${this.cursoUrl}/asignarAula`, aulaCursoDTO, {headers: this.headers});
   }
 }

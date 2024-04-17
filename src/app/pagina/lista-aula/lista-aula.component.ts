@@ -21,6 +21,8 @@ export class ListaAulaComponent implements OnInit {
   @ViewChild('f') f!: NgForm;
   formEnviado = false;
 
+  nombreArchivo!: string;
+
   cols!: Column[];
   exportColumns!: ExportColumn[];
   textoEliminar: string;
@@ -59,6 +61,12 @@ export class ListaAulaComponent implements OnInit {
     ];
 
     this.exportColumns = this.cols.map((col) => ({ title: col.header, dataKey: col.field }));
+  }
+
+  onAulasCSVChange(event: any) {
+    if(event.target.files.length > 0){
+      this.nombreArchivo = event.target.files[0].name;
+    }
   }
 
   editar(aula: AulaGetDTO) {

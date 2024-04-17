@@ -21,6 +21,8 @@ export class ListaCursoComponent implements OnInit {
   @ViewChild('f') f!: NgForm;
   formEnviado = false;
 
+  nombreArchivo!: string;
+
   cols!: Column[];
   exportColumns!: ExportColumn[];
   textoEliminar: string;
@@ -113,6 +115,12 @@ export class ListaCursoComponent implements OnInit {
         this.showError(error.error.message);
       }
     });
+  }
+
+  onAulasCSVChange(event: any) {
+    if(event.target.files.length > 0){
+      this.nombreArchivo = event.target.files[0].name;
+    }
   }
 
   listarProgramasPorFacultad(idFacultad: any) {
@@ -335,7 +343,7 @@ export class ListaCursoComponent implements OnInit {
       horario += this.diasSemana[h.diaSemana].nombre + ' ' + this.horaString(h.horaInicio) + ' - ' + this.horaString(h.horaFin) + ', ';
     }
 
-    return horario;
+    return horario.slice(0, -2);
   }
 
   horaString(hora: number) {

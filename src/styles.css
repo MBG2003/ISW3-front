@@ -125,6 +125,10 @@ input[type="time"]::-webkit-calendar-picker-indicator {
     display: block;
 }
 
+input[type="file"] {
+    display: none;
+}
+
 @import "primeng/resources/themes/lara-light-blue/theme.css";
 @import "primeng/resources/primeng.css";
 @import "../node_modules/angular-calendar/css/angular-calendar.css";

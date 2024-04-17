@@ -10,6 +10,7 @@ import { FileSaverModule } from 'ngx-filesaver';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { DropdownModule } from 'primeng/dropdown';
 import { TagModule } from 'primeng/tag';
+import { TooltipModule } from 'primeng/tooltip';
 import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 
@@ -59,6 +60,7 @@ import { AsignarHorarioComponent } from './pagina/asignar-horario/asignar-horari
     MultiSelectModule,
     DropdownModule,
     TagModule,
+    TooltipModule,
     CalendarModule.forRoot(
       {
         provide: DateAdapter,

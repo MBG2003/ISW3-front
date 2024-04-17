@@ -82,22 +82,24 @@
             <ng-template pTemplate="rowexpansion" let-cursoLista>
                 <tr>
                     <td colspan="5">
-                            <p-table #dtGrupos [value]="cursoLista.grupos" selectionMode="single" dataKey="idGrupo">
+                            <p-table #dtGrupos [value]="cursoLista.grupos" dataKey="idGrupo">
                                 <ng-template pTemplate="header">
                                     <tr>
                                         <th style="width: 4rem"></th>
-                                        <th pSortableColumn="nombre">Grupo <p-sortIcon field="nombre"></p-sortIcon></th>
-                                        <th pSortableColumn="cupos">Cupos <p-sortIcon field="cupos"></p-sortIcon></th>
-                                        <th>Horario </th>
+                                        <th pSortableColumn="nombre" style="min-width: 150px;">Grupo <p-sortIcon field="nombre"></p-sortIcon></th>
+                                        <th pSortableColumn="cupos" style="min-width: 150px;">Cupos <p-sortIcon field="cupos"></p-sortIcon></th>
+                                        <th style="min-width: 150px;">Horario </th>
                                     </tr>
                                 </ng-template>
                                 <ng-template pTemplate="body" let-grupo>
                                     <tr>
                                         <td>
-                                            <p-tableRadioButton [value]="grupo"></p-tableRadioButton>
+                                            <input class="form-check-input" type="radio" name="cursoSelected"
+                                            (change)="changeCursoSelected(cursoLista, grupo)" role="button">
                                         </td>
                                         <td>{{ grupo.nombre }}</td>
                                         <td>{{ grupo.cupos }}</td>
+                                        <td>{{ obtenerHorarioGrupo(grupo) }}</td>
                                     </tr>
                                 </ng-template>
                                 <ng-template pTemplate="emptymessage">
@@ -155,7 +157,8 @@
         <ng-template pTemplate="body" let-aulaLista>
             <tr>
                 <td>
-                    <p-tableRadioButton [value]="aulaLista"></p-tableRadioButton>
+                    <input class="form-check-input" type="radio" name="aulaSelected"
+                        (change)="changeAulaSelected(aulaLista)" role="button">
                 </td>
                 <td>{{aulaLista.idAula}}</td>
                 <td>{{aulaLista.nombre}}</td>
@@ -172,7 +175,7 @@
         </ng-template>
         <ng-template pTemplate="emptymessage">
             <tr>
-                <td colspan="8">No hay aulas</td>
+                <td colspan="8">No hay aulas disponibles en el horario seleccionado</td>
             </tr>
         </ng-template>
     </p-table>
