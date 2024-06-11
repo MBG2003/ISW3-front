@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import { JwtHelperService } from '@auth0/angular-jwt';
 import { Buffer } from 'buffer';
 
 const TOKEN_KEY = "AuthToken";
@@ -7,7 +8,7 @@ const TOKEN_KEY = "AuthToken";
   providedIn: 'root'
 })
 export class TokenService {
-  constructor(private router: Router) { }
+  constructor(private router: Router, private jwt: JwtHelperService) { }
   public setToken(token: string) {
     window.localStorage.removeItem(TOKEN_KEY);
     window.localStorage.setItem(TOKEN_KEY, token);
@@ -34,7 +35,8 @@ export class TokenService {
   }
 
   public isLogged(): boolean {
-    if (this.getToken()) {
+    const token = this.getToken();
+    if (token && !this.jwt.isTokenExpired(token)) {
       return true;
     }
     return false;

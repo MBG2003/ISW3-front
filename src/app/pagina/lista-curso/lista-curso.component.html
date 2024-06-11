@@ -359,9 +359,6 @@
                     tooltipPosition="top"><i class="fa-solid fa-file-excel"></i></button>
                 <button type="button" (click)="exportPdf()" class="btn btn-danger mx-2" pTooltip="Descargar en PDF"
                     tooltipPosition="top"><i class="fa-solid fa-file-pdf"></i></button>
-                <button type="button" (click)="dtCursos.exportCSV({ selectionOnly: true })"
-                    class="btn btn-primary float-end" pTooltip="Selection Only" tooltipPosition="top"><i
-                        class="fa-solid fa-filter"></i></button>
                 <span class="float-end mx-3">
                     <input type="text" (input)="dtCursos.filterGlobal($any($event.target).value, 'contains')"
                         placeholder="Ingrese el ID del Curso" class="form-control" />

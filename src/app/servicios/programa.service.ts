@@ -9,7 +9,7 @@ import { MensajeDTO } from '../modelo/mensaje-dto';
 })
 export class ProgramaService {
 
-  private programaURL = "http://localhost:8080/programa";
+  private programaURL = `http://${window.location.hostname}:8080/programa`;
 
   private headers!:HttpHeaders;
 

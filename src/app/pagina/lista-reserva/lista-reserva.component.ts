@@ -110,12 +110,27 @@ export class ListaReservaComponent implements OnInit {
   }
 
   public listar() {
+    this.reservas = [];
     this.reservaServicio.listar().subscribe({
       next: data => {
-        this.reservas = data.response;
+        data.response.forEach((r: ReservaGetDTO) => {
+          this.reservas = [...this.reservas, {
+            idReserva: r.idReserva,
+            idFacultad: r.idFacultad,
+            idAula: r.idAula,
+            emisor: r.emisor,
+            asunto: r.asunto,
+            descripcion: r.descripcion,
+            estado: r.estado,
+            fecha: r.fecha,
+            horaInicio: r.horaInicio,
+            horaFin: r.horaFin,
+            observaciones: r.observaciones
+          }]
+        })
       },
       error: error => {
-        this.reservas = [];
+        this.showError(error.error.message);
       }
     });
   }
@@ -136,9 +151,8 @@ export class ListaReservaComponent implements OnInit {
   }
 
   agregarReserva() {
-    console.log(this.reserva.fecha);
     var fecha = new Date(this.reserva.fecha);
-    fecha.setMinutes(fecha.getMinutes() + fecha.getTimezoneOffset())
+    fecha.setMinutes(fecha.getMinutes() + fecha.getTimezoneOffset());
     this.reserva.fecha = fecha;
     this.reserva.horaInicio = this.reserva.horaInicio.split(':')[0];
     this.reserva.horaFin = this.reserva.horaFin.split(':')[0];
@@ -162,9 +176,11 @@ export class ListaReservaComponent implements OnInit {
   }
 
   public editarReserva() {
+    var fecha = new Date(this.reserva.fecha);
+    fecha.setMinutes(fecha.getMinutes() + fecha.getTimezoneOffset());
+    this.reserva.fecha = fecha;
     this.reserva.horaInicio = this.reserva.horaInicio.split(':')[0];
     this.reserva.horaFin = this.reserva.horaFin.split(':')[0];
-    this.reserva.idAula = this.reserva.idAula.split(',')[1];
 
     this.reservaServicio.actualizar(this.reserva).subscribe({
       next: data => {

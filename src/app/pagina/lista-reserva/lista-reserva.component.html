@@ -113,7 +113,6 @@
                                         <option value="ACEPTADO">Aceptada</option>
                                         <option value="RECHAZADO">Rechazada</option>
                                         <option value="REVISION">En revisión</option>
-                                        <option value="SOLUCIONADO">Solucionado</option>
                                     </select>
                                     <label for="estado" class="form-label">Estado</label>
                                     <div *ngIf="formEnviado && estado.invalid" class="invalid-feedback">
@@ -202,7 +201,7 @@
     <p-table #dt [value]="reservas" [columns]="cols" [exportHeader]="'customExportHeader'" [paginator]="true"
         [rows]="10" [showCurrentPageReport]="true"
         currentPageReportTemplate="Mostrando {first} - {last} de {totalRecords} resultados"
-        [rowsPerPageOptions]="[10, 25, 50]" [globalFilterFields]="['idAula']">
+        [rowsPerPageOptions]="[10, 25, 50]" [globalFilterFields]="['idReserva']">
         <ng-template pTemplate="caption">
             <div class="flex">
                 <button type="button" (click)="dt.exportCSV()" class="btn btn-secondary mx-2"><i
@@ -211,11 +210,9 @@
                         class="fa-solid fa-file-excel"></i></button>
                 <button type="button" (click)="exportPdf()" class="btn btn-danger mx-2"><i
                         class="fa-solid fa-file-pdf"></i></button>
-                <button type="button" (click)="dt.exportCSV({ selectionOnly: true })" class="btn btn-primary float-end"
-                    pTooltip="Selection Only" tooltipPosition="bottom"><i class="fa-solid fa-filter"></i></button>
                 <span class="float-end mx-3">
                     <input type="text" (input)="dt.filterGlobal($any($event.target).value, 'contains')"
-                        placeholder="Ingrese el ID del aula" class="form-control" />
+                        placeholder="Ingrese el ID de la reserva" class="form-control" />
                 </span>
                 <button class="btn btn-primary float-end" data-bs-toggle="modal" data-bs-target="#agregarEditar"
                     (click)="esEdicion = false; limpiarCampos();">

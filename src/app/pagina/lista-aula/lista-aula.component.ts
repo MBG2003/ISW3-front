@@ -21,7 +21,7 @@ export class ListaAulaComponent implements OnInit {
   @ViewChild('f') f!: NgForm;
   formEnviado = false;
 
-  nombreArchivo!: string;
+  archivoSubirAulasCSV: File | undefined;
 
   cols!: Column[];
   exportColumns!: ExportColumn[];
@@ -57,15 +57,31 @@ export class ListaAulaComponent implements OnInit {
       { field: 'nombre', header: 'Nombre' },
       { field: 'idFacultad', header: 'Facultad' },
       { field: 'capacidad', header: 'Capacidad' },
-      { field: 'estado', header: 'Estado' }
+      { field: 'estado', header: 'Estado' },
+      { field: 'recursos', header: 'RecursosAV' }
     ];
 
     this.exportColumns = this.cols.map((col) => ({ title: col.header, dataKey: col.field }));
   }
 
-  onAulasCSVChange(event: any) {
-    if(event.target.files.length > 0){
-      this.nombreArchivo = event.target.files[0].name;
+  onAulasCSVChange(event: any): void {
+    if (event.target.files.length > 0) {
+      this.archivoSubirAulasCSV = event.target.files[0];
+    }
+  }
+
+  onsSubmitAulasCSV(): void {
+    if (this.archivoSubirAulasCSV) {
+      this.aulaServicio.cargarAulas(this.archivoSubirAulasCSV).subscribe({
+        next: data => {
+          this.showSuccess(data.message);
+          this.archivoSubirAulasCSV = undefined;
+          this.listar();
+        },
+        error: error => {
+          this.showInfo(error.error.message);
+        }
+      });
     }
   }
 
@@ -92,12 +108,15 @@ export class ListaAulaComponent implements OnInit {
   }
 
   listar() {
+    this.aulas = [];
     this.aulaServicio.listar().subscribe({
       next: data => {
-        this.aulas = data.response;
+        data.response.forEach((a: AulaGetDTO) => {
+          this.aulas = [...this.aulas, { idFacultad: a.idFacultad, idAula: a.idAula, nombre: a.nombre, capacidad: a.capacidad, estado: a.estado, recursos: a.recursos }];
+        });
       },
       error: error => {
-        this.aulas = [];
+        this.showError(error.error.message);
       }
     });
   }

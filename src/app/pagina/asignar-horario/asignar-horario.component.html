@@ -54,8 +54,10 @@
             <ng-template pTemplate="body" let-cursoLista let-expanded="expanded">
                 <tr>
                     <td>
-                        <button *ngIf="expanded" type="button" pButton pRipple [pRowToggler]="cursoLista" class="btn"><i class="fa-solid fa-angle-down"></i></button>
-                        <button *ngIf="!expanded" type="button" pButton pRipple [pRowToggler]="cursoLista" class="btn"><i class="fa-solid fa-angle-right"></i></button>
+                        <button type="button" pButton pRipple [pRowToggler]="cursoLista" class="btn">
+                            <i *ngIf="!expanded" class="fa-solid fa-angle-right"></i>
+                            <i *ngIf="expanded" class="fa-solid fa-angle-down"></i>
+                        </button>
                     </td>
                     <td>{{cursoLista.idCurso}}</td>
                     <td>{{cursoLista.nombre}}</td>
@@ -73,13 +75,14 @@
                         <i *ngIf="estaEnLista('VIDEOBEAM', cursoLista.recursos)"
                             class="fa-solid fa-video fa-xl ms-2"></i>
                     </td>
+                </tr>
             </ng-template>
             <ng-template pTemplate="emptymessage">
                 <tr>
                     <td colspan="14">No hay cursos</td>
                 </tr>
             </ng-template>
-            <ng-template pTemplate="rowexpansion" let-cursoLista>
+            <ng-template pTemplate="rowexpansion" let-cursoLista let-expanded="expanded">
                 <tr>
                     <td colspan="5">
                             <p-table #dtGrupos [value]="cursoLista.grupos" dataKey="idGrupo">
@@ -91,15 +94,43 @@
                                         <th style="min-width: 150px;">Horario </th>
                                     </tr>
                                 </ng-template>
-                                <ng-template pTemplate="body" let-grupo>
+                                <ng-template pTemplate="body" let-grupo let-grupo.verHorarios="false">
                                     <tr>
                                         <td>
-                                            <input class="form-check-input" type="radio" name="cursoSelected"
-                                            (change)="changeCursoSelected(cursoLista, grupo)" role="button">
+                                            <button type="button" pButton pRipple [pRowToggler]="cursoLista" class="btn" (click)="grupo.verHorarios = !grupo.verHorarios">
+                                                <i *ngIf="!grupo.verHorarios" class="fa-solid fa-angle-right"></i>
+                                                <i *ngIf="grupo.verHorarios" class="fa-solid fa-angle-down"></i>
+                                            </button>
                                         </td>
                                         <td>{{ grupo.nombre }}</td>
                                         <td>{{ grupo.cupos }}</td>
                                         <td>{{ obtenerHorarioGrupo(grupo) }}</td>
+                                    </tr>
+                                    <tr *ngIf="grupo.verHorarios">
+                                        <td colspan="4">
+                                            <p-table #dtHorarios [value]="grupo.horario" dataKey="idHorario">
+                                                <ng-template pTemplate="header">
+                                                    <tr>
+                                                        <th style="width: 4rem"></th>
+                                                        <th style="min-width: 150px;">Horario </th>
+                                                    </tr>
+                                                </ng-template>
+                                                <ng-template pTemplate="body" let-horario>
+                                                    <tr>
+                                                        <td>
+                                                            <input class="form-check-input" type="radio" name="aulaSelected"
+                                                                (change)="changeCursoSelected(cursoLista, grupo, horario)" role="button">
+                                                        </td>
+                                                        <td>{{formatHorario(horario)}}</td>
+                                                    </tr>
+                                                </ng-template>
+                                                <ng-template pTemplate="emptymessage">
+                                                    <tr>
+                                                        <td colspan="4">El grupo no tiene horarios</td>
+                                                    </tr>
+                                                </ng-template>
+                                            </p-table>
+                                        </td>
                                     </tr>
                                 </ng-template>
                                 <ng-template pTemplate="emptymessage">
@@ -179,4 +210,7 @@
             </tr>
         </ng-template>
     </p-table>
+    <div class="row justify-content-start">
+        <button class="btn btn-success w-25" (click)="asignarAula()" [disabled]="asignacion.idCurso == '' || asignacion.idAula == ''">Asignar aula</button>
+    </div>
 </div>

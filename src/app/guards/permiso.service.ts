@@ -10,7 +10,7 @@ export class PermisoService {
   constructor(private tokenService: TokenService, private router: Router) { }
   canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
     if (this.tokenService.isLogged()) {
-      this.router.navigate([""]);
+      this.router.navigate(['/gestion_aulas']);
       return false;
     }
     return true;

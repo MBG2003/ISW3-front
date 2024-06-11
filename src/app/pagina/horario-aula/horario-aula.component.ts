@@ -50,6 +50,7 @@ import { MessageService } from 'primeng/api';
 import { FacultadService } from 'src/app/servicios/facultad.service';
 import { CursoService } from 'src/app/servicios/curso.service';
 import { error } from 'jquery';
+import { AulaCursoGetDTO } from 'src/app/modelo/aula-curso-get-dto';
 
 interface RecurringEvent {
   title: string;
@@ -103,6 +104,7 @@ export class HorarioAulaComponent implements OnInit {
   idAula!: string;
 
   cursos: CursoGetDTO[];
+  horarios: AulaCursoGetDTO[];
   reservas: ReservaGetDTO[];
 
   constructor(private cdr: ChangeDetectorRef, private reservaServicio: ReservaService, private facultadServicio: FacultadService, private aulaServicio: AulaService, private cursoServicio: CursoService, private messageService: MessageService, private eventInfoModal: NgbModal) {
@@ -111,6 +113,7 @@ export class HorarioAulaComponent implements OnInit {
     this.facultades = [];
     this.aulas = [];
     this.cursos = [];
+    this.horarios = [];
     this.reservas = [];
     this.idFacultad = "";
     this.idAula = "";
@@ -144,44 +147,39 @@ export class HorarioAulaComponent implements OnInit {
 
         // Primer semestre
         rule.between(new Date(`${currentYear}-02-05`), new Date(`${currentYear}-06-01`), true).forEach((date) => {
-          this.calendarEvents.push({
+          this.calendarEvents = [...this.calendarEvents, {
             title,
             color,
             start: addHours(startOfDay(new Date(date)), event.start),
             end: addHours(startOfDay(new Date(date)), event.end)
-          });
+          }];
         });
 
         // Segundo semestre
         rule.between(new Date(`${currentYear}-08-08`), new Date(`${currentYear}-11-25`), true).forEach((date) => {
-          this.calendarEvents.push({
+          this.calendarEvents = [...this.calendarEvents, {
             title,
             color,
             start: addHours(startOfDay(new Date(date)), event.start),
             end: addHours(startOfDay(new Date(date)), event.end)
-          });
+          }];
         });
       });
 
-
-      this.reservaServicio.listar().subscribe({
+      // Consultar reservas
+      this.reservaServicio.listarAceptada().subscribe({
         next: data => {
           this.reservas = data.response;
           this.reservas.forEach(r => {
             var fecha = new Date(r.fecha);
             fecha.setMinutes(fecha.getMinutes() + fecha.getTimezoneOffset());
             this.calendarEvents.push({
-              title: r.asunto,
+              title: r.asunto + ' (' + r.idAula + ')',
               start: addHours(startOfDay(new Date(fecha)), r.horaInicio),
               end: addHours(startOfDay(new Date(fecha)), r.horaFin),
               color: {
                 primary: '#1e90ff',
                 secondary: '#D1E8FF',
-              },
-              draggable: true,
-              resizable: {
-                beforeStart: true,
-                afterEnd: true,
               }
             });
           })
@@ -254,26 +252,22 @@ export class HorarioAulaComponent implements OnInit {
       }
     });
 
-    this.cursoServicio.listar().subscribe({
+    this.aulaServicio.listarHorarios().subscribe({
       next: data => {
-        this.cursos = data.response;
-        this.cursos.forEach(c => {
-          c.grupos.forEach(g => {
-            g.horario.forEach(h => {
-              this.clases.push({
-                title: c.nombre + ' (' + g.nombre + ')',
-                color: {
-                  primary: '#3A9B4A',
-                  secondary: '#E8F3EE'
-                },
-                start: h.horaInicio,
-                end: h.horaFin,
-                rrule: {
-                  freq: RRule.WEEKLY,
-                  byweekday: h.diaSemana
-                }
-              })
-            })
+        this.horarios = data.response;
+        this.horarios.forEach((h: AulaCursoGetDTO) => {
+          this.clases.push({
+            title: h.nombreCurso + ' | ' + h.nombreGrupo + ' (' + h.idAula + ')',
+            color: {
+              primary: '#3A9B4A',
+              secondary: '#E8F3EE'
+            },
+            start: h.horaInicio,
+            end: h.horaFin,
+            rrule: {
+              freq: RRule.WEEKLY,
+              byweekday: h.diaSemana
+            }
           })
         });
       },

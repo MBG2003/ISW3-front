@@ -91,12 +91,23 @@ export class ListaMejoraProblemaComponent implements OnInit {
   }
 
   public listar() {
+    this.solicitudes = [];
     this.mejoraProblemaServicio.listar().subscribe({
       next: data => {
-        this.solicitudes = data.response;
+        data.response.forEach((s: MejoraProblemaGetDTO) => {
+          this.solicitudes = [...this.solicitudes, {
+            emisor: s.emisor,
+            idFacultad: s.idFacultad,
+            idAula: s.idAula,
+            idSolicitud: s.idSolicitud,
+            descripcion: s.descripcion,
+            observaciones: s.observaciones,
+            estado: s.estado
+          }]
+        })
       },
       error: error => {
-        this.solicitudes = [];
+        this.showInfo(error.error.message);
       }
     });
   }

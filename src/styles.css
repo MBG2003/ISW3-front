@@ -52,8 +52,14 @@ body::-webkit-scrollbar {
 }
 
 .sidebar {
-    width: 300px;
     font-size: 17px;
+    width: 100%;
+    height: 100%;
+}
+
+.menu {
+    height: 100% !important;
+    overflow-y: hidden;
 }
 
 .menu ul ul {
@@ -75,6 +81,23 @@ body::-webkit-scrollbar {
 .seccion {
     width: 80%;
     min-height: 700px;
+}
+
+.offcanvas-body::-webkit-scrollbar {
+    display: none;
+}
+
+@media (max-width: 991px) {
+
+    .seccion {
+        width: 100% !important;
+    }
+}
+
+@media (min-width: 992px) {
+    .sidebar {
+        overflow-y: hidden;
+    }
 }
 
 .color-u {

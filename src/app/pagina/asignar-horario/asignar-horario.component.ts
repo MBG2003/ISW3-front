@@ -57,10 +57,14 @@ export class AsignarHorarioComponent implements OnInit {
     let horario: string = '';
 
     for (let h of grupo.horario) {
-      horario += this.diasSemana[h.diaSemana].nombre + ' ' + this.horaString(h.horaInicio) + ' - ' + this.horaString(h.horaFin) + ', ';
+      horario += this.formatHorario(h);
     }
 
     return horario.slice(0, -2);
+  }
+
+  formatHorario(horario: Horario): string {
+    return this.diasSemana[horario.diaSemana].nombre + ' ' + this.horaString(horario.horaInicio) + ' - ' + this.horaString(horario.horaFin) + ', ';
   }
 
   horaString(hora: number) {
@@ -70,27 +74,40 @@ export class AsignarHorarioComponent implements OnInit {
     return hora + ':00 AM';
   }
 
-  changeCursoSelected(curso: CursoGetDTO, grupo: Grupo) {
-    this.asignacion.idFacultadCurso = curso.idCurso;
+  changeCursoSelected(curso: CursoGetDTO, grupo: Grupo, horario: Horario) {
+    this.asignacion.idFacultadCurso = curso.idFacultad;
     this.asignacion.idPrograma = curso.idPrograma;
     this.asignacion.idCurso = curso.idCurso;
+    this.asignacion.idGrupo = grupo.idGrupo;
+    this.asignacion.idHorario = horario.idHorario;
+    this.asignacion.diaSemana = horario.diaSemana;
+    this.asignacion.horaInicio = horario.horaInicio;
+    this.asignacion.horaFin = horario.horaFin;
 
     this.aulas = [];
 
-    grupo.horario.forEach(h => {
-      this.aulaService.listarPorHorario(h.diaSemana, h.horaInicio, h.horaFin).subscribe({
-        next: data => {
-          const aulasResponse: AulaGetDTO[] = data.response;
-  
-          aulasResponse.forEach(a => {
-            this.aulas.push({ idFacultad: a.idFacultad, idAula: a.idAula, nombre: a.nombre, capacidad: a.capacidad, estado: a.estado, recursos: a.recursos });
-          });
-        },
-        error: error => {
-          this.showError(error.error.message);
-        }
-      });
-    }) ;
+    this.aulaService.listarPorHorario(horario.diaSemana, horario.horaInicio, horario.horaFin).subscribe({
+      next: data => {
+        const aulasResponse: AulaGetDTO[] = data.response;
+
+        aulasResponse.forEach(aula => {
+          let index = this.aulas.findIndex(a => a.idFacultad == aula.idFacultad && a.idAula == aula.idAula);
+          if (index == -1) {
+            this.aulas = [...this.aulas, {
+              idFacultad: aula.idFacultad,
+              idAula: aula.idAula,
+              nombre: aula.nombre,
+              capacidad: aula.capacidad,
+              estado: aula.estado,
+              recursos: aula.recursos
+            }];
+          }
+        });
+      },
+      error: error => {
+        this.showError(error.error.message);
+      }
+    });
   }
 
   changeAulaSelected(aula: any) {
@@ -106,7 +123,7 @@ export class AsignarHorarioComponent implements OnInit {
       error: error => {
         this.showError(error.error.message);
       }
-    })
+    });
   }
 
   public getSeverity(status: string) {
@@ -146,7 +163,7 @@ interface Grupo {
 }
 
 interface Horario {
-  idHorario: number;
+  idHorario: string;
   diaSemana: number;
   horaInicio: number;
   horaFin: number;

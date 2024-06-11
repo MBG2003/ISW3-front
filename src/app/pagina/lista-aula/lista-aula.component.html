@@ -157,33 +157,33 @@
                         class="fa-solid fa-file-excel"></i></button>
                 <button type="button" (click)="exportPdf()" class="btn btn-danger mx-2" pTooltip="Descargar en PDF" tooltipPosition="top"><i
                         class="fa-solid fa-file-pdf"></i></button>
-                <button type="button" (click)="dt.exportCSV({ selectionOnly: true })" class="btn btn-primary float-end"
-                    pTooltip="Selection Only" tooltipPosition="bottom"><i class="fa-solid fa-filter"></i></button>
                 <span class="float-end mx-3">
                     <input type="text" (input)="dt.filterGlobal($any($event.target).value, 'contains')"
                         placeholder="Ingrese el ID del aula" class="form-control" />
                 </span>
                 
-                <div *ngIf="nombreArchivo" class="d-inline float-end">
-                    <button class="btn btn-success mx-1">
-                        <i class="fa-solid fa-check"></i>
-                    </button>
-                    <button class="btn btn-danger mx-1" (click)="nombreArchivo = ''">
-                        <i class="fa-solid fa-xmark"></i>
-                    </button>
-                </div>
-                <button *ngIf="!nombreArchivo" class="btn btn-primary float-end" data-bs-toggle="modal" data-bs-target="#agregarEditar"
-                    (click)="esEdicion = false; limpiarCampos();">
-                    <i class="fa-solid fa-circle-plus"></i>
-                    Agregar
-                </button>
-                <label for="aulasCSV" class="float-end mx-3" pTooltip="Subir archivo CSV" tooltipPosition="top">
-                    <div class="btn btn-secondary" role="button">
-                        <i class="fa-solid fa-upload"></i>
-                        {{nombreArchivo}}
+                <form (ngSubmit)="onsSubmitAulasCSV()" enctype="multipart/form-data" class="d-inline">
+                    <div *ngIf="archivoSubirAulasCSV" class="d-inline float-end">
+                        <button type="submit" class="btn btn-success mx-1">
+                            <i class="fa-solid fa-check"></i>
+                        </button>
+                        <button class="btn btn-danger mx-1" (click)="archivoSubirAulasCSV = undefined">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
                     </div>
-                </label>
-                <input type="file" name="aulasCSV" id="aulasCSV" accept=".csv" (change)="onAulasCSVChange($event)">
+                    <button *ngIf="!archivoSubirAulasCSV" class="btn btn-primary float-end" data-bs-toggle="modal" data-bs-target="#agregarEditar"
+                        (click)="esEdicion = false; limpiarCampos();">
+                        <i class="fa-solid fa-circle-plus"></i>
+                        Agregar
+                    </button>
+                    <label for="aulasCSV" class="float-end mx-3" pTooltip="Subir archivo CSV" tooltipPosition="top">
+                        <div class="btn btn-secondary" role="button">
+                            <i class="fa-solid fa-upload"></i>
+                            {{archivoSubirAulasCSV?.name}}
+                        </div>
+                    </label>
+                    <input type="file" name="aulasCSV" id="aulasCSV" accept=".csv" (change)="onAulasCSVChange($event)">
+                </form>
             </div>
         </ng-template>
         <ng-template pTemplate="header">

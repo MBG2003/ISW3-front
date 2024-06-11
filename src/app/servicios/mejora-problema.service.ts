@@ -10,7 +10,7 @@ import { MejoraProblemaDTO } from '../modelo/mejora-problema-dto';
 })
 export class MejoraProblemaService {
 
-  private mejoraProblemaUrl = "http://localhost:8080/mejoraProblema";
+  private mejoraProblemaURL = `http://${window.location.hostname}:8080/mejoraProblema`;
 
   private headers!:HttpHeaders;
 
@@ -23,18 +23,18 @@ export class MejoraProblemaService {
   }
 
   public listar(): Observable<MensajeDTO> {
-    return this.http.get<MensajeDTO>(`${this.mejoraProblemaUrl}/listar`, {headers: this.headers});
+    return this.http.get<MensajeDTO>(`${this.mejoraProblemaURL}/listar`, {headers: this.headers});
   }
 
   public agregar(solicitud:MejoraProblemaDTO) {
-    return this.http.post<MensajeDTO>(`${this.mejoraProblemaUrl}/crear`, solicitud, {headers: this.headers});
+    return this.http.post<MensajeDTO>(`${this.mejoraProblemaURL}/crear`, solicitud, {headers: this.headers});
   }
 
   public actualizar(solicitud:MejoraProblemaDTO) {
-    return this.http.put<MensajeDTO>(`${this.mejoraProblemaUrl}/actualizar`, solicitud, {headers: this.headers});
+    return this.http.put<MensajeDTO>(`${this.mejoraProblemaURL}/actualizar`, solicitud, {headers: this.headers});
   }
 
   public eliminar(idSolicitud:string) {
-    return this.http.delete<MensajeDTO>(`${this.mejoraProblemaUrl}/eliminar/${idSolicitud}`, {headers: this.headers});
+    return this.http.delete<MensajeDTO>(`${this.mejoraProblemaURL}/eliminar/${idSolicitud}`, {headers: this.headers});
   }
 }

@@ -89,6 +89,8 @@
         [events]="calendarEvents"
         [refresh]="refresh"
         [locale]="locale"
+        [dayStartHour]="6"
+        [dayEndHour]="22"
         (beforeViewRender)="updateCalendarEvents($event)"
       >
       </mwl-calendar-week-view>

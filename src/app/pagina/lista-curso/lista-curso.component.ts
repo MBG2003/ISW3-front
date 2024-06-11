@@ -106,12 +106,26 @@ export class ListaCursoComponent implements OnInit {
   }
 
   public listar() {
+    this.cursos = [];
     this.cursoServicio.listar().subscribe({
       next: data => {
-        this.cursos = data.response;
+        data.response.forEach((c: CursoGetDTO) => {
+          this.cursos = [...this.cursos, { 
+            idFacultad: c.idFacultad, 
+            idPrograma: c.idPrograma, 
+            idCurso: c.idCurso, 
+            idDocente: c.idDocente, 
+            nombre: c.nombre, 
+            descripcion: c.descripcion, 
+            pensum: c.pensum, 
+            creditos: c.creditos, 
+            nivel: c.nivel, 
+            horas: c.horas, 
+            grupos: c.grupos, 
+            recursos: c.recursos }]
+        })
       },
       error: error => {
-        this.cursos = [];
         this.showError(error.error.message);
       }
     });

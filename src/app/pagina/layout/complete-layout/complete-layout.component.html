@@ -1,83 +1,99 @@
 <header>
-    <div class="bg-color-u shadow-bottom py-3 ps-5">
-        <div class="d-flex flex-wrap align-items-center justify-content-lg-start">
-            <div class="d-flex align-items-center col-9">
+    <div class="bg-color-u shadow-bottom py-3 ps-4">
+        <div class="d-flex align-items-center justify-content-between justify-content-lg-start">
+            <div class="d-lg-none">
+                <button class="btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasSidebar"
+                    aria-controls="offcanvasSidebar">
+                    <i class="fa-solid fa-bars fa-2xl"></i>
+                </button>
+            </div>
+            <div class="d-flex align-items-center ps-2">
                 <a routerLink="/gestion_aulas" title="Inicio">
                     <img src="../../../assets/logo-universidad-del-quindio.png" alt="logo-universidad-del-quindio"
-                        class="img-fluid rounded-circle shadow user-select-none" width="80px">
+                        class="img-fluid rounded-circle shadow user-select-none" width="80px" style="min-width: 80px;">
                 </a>
                 <div class="d-inline ms-3">
                     <h1 class="fs-1">
-                        <a routerLink="/gestion_aulas" class="d-block text-white text-decoration-underline user-select-none"
-                            title="Inicio">SISTEMA DE GESTION DE AULAS</a>
+                        <a routerLink="/gestion_aulas"
+                            class="d-block d-lg-none text-white text-decoration-underline user-select-none" title="Inicio">SGA</a>
+                        <a routerLink="/gestion_aulas"
+                            class="d-none d-lg-block text-white text-decoration-underline user-select-none" title="Inicio">SISTEMA
+                            DE GESTION DE AULAS</a>
                     </h1>
-                    <span class="d-block fs-5 text-dark user-select-none"><strong>Universidad del Quindio</strong></span>
+                    <span class="d-none d-lg-block fs-5 text-dark user-select-none"><strong>Universidad del
+                            Quindio</strong></span>
                 </div>
             </div>
-            <div class="shadow col-3 p-3">
-                <a routerLink="/" class="fs-5 mx-2 text-dark">Ayuda</a>
-                <a routerLink="/" class="fs-5 mx-2 text-dark">Mi cuenta</a>
+            <div class="ms-lg-auto p-3 shadow">
                 <a (click)="logout()" class="fs-5 mx-2 text-dark" role="button">Salir</a>
             </div>
         </div>
     </div>
 </header>
-<div class="d-flex">
-    <div class="sidebar" style="overflow-y:hidden;">
-        <div class="row-4 my-4 border-end border-2 border-success">
-            <div class="col">
-                <div class="d-flex row-8 mb-3 align-items-center justify-content-center">
-                    <img src="../assets/user.png" alt="foto-usuario" class="mx-auto" width="120px">
+<div class="d-flex w-100">
+    <div class="offcanvas-lg offcanvas-start" tabindex="-1" id="offcanvasSidebar"
+        aria-labelledby="offcanvasSidebarLabel" style="width: 250px;">
+        <div class="offcanvas-header">
+            
+        </div>
+        <div class="offcanvas-body p-0 h-100">
+            <div class="sidebar">
+                <div class="row-4 px-2 my-4 border-end border-2 border-success">
+                    <div class="col">
+                        <div class="d-flex row-8 mb-3 align-items-center justify-content-center">
+                            <img src="../assets/user.png" alt="foto-usuario" class="mx-auto" width="120px">
+                        </div>
+                        <div class="row-4">
+                            <p class="m-0 p-0 fs-5 fw-semibold text-center">Bienvenid@</p>
+                            <p class="m-0 p-0 fs-5 fw-semibold text-center">{{usuario}}</p>
+                        </div>
+                    </div>
                 </div>
-                <div class="row-4">
-                    <p class="m-0 p-0 fs-5 fw-semibold text-center">Bienvenid@</p>
-                    <p class="m-0 p-0 fs-5 fw-semibold text-center">{{usuario}}</p>
+                <div class="row-8 menu h-100">
+                    <ul class="list-unstyled bg-color-u m-0 h-100">
+                        <div *ngIf="isAdmin">
+                            <li>
+                                <a class="btn-toggle border-0 rounded-0 d-inline-flex collapsed w-100 p-3 justify-content-start align-items-center" data-bs-toggle="collapse"
+                                    href="#aulas-collapse" aria-expanded="false">
+                                    Aulas
+                                </a>
+                                <div class="collapse" id="aulas-collapse">
+                                    <ul class="btn-toggle-nav list-unstyled fw-normal m-3 small">
+                                        <li><a routerLink="/gestion_aulas/listado_aulas">Listado de
+                                                aulas</a></li>
+                                        <li><a routerLink="/gestion_aulas/asignacion_aulas">Asignación de aulas</a></li>
+                                        <li><a routerLink="/gestion_aulas/horario_aulas">Horario de aulas</a></li>
+                                    </ul>
+                                </div>
+                            </li>
+                            <li>
+                                <a class="btn-toggle border-0 rounded-0 d-inline-flex collapsed w-100 p-3 justify-content-start align-items-center" data-bs-toggle="collapse"
+                                    href="#cursos-collapse" aria-expanded="false">
+                                    Cursos
+                                </a>
+                                <div class="collapse" id="cursos-collapse">
+                                    <ul class="btn-toggle-nav list-unstyled fw-normal m-3 small">
+                                        <li><a routerLink="/gestion_aulas/listado_cursos">Listado de
+                                                cursos</a></li>
+                                    </ul>
+                                </div>
+                            </li>
+                        </div>
+                        <li>
+                            <a class="btn-toggle border-0 rounded-0 d-inline-flex collapsed w-100 p-3 justify-content-start align-items-center" data-bs-toggle="collapse"
+                                href="#tramites-collapse" aria-expanded="false">
+                                Trámites
+                            </a>
+                            <div class="collapse" id="tramites-collapse">
+                                <ul class="btn-toggle-nav list-unstyled fw-normal m-3 small">
+                                    <li><a routerLink="/gestion_aulas/listado_reservas">Reservas</a></li>
+                                    <li><a routerLink="/gestion_aulas/listado_mejoras_problemas">Problemas y Mejoras</a></li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
                 </div>
             </div>
-        </div>
-        <div class="row-8 menu h-100">
-            <ul class="list-unstyled bg-color-u m-0 h-100">
-                <div *ngIf="isAdmin">
-                    <li>
-                        <a class="btn-toggle border-0 rounded-0 d-inline-flex collapsed w-100 p-3 justify-content-start align-items-center" data-bs-toggle="collapse"
-                            href="#aulas-collapse" aria-expanded="false">
-                            Aulas
-                        </a>
-                        <div class="collapse" id="aulas-collapse">
-                            <ul class="btn-toggle-nav list-unstyled fw-normal m-3 small">
-                                <li><a routerLink="/gestion_aulas/listado_aulas">Listado de
-                                        aulas</a></li>
-                                <li><a routerLink="/gestion_aulas/asignacion_aulas">Asignación de aulas</a></li>
-                                <li><a routerLink="/gestion_aulas/horario_aulas">Horario de aulas</a></li>
-                            </ul>
-                        </div>
-                    </li>
-                    <li>
-                        <a class="btn-toggle border-0 rounded-0 d-inline-flex collapsed w-100 p-3 justify-content-start align-items-center" data-bs-toggle="collapse"
-                            href="#cursos-collapse" aria-expanded="false">
-                            Cursos
-                        </a>
-                        <div class="collapse" id="cursos-collapse">
-                            <ul class="btn-toggle-nav list-unstyled fw-normal m-3 small">
-                                <li><a routerLink="/gestion_aulas/listado_cursos">Listado de
-                                        cursos</a></li>
-                            </ul>
-                        </div>
-                    </li>
-                </div>
-                <li>
-                    <a class="btn-toggle border-0 rounded-0 d-inline-flex collapsed w-100 p-3 justify-content-start align-items-center" data-bs-toggle="collapse"
-                        href="#tramites-collapse" aria-expanded="false">
-                        Trámites
-                    </a>
-                    <div class="collapse" id="tramites-collapse">
-                        <ul class="btn-toggle-nav list-unstyled fw-normal m-3 small">
-                            <li><a routerLink="/gestion_aulas/listado_reservas">Reservas</a></li>
-                            <li><a routerLink="/gestion_aulas/listado_mejoras_problemas">Problemas y Mejoras</a></li>
-                        </ul>
-                    </div>
-                </li>
-            </ul>
         </div>
     </div>
     <div class="seccion" style="overflow-y:visible;">
@@ -87,29 +103,28 @@
 <footer class="shadow-top m-0 p-0">
     <img class="img-responsive" src="../assets/border-uniquindio.jpg"
         style="background-size:cover;height:5px;width:100%;">
-    <div class="row mw-100 mt-5 pie-pagina">
-        <div class="col-2"></div>
-        <div class="col-2">
+    <div class="row justify-content-center mw-100 mt-5 pie-pagina">
+        <div class="col-sm-12 col-md-3 d-flex justify-content-center">
             <img src="../assets/logo-acreditada.jpg" style="float:right;" class="img-responsive" width="79px"
                 height="80">
-            <img src="../assets/linea.png" style="float:right;" class="img-responsive">
+            <img src="../assets/linea.png" style="float:right; max-height: 80px;">
             <img src="../assets/logo-universidad.jpg" style="float:right;" class="img-responsive" width="70px"
                 height="80">
         </div>
-        <div class="col-2">
-            <p class="p-0 m-0">Carrera 15 Calle 12 Norte +57(6) 7359300</p>
-            <p class="p-0 mb-2">Armenia,Quindio,Colombia</p>
-            <p>
+        <div class="col-sm-12 col-md-3 pt-4 pt-md-0">
+            <p class="p-0 m-0 text-center text-md-start">Carrera 15 Calle 12 Norte +57(6) 7359300</p>
+            <p class="p-0 mb-2 text-center text-md-start">Armenia,Quindio,Colombia</p>
+            <p class="text-center text-md-start">
                 <a href="mailto:corrupcioncero@uniquindio.edu.co">corrupcioncero@uniquindio.edu.co</a><br>
                 <a href="mailto:wbmaster@uniquindio.edu.co">wbmaster@uniquindio.edu.co</a><br>
                 <a href="mailto:csu@uniquindio.edu.co">corrupcioncero@uniquindio.edu.co</a><br>
             </p>
-            <p class="py-0 my-2">Quejas y Reclamos: 018000 96 35 78 opción 5</p>
-            <p class="pb-0 my-2">Denuncias actos de corrupción: +57 (6) 7359416</p>
-            <p class="pb-0 my-2">Ext.416</p>
+            <p class="py-0 my-2 text-center text-md-start">Quejas y Reclamos: 018000 96 35 78 opción 5</p>
+            <p class="pb-0 my-2 text-center text-md-start">Denuncias actos de corrupción: +57 (6) 7359416</p>
+            <p class="pb-0 my-2 text-center text-md-start">Ext.416</p>
             <br />
         </div>
-        <div id="enlaces" class="col-2">
+        <div id="enlaces" class="col-sm-12 col-md-3 d-flex justify-content-center">
             <p>
                 <a href="https://uniquindio.edu.co/mapa-del-sitio" title="Enlace a Mapa del sitio">
                     <strong>Mapa del sitio</strong> </a><br>
@@ -129,9 +144,8 @@
                     <strong>Notificaciones por aviso</strong> </a>
             </p>
         </div>
-        <div class="col-2">
-            <img src="../assets/iconteciso.png" style="float:left;width:250px;height:150px;" class="img-responsive">
+        <div class="col-sm-12 col-md-3 d-flex justify-content-center">
+            <img src="../assets/iconteciso.png" style="float:left;width:250px;height:150px;">
         </div>
-        <div class="col-2"></div>
     </div>
 </footer>

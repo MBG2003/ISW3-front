@@ -9,7 +9,7 @@ import { MensajeDTO } from '../modelo/mensaje-dto';
 })
 export class UsuarioService {
 
-  private cursoUrl = "http://localhost:8080/usuario";
+  private usuarioURL = `http://${window.location.hostname}:8080/usuario`;
 
   private headers!:HttpHeaders;
 
@@ -22,7 +22,7 @@ export class UsuarioService {
   }
 
   public consultarNombre(documento: String): Observable<MensajeDTO> {
-    return this.http.get<MensajeDTO>(`${this.cursoUrl}/consultaNombreUsuario/${documento}`, {headers: this.headers});
+    return this.http.get<MensajeDTO>(`${this.usuarioURL}/consultaNombreUsuario/${documento}`, {headers: this.headers});
   }
 
 }

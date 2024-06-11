@@ -10,8 +10,8 @@ import { ListaMejoraProblemaComponent } from './pagina/lista-mejora-problema/lis
 import { ListaReservaComponent } from './pagina/lista-reserva/lista-reserva.component';
 import { HorarioAulaComponent } from './pagina/horario-aula/horario-aula.component';
 import { AsignarHorarioComponent } from './pagina/asignar-horario/asignar-horario.component';
-import { LoginGuard } from './guards/permiso.service';
 import { RolesGuard } from './guards/roles.service';
+import { LoginGuard } from './guards/permiso.service';
 
 const routes: Routes = [
   { title: "SGA | Login", path: "gestion_aulas/login", component: LoginComponent, canActivate: [LoginGuard] },

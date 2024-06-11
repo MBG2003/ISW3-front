@@ -10,7 +10,7 @@ import { TokenService } from './token.service';
 
 export class FacultadService {
 
-  private facultadURL = "http://localhost:8080/facultad";
+  private facultadURL = `http://${window.location.hostname}:8080/facultad`;
 
   private headers!:HttpHeaders;
 
