@@ -66,10 +66,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "proyecto_isw3_front:build:production"
+              "buildTarget": "proyecto_isw3_front:build:production"
             },
             "development": {
-              "browserTarget": "proyecto_isw3_front:build:development"
+              "buildTarget": "proyecto_isw3_front:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -77,7 +77,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "proyecto_isw3_front:build"
+            "buildTarget": "proyecto_isw3_front:build"
           }
         },
         "test": {
